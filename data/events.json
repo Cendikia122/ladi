@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "title": "Workshop Digitalisasi UMKM Bogor & Depok: Dari Nol Sampai Ditemukan di Google",
+    "tag": "Workshop Praktis",
+    "thumb": "/images/event1.jpg",
+    "date": "Sabtu, 24 Oktober 2026 · 09.00 - 15.00 WIB",
+    "location": "Bogor Creative Center & Live Zoom",
+    "short_desc": "Pelatihan langsung cara mendaftarkan profil usaha di Google, membuat katalog WhatsApp bisnis, dan strategi mendatangkan pembeli tanpa biaya iklan.",
+    "description": "<h3>Tentang Workshop:</h3><p>Banyak pemilik usaha yang bingung bagaimana cara agar tokonya bisa muncul di Google Maps dan dicari pelanggan. Dalam workshop tatap muka ini, tim Ladi memandu langkah demi langkah secara langsung di laptop/HP Anda.</p><h3>Materi yang Dipelajari:</h3><ul><li>Pendaftaran dan verifikasi profil Google Business resmi</li><li>Pembuatan link chat WhatsApp langsung yang rapi</li><li>Cara mengambil foto produk yang meyakinkan pembeli</li><li>Membaca laporan pengunjung tanpa istilah rumit</li></ul>",
+    "btn_text": "Daftar Workshop via WA",
+    "btn_link": "https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+ingin+mendaftar+Workshop+Digitalisasi+UMKM",
+    "status": "active",
+    "created_at": "2026-09-30T10:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "title": "Executive Briefing: Otoritas SEO Semantik & Kedaulatan Web di Era AI",
+    "tag": "Executive Briefing",
+    "thumb": "/images/event2.jpg",
+    "date": "Kamis, 12 November 2026 · 14.00 - 17.00 WIB",
+    "location": "Online via Zoom",
+    "short_desc": "Khusus pimpinan perusahaan dan pemilik bisnis yang ingin memahami arsitektur digital berstandar global dan melepaskan ketergantungan dari marketplace.",
+    "description": "<h3>Tentang Sesi:</h3><p>Sesi strategis untuk para pengambil keputusan mengenai cara membangun aset web berdaulat, implementasi Schema.org Knowledge Graph, dan optimasi performa Core Web Vitals untuk konversi B2B internasional.</p>",
+    "btn_text": "Reservasi Kursi",
+    "btn_link": "https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+ingin+reservasi+Executive+Briefing",
+    "status": "active",
+    "created_at": "2026-09-30T10:00:00.000Z"
+  },
+  {
+    "id": 3,
+    "title": "Klinik Konsultasi Digital Ladi: Bedah Website & Profil Google 1-on-1",
+    "tag": "Konsultasi Gratis",
+    "thumb": "/images/event3.jpg",
+    "date": "Setiap Hari Jumat · 15.00 - 17.00 WIB",
+    "location": "Sesi Konsultasi Online via Google Meet / WA Call",
+    "short_desc": "Sesi privat 30 menit tanpa biaya bersama konsultan Ladi untuk memeriksa 10 parameter kesiapan online bisnis Anda secara langsung.",
+    "description": "<h3>Tentang Klinik Konsultasi:</h3><p>Sesi privat dan santai. Bawa link website atau nama usaha Anda, dan kami akan periksa bersama apa saja yang perlu dilengkapi agar usaha Anda lebih dipercaya calon pembeli.</p>",
+    "btn_text": "Jadwalkan Sesi Gratis",
+    "btn_link": "https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+mau+jadwal+Klinik+Konsultasi+Jumat",
+    "status": "active",
+    "created_at": "2026-09-30T10:00:00.000Z"
+  }
+]
