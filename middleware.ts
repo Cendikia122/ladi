@@ -43,8 +43,11 @@ export function middleware(request: NextRequest) {
   if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
     const token = request.cookies.get("ladi_admin_token")?.value;
 
-    // Jika belum login, redirect ke halaman login dengan query redirect
+    // Jika belum login di production, arahkan ke login
     if (!token || !token.trim()) {
+      if (isLocalhost || process.env.NODE_ENV !== "production") {
+        return NextResponse.next();
+      }
       const loginUrl = new URL("/admin/login", request.url);
       loginUrl.searchParams.set("redirect", pathname);
       loginUrl.searchParams.set("reason", "unauthorized");

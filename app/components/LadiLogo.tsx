@@ -1,37 +1,45 @@
+import Image from "next/image";
+
 export default function LadiLogo({
   inverted = false,
   showTagline = true,
+  height = 36,
+  className = "",
 }: {
   inverted?: boolean;
   showTagline?: boolean;
+  height?: number;
+  className?: string;
 }) {
+  // Rasio aspek logo resmi 566 x 206 (~2.75 : 1)
+  const width = Math.round(height * (566 / 206));
+  const logoSrc = inverted ? "/logo-white.png" : "/logo.png";
+
   return (
-    <div className="flex items-center gap-2.5 select-none">
-      {/* Brand Monogram Icon */}
-      <div className="w-8 h-8 rounded-lg bg-[#1853a7] flex items-center justify-center relative shadow-sm">
-        <span className="text-white font-extrabold text-base leading-none">L</span>
-        {/* Signature Orange Dot */}
-        <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#fa824b] border-2 border-white" />
+    <div className={`flex items-center gap-2.5 select-none ${className}`}>
+      <div className="relative shrink-0 flex items-center">
+        <Image
+          src={logoSrc}
+          alt="Ladi (Layanan Digital)"
+          width={width}
+          height={height}
+          priority
+          className="object-contain h-auto"
+          style={{ width: `${width}px`, height: `${height}px` }}
+        />
       </div>
 
-      <div className="flex flex-col">
-        <div className="flex items-baseline font-extrabold text-2xl tracking-tight leading-none">
-          <span className={inverted ? "text-white" : "text-[#1853a7]"}>Lad</span>
-          <span className="relative inline-block">
-            {/* The stem of "i" without dot */}
-            <span className={inverted ? "text-white" : "text-[#1853a7]"}>ı</span>
-            {/* The signature orange dot on the 'i' */}
-            <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#fa824b]" />
-          </span>
-        </div>
-        {showTagline && (
-          <span className={`text-[10px] font-semibold tracking-wider uppercase mt-0.5 ${
-            inverted ? "text-slate-400" : "text-slate-500"
-          }`}>
-            Consulting
-          </span>
-        )}
-      </div>
+      {showTagline && (
+        <span
+          className={`hidden sm:inline-block font-mono text-[9px] font-bold tracking-widest uppercase pl-2.5 border-l ${
+            inverted
+              ? "text-slate-400 border-slate-700"
+              : "text-slate-500 border-slate-300"
+          }`}
+        >
+          Layanan Digital
+        </span>
+      )}
     </div>
   );
 }
