@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { getEvents, createEvent } from "@/app/lib/storage";
+import { getProjects, createProject } from "@/app/lib/storage";
 import { verifyAdmin } from "@/app/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     const limit = searchParams.get("limit") ? parseInt(searchParams.get("limit")!, 10) : undefined;
     const all = searchParams.get("all") === "true";
 
-    const data = await getEvents(limit, all);
+    const data = await getProjects(limit, all);
     return NextResponse.json({ success: true, data });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
@@ -22,24 +22,30 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const admin = verifyAdmin(request);
   if (!admin) {
-    return NextResponse.json({ success: false, message: "Akses ditolak. Silakan login terlebih dahulu." }, { status: 401 });
+    return NextResponse.json(
+      { success: false, message: "Akses ditolak. Silakan login terlebih dahulu." },
+      { status: 401 }
+    );
   }
 
   try {
     const body = await request.json();
     if (!body.title || !body.title.trim()) {
-      return NextResponse.json({ success: false, message: "Judul event wajib diisi" }, { status: 400 });
+      return NextResponse.json({ success: false, message: "Nama proyek wajib diisi" }, { status: 400 });
     }
 
-    const created = await createEvent(body);
+    const created = await createProject(body);
 
-    // Revalidate cache agar beranda dan halaman /events seketika terupdate
     revalidatePath("/", "layout");
-    revalidatePath("/events");
+    revalidatePath("/project");
     revalidatePath("/admin");
-    revalidatePath("/admin/events");
+    revalidatePath("/admin/projects");
 
-    return NextResponse.json({ success: true, message: "Event berhasil ditambahkan", data: created });
+    return NextResponse.json({
+      success: true,
+      message: "Proyek portfolio berhasil ditambahkan",
+      data: created,
+    });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }

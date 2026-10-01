@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { getBlogById, updateBlog, deleteBlog } from "@/app/lib/storage";
+import { getProjectById, updateProject, deleteProject } from "@/app/lib/storage";
 import { verifyAdmin } from "@/app/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -12,11 +12,11 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const blog = await getBlogById(id);
-    if (!blog) {
-      return NextResponse.json({ success: false, message: "Artikel tidak ditemukan" }, { status: 404 });
+    const project = await getProjectById(id);
+    if (!project) {
+      return NextResponse.json({ success: false, message: "Proyek tidak ditemukan" }, { status: 404 });
     }
-    return NextResponse.json({ success: true, data: blog });
+    return NextResponse.json({ success: true, data: project });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
@@ -34,19 +34,21 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const updated = await updateBlog(id, body);
+    const updated = await updateProject(id, body);
     if (!updated) {
-      return NextResponse.json({ success: false, message: "Artikel tidak ditemukan" }, { status: 404 });
+      return NextResponse.json({ success: false, message: "Proyek tidak ditemukan" }, { status: 404 });
     }
 
-    // Segarkan seluruh rute website
     revalidatePath("/", "layout");
-    revalidatePath("/blog");
-    revalidatePath(`/blog/${updated.slug}`);
+    revalidatePath("/project");
     revalidatePath("/admin");
-    revalidatePath("/admin/blogs");
+    revalidatePath("/admin/projects");
 
-    return NextResponse.json({ success: true, message: "Artikel berhasil diperbarui", data: updated });
+    return NextResponse.json({
+      success: true,
+      message: "Proyek portfolio berhasil diperbarui",
+      data: updated,
+    });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
@@ -63,18 +65,20 @@ export async function DELETE(
 
   try {
     const { id } = await params;
-    const deleted = await deleteBlog(id);
+    const deleted = await deleteProject(id);
     if (!deleted) {
-      return NextResponse.json({ success: false, message: "Artikel tidak ditemukan atau sudah terhapus" }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: "Proyek tidak ditemukan atau sudah terhapus" },
+        { status: 404 }
+      );
     }
 
-    // Segarkan seluruh rute website
     revalidatePath("/", "layout");
-    revalidatePath("/blog");
+    revalidatePath("/project");
     revalidatePath("/admin");
-    revalidatePath("/admin/blogs");
+    revalidatePath("/admin/projects");
 
-    return NextResponse.json({ success: true, message: "Artikel berhasil dihapus" });
+    return NextResponse.json({ success: true, message: "Proyek berhasil dihapus" });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }

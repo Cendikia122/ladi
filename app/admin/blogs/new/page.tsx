@@ -5,12 +5,15 @@ import Link from "next/link";
 import LadiLogo from "../../../components/LadiLogo";
 
 import { authFetch } from "@/app/lib/clientAuth";
+import ImageUpload from "@/app/components/ImageUpload";
+import RichTextEditor from "@/app/components/RichTextEditor";
 
 export default function NewBlogPage() {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("PANDUAN USAHA");
   const [author, setAuthor] = useState("Tim Ladi");
+  const [thumb, setThumb] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
   const [status, setStatus] = useState<"published" | "draft">("published");
@@ -32,6 +35,8 @@ export default function NewBlogPage() {
           title,
           category,
           author,
+          thumb,
+          thumb_full: thumb,
           excerpt,
           content,
           status,
@@ -158,6 +163,13 @@ export default function NewBlogPage() {
               </div>
             </div>
 
+            <ImageUpload
+              value={thumb}
+              onChange={setThumb}
+              label="Foto Cover / Thumbnail Artikel"
+              helperText="Upload foto dari laptop atau gunakan tautan URL gambar eksternal (JPG/PNG/WEBP, maks 5MB)."
+            />
+
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">
                 Ringkasan Singkat (Excerpt)
@@ -172,19 +184,12 @@ export default function NewBlogPage() {
               />
             </div>
 
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">
-                Isi Artikel Lengkap (Format HTML atau Teks)
-              </label>
-              <textarea
-                rows={10}
-                required
-                placeholder="Tuliskan isi artikel Anda di sini. Tag HTML seperti <p>, <h3>, <ul>, <li> dapat digunakan..."
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-mono focus:outline-none focus:border-[#1853a7] bg-[#f8fafc]"
-              />
-            </div>
+            <RichTextEditor
+              value={content}
+              onChange={setContent}
+              label="Isi Artikel Lengkap (Rich Text Editor)"
+              placeholder="Tuliskan isi artikel Anda di sini lengkap dengan heading, bullet points, atau gambar..."
+            />
 
             <div className="pt-4 flex items-center justify-end gap-3">
               <Link

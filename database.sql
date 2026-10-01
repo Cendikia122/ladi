@@ -140,3 +140,63 @@ VALUES
   'active'
 )
 ON DUPLICATE KEY UPDATE `title`=VALUES(`title`);
+
+-- -----------------------------------------------------
+-- Table: projects (Portfolio Studi Kasus Klien)
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `projects` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `title` VARCHAR(500) NOT NULL,
+  `slug` VARCHAR(500) NOT NULL UNIQUE,
+  `client_name` VARCHAR(255),
+  `client_industry` VARCHAR(255),
+  `client_location` VARCHAR(255),
+  `website_url` TEXT,
+  `thumb` MEDIUMTEXT,
+  `summary` TEXT,
+  `challenge` LONGTEXT,
+  `solution` LONGTEXT,
+  `results` TEXT,
+  `year` VARCHAR(50) DEFAULT '2026',
+  `status` ENUM('published', 'draft') DEFAULT 'published',
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- -----------------------------------------------------
+-- Seed Projects
+-- -----------------------------------------------------
+INSERT INTO `projects` (`title`, `slug`, `client_name`, `client_industry`, `client_location`, `website_url`, `thumb`, `summary`, `challenge`, `solution`, `results`, `year`, `status`)
+VALUES 
+(
+  'Bengkel Motor Budi Jaya',
+  'bengkel-motor-budi-jaya',
+  'Pak Budi Santoso',
+  'Otomotif & Servis Kendaraan',
+  'Tanah Sareal, Kota Bogor',
+  'https://maps.google.com/?q=bengkel+motor+budi+jaya',
+  '/images/bengkel.jpg',
+  'Transformasi bengkel lokal tradisional menjadi bengkel rujukan nomor 1 di Google Maps kawasan Tanah Sareal dengan peningkatan panggilan telepon darurat servis sebesar +340%.',
+  'Lokasi berada agak masuk ke dalam gang jalan sekunder. Hanya mengandalkan plang kayu di depan bengkel, sehingga pengendara motor yang mengalami mogok di jalan raya tidak tahu keberadaannya.',
+  'Pendaftaran resmi Google Bisnis, optimasi titik koordinat GPS akurat, penambahan tombol Telepon Montir Darurat Langsung, serta website profil satu halaman yang memuat katalog harga suku cadang transparan.',
+  '+340% Telepon & Kunjungan, Peringkat #1 Pencarian Bengkel Motor Terdekat di Radius 4 km',
+  '2026',
+  'published'
+),
+(
+  'Katering Sari Rasa Ibu Hj. Nunung',
+  'katering-sari-rasa-ibu-hj-nunung',
+  'Hj. Nunung Suryani',
+  'Kuliner & Katering Korporat',
+  'Pajajaran, Kota Bogor',
+  'https://kateringsarirasa.com',
+  '/images/katering.jpg',
+  'Peningkatan omzet pesanan nasi kotak dan prasmanan kantor hingga 180% melalui katalog menu digital dan formulir pemesanan cepat via WhatsApp.',
+  'Sebelumnya hanya mengandalkan brosur fotokopi dan rekomendasi mulut ke mulut keluarga. Kesulitan mendapatkan order besar dari perkantoran dan instansi pemerintah karena tidak memiliki katalog resmi.',
+  'Pembangunan website katalog menu interaktif dengan foto hidangan profesional, paket harga transparan per porsi, dan tombol unduh proposal penawaran otomatis untuk sekretariat kantor.',
+  '+180% Omzet Pesanan Kantor, Rata-rata 25 Pesanan Korporat Baru per Bulan',
+  '2026',
+  'published'
+)
+ON DUPLICATE KEY UPDATE `title`=VALUES(`title`);
+

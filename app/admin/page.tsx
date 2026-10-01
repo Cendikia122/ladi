@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getBlogs, getEvents } from "@/app/lib/storage";
+import { getBlogs, getEvents, getProjects } from "@/app/lib/storage";
 import { checkDbConnection } from "@/app/lib/mysql";
 import { verifyToken } from "@/app/lib/auth";
 import LadiLogo from "../components/LadiLogo";
@@ -21,14 +21,16 @@ export default async function AdminDashboardPage() {
     redirect("/admin/login?reason=unauthorized");
   }
 
-  const [allBlogs, allEvents, dbStatus] = await Promise.all([
+  const [allBlogs, allEvents, allProjects, dbStatus] = await Promise.all([
     getBlogs(5, true),
     getEvents(5, true),
+    getProjects(5, true),
     checkDbConnection(),
   ]);
 
   const publishedCount = allBlogs.filter((b) => b.status === "published").length;
   const activeEventsCount = allEvents.filter((e) => e.status === "active").length;
+  const publishedProjectsCount = allProjects.filter((p) => p.status === "published").length;
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-[#0f172a]">
@@ -112,6 +114,12 @@ export default async function AdminDashboardPage() {
             >
               + Tambah Event
             </Link>
+            <Link
+              href="/admin/projects/new"
+              className="px-5 py-3 rounded-full bg-slate-900 hover:bg-black text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
+            >
+              + Tambah Portfolio
+            </Link>
           </div>
         </div>
 
@@ -130,36 +138,37 @@ export default async function AdminDashboardPage() {
           </div>
 
           <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-2">
-            <span className="text-xs font-mono text-emerald-600 font-bold uppercase">STORAGE ENGINE</span>
-            <div className="text-lg font-extrabold text-emerald-600">
-              {dbStatus.connected ? "MySQL (Hostinger)" : "Hybrid JSON Fallback"}
-            </div>
-            <div className="text-xs text-slate-500">Tahan serverless & otomatis failover</div>
+            <span className="text-xs font-mono text-indigo-600 font-bold uppercase">PORTFOLIO KLIEN</span>
+            <div className="text-3xl font-extrabold text-indigo-600">{publishedProjectsCount}</div>
+            <div className="text-xs text-slate-500">Dari total {allProjects.length} studi kasus</div>
           </div>
 
           <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-2">
             <span className="text-xs font-mono text-slate-500 font-bold uppercase">AKSES CEPAT</span>
-            <div className="flex gap-2 pt-1">
-              <Link href="/admin/blogs" className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700">
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              <Link href="/admin/blogs" className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700">
                 Blogs
               </Link>
-              <Link href="/admin/events" className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700">
+              <Link href="/admin/events" className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700">
                 Events
+              </Link>
+              <Link href="/admin/projects" className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700">
+                Portfolio
               </Link>
             </div>
             <div className="text-xs text-slate-500">Kelola dan edit konten</div>
           </div>
         </div>
 
-        {/* Grid: Recent Blogs & Recent Events */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Grid: Recent Blogs, Recent Events & Recent Projects */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Recent Blogs */}
           <div className="rounded-3xl bg-white border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between">
             <div>
-              <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+              <div className="p-5 border-b border-slate-100 flex items-center justify-between">
                 <div>
                   <h2 className="font-bold text-slate-900 text-base">Artikel Terbaru</h2>
-                  <p className="text-xs text-slate-500">Konten wawasan bisnis Ladi</p>
+                  <p className="text-xs text-slate-500">Wawasan bisnis Ladi</p>
                 </div>
                 <Link href="/admin/blogs" className="text-xs font-bold text-[#1853a7] hover:underline">
                   Kelola ({allBlogs.length}) →
@@ -168,9 +177,9 @@ export default async function AdminDashboardPage() {
 
               <div className="divide-y divide-slate-100">
                 {allBlogs.slice(0, 4).map((b) => (
-                  <div key={b.id} className="p-4 sm:px-6 flex items-center justify-between gap-3 hover:bg-slate-50 transition-colors">
-                    <div>
-                      <div className="font-bold text-sm text-slate-900 line-clamp-1">{b.title}</div>
+                  <div key={b.id} className="p-4 flex items-center justify-between gap-3 hover:bg-slate-50 transition-colors">
+                    <div className="min-w-0">
+                      <div className="font-bold text-sm text-slate-900 truncate">{b.title}</div>
                       <div className="text-xs text-slate-500 mt-0.5">{b.date} · {b.category}</div>
                     </div>
                     <Link
@@ -184,7 +193,7 @@ export default async function AdminDashboardPage() {
               </div>
             </div>
 
-            <div className="p-4 bg-[#f8fafc] border-t border-slate-100 text-center">
+            <div className="p-3 bg-[#f8fafc] border-t border-slate-100 text-center">
               <Link href="/admin/blogs/new" className="text-xs font-bold text-[#fa824b] hover:underline">
                 + Tambah Artikel Baru
               </Link>
@@ -194,10 +203,10 @@ export default async function AdminDashboardPage() {
           {/* Recent Events */}
           <div className="rounded-3xl bg-white border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between">
             <div>
-              <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+              <div className="p-5 border-b border-slate-100 flex items-center justify-between">
                 <div>
                   <h2 className="font-bold text-slate-900 text-base">Event & Workshop</h2>
-                  <p className="text-xs text-slate-500">Agenda pelatihan dan edukasi digital</p>
+                  <p className="text-xs text-slate-500">Agenda edukasi UMKM</p>
                 </div>
                 <Link href="/admin/events" className="text-xs font-bold text-[#1853a7] hover:underline">
                   Kelola ({allEvents.length}) →
@@ -206,9 +215,9 @@ export default async function AdminDashboardPage() {
 
               <div className="divide-y divide-slate-100">
                 {allEvents.slice(0, 4).map((e) => (
-                  <div key={e.id} className="p-4 sm:px-6 flex items-center justify-between gap-3 hover:bg-slate-50 transition-colors">
-                    <div>
-                      <div className="font-bold text-sm text-slate-900 line-clamp-1">{e.title}</div>
+                  <div key={e.id} className="p-4 flex items-center justify-between gap-3 hover:bg-slate-50 transition-colors">
+                    <div className="min-w-0">
+                      <div className="font-bold text-sm text-slate-900 truncate">{e.title}</div>
                       <div className="text-xs text-slate-500 mt-0.5">{e.date} · {e.location}</div>
                     </div>
                     <Link
@@ -222,9 +231,49 @@ export default async function AdminDashboardPage() {
               </div>
             </div>
 
-            <div className="p-4 bg-[#f8fafc] border-t border-slate-100 text-center">
+            <div className="p-3 bg-[#f8fafc] border-t border-slate-100 text-center">
               <Link href="/admin/events/new" className="text-xs font-bold text-[#1853a7] hover:underline">
                 + Tambah Event Baru
+              </Link>
+            </div>
+          </div>
+
+          {/* Recent Projects */}
+          <div className="rounded-3xl bg-white border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between">
+            <div>
+              <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+                <div>
+                  <h2 className="font-bold text-slate-900 text-base">Portfolio Klien</h2>
+                  <p className="text-xs text-slate-500">Studi kasus digitalisasi</p>
+                </div>
+                <Link href="/admin/projects" className="text-xs font-bold text-[#1853a7] hover:underline">
+                  Kelola ({allProjects.length}) →
+                </Link>
+              </div>
+
+              <div className="divide-y divide-slate-100">
+                {allProjects.slice(0, 4).map((p) => (
+                  <div key={p.id} className="p-4 flex items-center justify-between gap-3 hover:bg-slate-50 transition-colors">
+                    <div className="min-w-0">
+                      <div className="font-bold text-sm text-slate-900 truncate">{p.title}</div>
+                      <div className="text-xs text-slate-500 mt-0.5">
+                        {p.client_name} · {p.year || "2026"}
+                      </div>
+                    </div>
+                    <Link
+                      href={`/admin/projects/edit/${p.id}`}
+                      className="px-2.5 py-1 rounded bg-slate-100 text-[#1853a7] text-xs font-bold shrink-0 hover:bg-slate-200"
+                    >
+                      Edit
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-3 bg-[#f8fafc] border-t border-slate-100 text-center">
+              <Link href="/admin/projects/new" className="text-xs font-bold text-[#1853a7] hover:underline">
+                + Tambah Proyek Baru
               </Link>
             </div>
           </div>

@@ -1,10 +1,11 @@
 import { MetadataRoute } from "next";
 import { getBlogs, getEvents } from "@/app/lib/storage";
+import { Config } from "@/app/lib/config";
 
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ladi.id";
+  const baseUrl = Config.siteUrl;
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${baseUrl}`, lastModified: new Date(), changeFrequency: "daily", priority: 1.0 },
@@ -28,10 +29,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}/blog/${b.slug}`,
       lastModified: new Date(b.created_at || Date.now()),
       changeFrequency: "weekly",
-      priority: 0.7,
+      priority: 0.8,
     }));
 
-    return [...staticRoutes, ...blogRoutes];
+    const eventRoutes: MetadataRoute.Sitemap = events.map((e) => ({
+      url: `${baseUrl}/events/${e.id}`,
+      lastModified: new Date(e.created_at || Date.now()),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    }));
+
+    return [...staticRoutes, ...blogRoutes, ...eventRoutes];
   } catch {
     return staticRoutes;
   }

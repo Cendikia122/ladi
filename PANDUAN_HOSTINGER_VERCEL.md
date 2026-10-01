@@ -131,7 +131,7 @@ git push -u origin main
 | `ADMIN_USERNAME` | `admin` | Username login admin panel |
 | `ADMIN_PASSWORD` | `admin123` | Password login admin (bisa diganti sesuai selera) |
 | `AUTH_SECRET` | `ladi_secret_super_aman_2026` | Kunci enkripsi token sesi |
-| `NEXT_PUBLIC_SITE_URL` | `https://ladi.id` | Domain publik Anda (atau URL default Vercel) |
+| `SITE_URL` | `https://ladi.id` | Domain publik Anda (atau URL default Vercel) |
 
 5. Klik tombol biru **"Deploy"**.
 6. Tunggu 1–2 menit hingga proses build selesai. Website Anda kini resmi **LIVE di Internet Global!** 🎉

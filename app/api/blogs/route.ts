@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getBlogs, createBlog } from "@/app/lib/storage";
 import { verifyAdmin } from "@/app/lib/auth";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function GET(request: NextRequest) {
   try {
@@ -30,6 +32,13 @@ export async function POST(request: NextRequest) {
     }
 
     const created = await createBlog(body);
+
+    // Revalidate cache agar beranda dan halaman /blog seketika terupdate
+    revalidatePath("/", "layout");
+    revalidatePath("/blog");
+    revalidatePath("/admin");
+    revalidatePath("/admin/blogs");
+
     return NextResponse.json({ success: true, message: "Artikel berhasil ditambahkan", data: created });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });

@@ -79,7 +79,7 @@ export default function ContactPage() {
                     </span>
                     <div>
                       <div className="text-xs text-slate-500 font-bold uppercase">Email Korespondensi</div>
-                      <div className="text-sm font-bold text-slate-900">contact@ladi.digital</div>
+                      <div className="text-sm font-bold text-slate-900">contact@layanandigital.id</div>
                     </div>
                   </div>
 

@@ -80,7 +80,7 @@ export default function Footer() {
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-[#fa824b] font-bold">✉️</span>
-                <span>contact@ladi.digital</span>
+                <span>contact@layanandigital.id</span>
               </div>
             </div>
 

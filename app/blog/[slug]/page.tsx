@@ -1,19 +1,23 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import TopBar from "../../components/TopBar";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import WhatsAppButton from "../../components/WhatsAppButton";
 import { getBlogBySlug, getBlogs } from "@/app/lib/storage";
+import { Config } from "@/app/lib/config";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const blog = await getBlogBySlug(slug);
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ladi.id";
+  const baseUrl = Config.siteUrl;
 
   if (!blog) return { title: "Artikel Tidak Ditemukan — Ladi" };
+
+  const blogImg = blog.thumb || blog.thumb_full;
 
   return {
     title: `${blog.title} — Ladi (Layanan Digital)`,
@@ -30,6 +34,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: "article",
       publishedTime: blog.created_at,
       authors: [blog.author],
+      images: blogImg
+        ? [{ url: blogImg.startsWith("http") ? blogImg : `${baseUrl}${blogImg}` }]
+        : [{ url: `${baseUrl}/logo.png` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: blog.title,
+      description: blog.excerpt,
+      images: blogImg ? [blogImg.startsWith("http") ? blogImg : `${baseUrl}${blogImg}`] : [`${baseUrl}/logo.png`],
     },
   };
 }
@@ -41,7 +54,7 @@ export default async function BlogDetailPage({
 }) {
   const { slug } = await params;
   const blog = await getBlogBySlug(slug);
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ladi.id";
+  const baseUrl = Config.siteUrl;
 
   if (!blog) {
     notFound();
@@ -49,12 +62,14 @@ export default async function BlogDetailPage({
 
   const allBlogs = await getBlogs(4);
   const related = allBlogs.filter((b) => b.slug !== slug).slice(0, 2);
+  const blogImg = blog.thumb || blog.thumb_full;
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: blog.title,
     description: blog.excerpt,
+    image: blogImg ? (blogImg.startsWith("http") ? blogImg : `${baseUrl}${blogImg}`) : `${baseUrl}/logo.png`,
     datePublished: blog.created_at,
     dateModified: blog.updated_at || blog.created_at,
     author: {
@@ -136,7 +151,19 @@ export default async function BlogDetailPage({
         {/* Article Body */}
         <article className="py-16 md:py-24">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-sm space-y-6 text-base sm:text-lg leading-relaxed text-slate-700">
+            <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-sm space-y-8 text-base sm:text-lg leading-relaxed text-slate-700">
+              {blogImg && (
+                <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-slate-100 border border-slate-200">
+                  <Image
+                    src={blogImg}
+                    alt={blog.title}
+                    fill
+                    className="object-cover"
+                    unoptimized={blogImg.startsWith("data:") || blogImg.startsWith("http")}
+                  />
+                </div>
+              )}
+
               <div
                 className="prose prose-slate max-w-none space-y-5"
                 dangerouslySetInnerHTML={{ __html: blog.content }}

@@ -79,6 +79,28 @@ async function ensureTables(db: mysql.Pool) {
         updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP
       )
     `);
+
+    // Pastikan tabel projects (portfolio) ada di Hostinger jika belum dibuat
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS projects (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        title VARCHAR(500) NOT NULL,
+        slug VARCHAR(500),
+        client_name VARCHAR(255),
+        client_industry VARCHAR(255),
+        client_location VARCHAR(255),
+        website_url TEXT,
+        thumb MEDIUMTEXT,
+        summary TEXT,
+        challenge LONGTEXT,
+        solution LONGTEXT,
+        results TEXT,
+        year VARCHAR(50) DEFAULT '2026',
+        status VARCHAR(50) DEFAULT 'published',
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP
+      )
+    `);
   } catch (e) {
     // Abaikan jika error permisson atau tabel sudah terpasang
   }

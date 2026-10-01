@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getEventById, updateEvent, deleteEvent } from "@/app/lib/storage";
 import { verifyAdmin } from "@/app/lib/auth";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function GET(
   request: NextRequest,
@@ -36,6 +38,13 @@ export async function PUT(
     if (!updated) {
       return NextResponse.json({ success: false, message: "Event tidak ditemukan" }, { status: 404 });
     }
+
+    // Segarkan seluruh rute website
+    revalidatePath("/", "layout");
+    revalidatePath("/events");
+    revalidatePath("/admin");
+    revalidatePath("/admin/events");
+
     return NextResponse.json({ success: true, message: "Event berhasil diperbarui", data: updated });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
@@ -55,8 +64,15 @@ export async function DELETE(
     const { id } = await params;
     const deleted = await deleteEvent(id);
     if (!deleted) {
-      return NextResponse.json({ success: false, message: "Event tidak ditemukan" }, { status: 404 });
+      return NextResponse.json({ success: false, message: "Event tidak ditemukan atau sudah terhapus" }, { status: 404 });
     }
+
+    // Segarkan seluruh rute website
+    revalidatePath("/", "layout");
+    revalidatePath("/events");
+    revalidatePath("/admin");
+    revalidatePath("/admin/events");
+
     return NextResponse.json({ success: true, message: "Event berhasil dihapus" });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });

@@ -5,11 +5,14 @@ import Link from "next/link";
 import LadiLogo from "../../../components/LadiLogo";
 
 import { authFetch } from "@/app/lib/clientAuth";
+import ImageUpload from "@/app/components/ImageUpload";
+import RichTextEditor from "@/app/components/RichTextEditor";
 
 export default function NewEventPage() {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [tag, setTag] = useState("Workshop Praktis");
+  const [thumb, setThumb] = useState("");
   const [date, setDate] = useState("");
   const [location, setLocation] = useState("Bogor & Live Zoom");
   const [shortDesc, setShortDesc] = useState("");
@@ -34,6 +37,7 @@ export default function NewEventPage() {
         body: JSON.stringify({
           title,
           tag,
+          thumb,
           date,
           location,
           short_desc: shortDesc,
@@ -179,6 +183,13 @@ export default function NewEventPage() {
               </div>
             </div>
 
+            <ImageUpload
+              value={thumb}
+              onChange={setThumb}
+              label="Foto / Poster Event"
+              helperText="Upload gambar poster/banner event dari laptop atau gunakan link URL eksternal (JPG/PNG/WEBP, maks 5MB)."
+            />
+
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">
                 Ringkasan Singkat (Short Description)
@@ -193,19 +204,12 @@ export default function NewEventPage() {
               />
             </div>
 
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">
-                Deskripsi Lengkap (HTML atau Teks)
-              </label>
-              <textarea
-                rows={6}
-                required
-                placeholder="Detail materi, pembicara, fasilitas peserta..."
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-mono focus:outline-none focus:border-[#1853a7] bg-[#f8fafc]"
-              />
-            </div>
+            <RichTextEditor
+              value={description}
+              onChange={setDescription}
+              label="Deskripsi Lengkap Event (Rich Text Editor)"
+              placeholder="Detail materi, jadwal lengkap, profil narasumber, dan fasilitas peserta..."
+            />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>

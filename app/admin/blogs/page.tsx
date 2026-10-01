@@ -6,11 +6,14 @@ import LadiLogo from "../../components/LadiLogo";
 import { BlogItem } from "@/app/lib/storage";
 import { authFetch } from "@/app/lib/clientAuth";
 
+export const dynamic = "force-dynamic";
+
 export default function AdminBlogsPage() {
   const router = useRouter();
   const [blogs, setBlogs] = useState<BlogItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [notice, setNotice] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
   const fetchBlogs = async () => {
     try {
@@ -33,6 +36,8 @@ export default function AdminBlogsPage() {
   const handleDelete = async (id: number, title: string) => {
     if (!confirm(`Yakin ingin menghapus artikel: "${title}"?`)) return;
     setDeletingId(id);
+    setNotice(null);
+
     try {
       const res = await authFetch(`/api/blogs/${id}`, { method: "DELETE" });
       if (res.status === 401) {
@@ -43,11 +48,21 @@ export default function AdminBlogsPage() {
       const json = await res.json();
       if (json.success) {
         setBlogs((prev) => prev.filter((b) => b.id !== id));
+        setNotice({
+          type: "success",
+          message: `Artikel "${title}" berhasil dihapus dan website telah diperbarui.`,
+        });
+        alert(`Berhasil! Artikel "${title}" telah dihapus.`);
+        router.refresh();
       } else {
-        alert(json.message || "Gagal menghapus artikel");
+        const msg = json.message || "Gagal menghapus artikel";
+        setNotice({ type: "error", message: msg });
+        alert(msg);
       }
     } catch {
-      alert("Terjadi kesalahan saat menghapus");
+      const err = "Terjadi kesalahan jaringan saat menghapus";
+      setNotice({ type: "error", message: err });
+      alert(err);
     } finally {
       setDeletingId(null);
     }
@@ -66,11 +81,18 @@ export default function AdminBlogsPage() {
           </div>
 
           <div className="flex items-center gap-4 text-xs">
-            <Link href="/admin" className="text-slate-300 hover:text-white">
-              ← Dashboard
+            <Link
+              href="/admin"
+              className="text-slate-300 hover:text-white transition-colors"
+            >
+              ← Kembali ke Dashboard
             </Link>
-            <Link href="/" target="_blank" className="text-slate-300 hover:text-white">
-              Website ↗
+            <Link
+              href="/blog"
+              target="_blank"
+              className="text-slate-300 hover:text-white transition-colors"
+            >
+              Lihat Blog Publik ↗
             </Link>
           </div>
         </div>
@@ -78,6 +100,28 @@ export default function AdminBlogsPage() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-8 py-10 space-y-6">
+        {/* Success / Error Notification Banner */}
+        {notice && (
+          <div
+            className={`p-4 rounded-2xl border text-xs sm:text-sm font-semibold flex items-center justify-between gap-3 shadow-sm ${
+              notice.type === "success"
+                ? "bg-emerald-50 border-emerald-300 text-emerald-900"
+                : "bg-red-50 border-red-300 text-red-900"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <span>{notice.type === "success" ? "✅" : "⚠️"}</span>
+              <span>{notice.message}</span>
+            </div>
+            <button
+              onClick={() => setNotice(null)}
+              className="text-xs opacity-60 hover:opacity-100 font-bold px-2 py-1"
+            >
+              ✕ Tutup
+            </button>
+          </div>
+        )}
+
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0f172a]">
@@ -103,19 +147,19 @@ export default function AdminBlogsPage() {
               Memuat data artikel...
             </div>
           ) : blogs.length === 0 ? (
-            <div className="p-12 text-center text-sm text-slate-500 space-y-3">
-              <p>Belum ada artikel yang dibuat.</p>
+            <div className="p-12 text-center space-y-3">
+              <p className="text-slate-500 text-sm">Belum ada artikel yang dibuat.</p>
               <Link
                 href="/admin/blogs/new"
-                className="inline-block px-5 py-2.5 rounded-full bg-[#1853a7] text-white text-xs font-bold"
+                className="inline-block px-5 py-2.5 rounded-full bg-[#1853a7] text-white font-bold text-xs"
               >
-                Buat Artikel Sekarang
+                Tulis Artikel Pertama
               </Link>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="bg-[#f8fafc] border-b border-slate-200 text-slate-500 uppercase font-mono text-[11px]">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-[#f8fafc] text-xs font-mono uppercase text-slate-500 border-b border-slate-200">
                   <tr>
                     <th className="p-4 sm:px-6">Judul Artikel</th>
                     <th className="p-4">Kategori</th>
