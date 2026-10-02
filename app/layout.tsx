@@ -35,6 +35,16 @@ export const metadata: Metadata = {
     description:
       "Mitra teknologi ramah bagi pemilik usaha di Indonesia. Hadirkan bisnis Anda di Google dan raih pelanggan baru setiap hari.",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico?v=2", sizes: "any" },
+      { url: "/icon.png?v=2", type: "image/png", sizes: "512x512" },
+    ],
+    shortcut: "/favicon.ico?v=2",
+    apple: [
+      { url: "/apple-touch-icon.png?v=2", sizes: "180x180", type: "image/png" },
+    ],
+  },
   robots: {
     index: true,
     follow: true,
