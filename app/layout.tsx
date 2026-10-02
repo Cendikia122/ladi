@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Config } from "@/app/lib/config";
+import NavigationProgress from "@/app/components/NavigationProgress";
+import PageTransition from "@/app/components/PageTransition";
 
 export const metadata: Metadata = {
   title: "Ladi (Layanan Digital) — Bisnis Anda Hidup di Internet Global",
@@ -124,7 +126,8 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased bg-[#f8fafc] text-[#0f172a] selection:bg-[#fa824b] selection:text-white">
-        {children}
+        <NavigationProgress />
+        <PageTransition>{children}</PageTransition>
       </body>
     </html>
   );
