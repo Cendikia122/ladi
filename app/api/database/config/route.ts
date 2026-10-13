@@ -60,26 +60,35 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    fs.writeFileSync(envPath, newEnvLines.join("\n"), "utf-8");
+    let fileWritten = false;
+    try {
+      fs.writeFileSync(envPath, newEnvLines.join("\n"), "utf-8");
+      fileWritten = true;
 
-    // Juga update .env jika ada
-    const rootEnvPath = path.join(process.cwd(), ".env");
-    if (fs.existsSync(rootEnvPath)) {
-      let rootLines = fs.readFileSync(rootEnvPath, "utf-8").split("\n");
-      for (const [key, val] of Object.entries(updates)) {
-        const idx = rootLines.findIndex((l) => l.startsWith(`${key}=`));
-        if (idx !== -1) {
-          rootLines[idx] = `${key}=${val}`;
-        } else {
-          rootLines.push(`${key}=${val}`);
+      // Juga update .env jika ada
+      const rootEnvPath = path.join(process.cwd(), ".env");
+      if (fs.existsSync(rootEnvPath)) {
+        let rootLines = fs.readFileSync(rootEnvPath, "utf-8").split("\n");
+        for (const [key, val] of Object.entries(updates)) {
+          const idx = rootLines.findIndex((l) => l.startsWith(`${key}=`));
+          if (idx !== -1) {
+            rootLines[idx] = `${key}=${val}`;
+          } else {
+            rootLines.push(`${key}=${val}`);
+          }
         }
+        fs.writeFileSync(rootEnvPath, rootLines.join("\n"), "utf-8");
       }
-      fs.writeFileSync(rootEnvPath, rootLines.join("\n"), "utf-8");
+    } catch {
+      // Di lingkungan serverless (Vercel), filesystem bersifat read-only.
+      // process.env sudah terupdate di memori.
     }
 
     return NextResponse.json({
       success: true,
-      message: "Konfigurasi database berhasil disimpan.",
+      message: fileWritten
+        ? "Konfigurasi database berhasil disimpan ke file .env.local!"
+        : "Konfigurasi aktif di serverless. Pastikan juga menambahkan DB_PASSWORD di Dashboard Vercel (Project Settings > Environment Variables).",
     });
   } catch (error: any) {
     return NextResponse.json({

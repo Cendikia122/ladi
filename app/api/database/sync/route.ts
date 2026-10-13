@@ -96,11 +96,28 @@ export async function POST(request: NextRequest) {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     `);
 
+    await conn.query(`
+      CREATE TABLE IF NOT EXISTS team_members (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        role VARCHAR(255) NOT NULL,
+        badge VARCHAR(100) DEFAULT 'Tim Ladi',
+        image MEDIUMTEXT,
+        \`desc\` TEXT,
+        focus VARCHAR(255) DEFAULT '',
+        order_num INT DEFAULT 0,
+        status VARCHAR(50) DEFAULT 'active',
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `);
+
     // 2. Baca data dari file JSON lokal
     const dataDir = path.join(process.cwd(), "data");
     const blogsFile = path.join(dataDir, "blogs.json");
     const eventsFile = path.join(dataDir, "events.json");
     const projectsFile = path.join(dataDir, "projects.json");
+    const teamFile = path.join(dataDir, "team.json");
 
     let syncedBlogs = 0;
     if (fs.existsSync(blogsFile)) {
@@ -177,15 +194,38 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    let syncedTeam = 0;
+    if (fs.existsSync(teamFile)) {
+      const team = JSON.parse(fs.readFileSync(teamFile, "utf-8"));
+      for (const m of team) {
+        await conn.query(
+          `INSERT INTO team_members (id, name, role, badge, image, \`desc\`, focus, order_num, status)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+           ON DUPLICATE KEY UPDATE
+            name = VALUES(name),
+            role = VALUES(role),
+            badge = VALUES(badge),
+            image = VALUES(image),
+            \`desc\` = VALUES(\`desc\`),
+            focus = VALUES(focus),
+            order_num = VALUES(order_num),
+            status = VALUES(status)`,
+          [m.id, m.name, m.role, m.badge || "Tim Ladi", m.image || "/images/team/team1.jpg", m.desc || "", m.focus || "", m.order_num || 0, m.status || "active"]
+        );
+        syncedTeam++;
+      }
+    }
+
     await conn.end();
 
     return NextResponse.json({
       success: true,
-      message: "Seluruh data berhasil disinkronkan ke MySQL Hostinger!",
+      message: "Seluruh data (Artikel, Event, Portofolio, Our Team) berhasil disinkronkan ke MySQL Hostinger!",
       synced: {
         blogs: syncedBlogs,
         events: syncedEvents,
         projects: syncedProjects,
+        team: syncedTeam,
       },
     });
   } catch (error: any) {

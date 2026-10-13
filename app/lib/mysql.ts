@@ -27,7 +27,7 @@ export function getPool(): mysql.Pool {
       waitForConnections: true,
       connectionLimit: 10,
       queueLimit: 0,
-      connectTimeout: 2500, // Timeout cepat 2.5s agar tidak menggantung jika offline
+      connectTimeout: 8000, // Timeout 8 detik agar stabil untuk koneksi cloud-to-Hostinger
       enableKeepAlive: true,
       keepAliveInitialDelay: 10000,
       ssl: isSsl ? { rejectUnauthorized: false } : undefined,
@@ -41,7 +41,7 @@ async function ensureTables(db: mysql.Pool) {
   if (tablesChecked) return;
   tablesChecked = true;
   try {
-    // Pastikan tabel blogs ada di Hostinger jika belum dibuat
+    // 1. Pastikan tabel blogs ada di Hostinger jika belum dibuat
     await db.query(`
       CREATE TABLE IF NOT EXISTS blogs (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -61,7 +61,7 @@ async function ensureTables(db: mysql.Pool) {
       )
     `);
 
-    // Pastikan tabel events ada di Hostinger jika belum dibuat
+    // 2. Pastikan tabel events ada di Hostinger jika belum dibuat
     await db.query(`
       CREATE TABLE IF NOT EXISTS events (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -80,7 +80,7 @@ async function ensureTables(db: mysql.Pool) {
       )
     `);
 
-    // Pastikan tabel projects (portfolio) ada di Hostinger jika belum dibuat
+    // 3. Pastikan tabel projects (portfolio) ada di Hostinger jika belum dibuat
     await db.query(`
       CREATE TABLE IF NOT EXISTS projects (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -101,8 +101,25 @@ async function ensureTables(db: mysql.Pool) {
         updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP
       )
     `);
+
+    // 4. Pastikan tabel team_members ada di Hostinger jika belum dibuat
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS team_members (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        role VARCHAR(255) NOT NULL,
+        badge VARCHAR(100) DEFAULT 'Tim Ladi',
+        image MEDIUMTEXT,
+        \`desc\` TEXT,
+        focus VARCHAR(255) DEFAULT '',
+        order_num INT DEFAULT 0,
+        status VARCHAR(50) DEFAULT 'active',
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP
+      )
+    `);
   } catch (e) {
-    // Abaikan jika error permisson atau tabel sudah terpasang
+    // Abaikan jika error permission atau tabel sudah terpasang
   }
 }
 
