@@ -22,7 +22,7 @@ export function getPool(): mysql.Pool {
       host: process.env.DB_HOST || "srv1762.hstgr.io",
       user: process.env.DB_USER || "u941811514_admin",
       password: process.env.DB_PASSWORD || "",
-      database: process.env.DB_NAME || "u941811514_faselin",
+      database: process.env.DB_NAME || "u941811514_ladi",
       port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306,
       waitForConnections: true,
       connectionLimit: 10,

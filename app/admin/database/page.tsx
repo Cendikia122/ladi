@@ -13,7 +13,7 @@ export default function AdminDatabasePage() {
     host: "srv1762.hstgr.io",
     user: "u941811514_admin",
     password: "",
-    database: "u941811514_faselin",
+    database: "u941811514_ladi",
     port: "3306",
     hasPassword: false,
   });

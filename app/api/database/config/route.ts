@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     config: {
       host: process.env.DB_HOST || "srv1762.hstgr.io",
       user: process.env.DB_USER || "u941811514_admin",
-      database: process.env.DB_NAME || "u941811514_faselin",
+      database: process.env.DB_NAME || "u941811514_ladi",
       port: process.env.DB_PORT || "3306",
       hasPassword: Boolean(process.env.DB_PASSWORD && process.env.DB_PASSWORD.trim().length > 0),
     },
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     const updates: Record<string, string> = {
       DB_HOST: host || "srv1762.hstgr.io",
       DB_USER: user || "u941811514_admin",
-      DB_NAME: database || "u941811514_faselin",
+      DB_NAME: database || "u941811514_ladi",
       DB_PORT: port ? String(port) : "3306",
     };
 
