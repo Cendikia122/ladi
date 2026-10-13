@@ -66,6 +66,16 @@ export default function AdminDatabasePage() {
   }, [router]);
 
   const handleTestConnection = async () => {
+    if (!config.password.trim() && !config.hasPassword) {
+      setTestResult({
+        success: false,
+        message: "Kolom DB_PASSWORD masih kosong! Ketik password database Hostinger Anda di kolom input di bawah sebelum menguji koneksi.",
+        help: "Hostinger menolak koneksi karena tidak ada password yang dikirim ('using password: NO'). Masukkan password database Anda pada kolom DB_PASSWORD di form bawah.",
+        loading: false,
+      });
+      return;
+    }
+
     setTestResult({ loading: true });
     try {
       const res = await authFetch("/api/database/test", {

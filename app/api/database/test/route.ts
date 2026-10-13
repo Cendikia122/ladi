@@ -13,9 +13,9 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json().catch(() => ({}));
     const host = body.host || process.env.DB_HOST || "srv1762.hstgr.io";
-    const user = body.user || process.env.DB_USER || "u941811514_admin";
+    const user = body.user || process.env.DB_USER || "u941811514_ladi";
     const password = body.password !== undefined ? body.password : (process.env.DB_PASSWORD || "");
-    const database = body.database || process.env.DB_NAME || "u941811514_faselin";
+    const database = body.database || process.env.DB_NAME || "u941811514_ladi";
     const port = body.port ? parseInt(body.port, 10) : (process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306);
     const ssl = body.ssl ?? (process.env.DB_SSL === "true");
 
