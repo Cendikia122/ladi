@@ -127,6 +127,18 @@ async function ensureTables(db: mysql.Pool) {
       )
     `);
 
+    // 6. Pastikan tabel login_lockouts ada untuk proteksi brute force login
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS login_lockouts (
+        username VARCHAR(100) PRIMARY KEY,
+        failed_attempts INT DEFAULT 0,
+        locked_until BIGINT DEFAULT 0,
+        last_attempt BIGINT DEFAULT 0,
+        ip_address VARCHAR(100) DEFAULT '',
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      )
+    `);
+
     // Periksa apakah database sudah pernah di-inisialisasi
     const [metaRows]: any = await db.query("SELECT `value` FROM system_settings WHERE `key` = 'initialized'");
     if (!metaRows || metaRows.length === 0) {

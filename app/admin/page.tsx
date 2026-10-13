@@ -7,6 +7,7 @@ import { checkDbConnection } from "@/app/lib/mysql";
 import { verifyToken } from "@/app/lib/auth";
 import LadiLogo from "../components/LadiLogo";
 import AdminLogoutButton from "@/app/components/AdminLogoutButton";
+import SecurityLockoutWidget from "@/app/components/SecurityLockoutWidget";
 
 export const dynamic = "force-dynamic";
 
@@ -144,6 +145,11 @@ export default async function AdminDashboardPage() {
             </div>
           </div>
         )}
+
+        {/* =================================================================== */}
+        {/* KHUSUS SUPERADMIN: Widget Kontrol Keamanan Login & Buka Blokir Akun */}
+        {/* =================================================================== */}
+        {!isEditor && <SecurityLockoutWidget />}
 
         {/* Action Header Banner */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-8 rounded-3xl bg-white border border-slate-200 shadow-sm">

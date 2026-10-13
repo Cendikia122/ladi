@@ -11,8 +11,9 @@ function LoginForm() {
   const redirectUrl = searchParams.get("redirect") || "/admin";
   const reason = searchParams.get("reason");
 
-  const [username, setUsername] = useState("penulis");
-  const [password, setPassword] = useState("penulis123");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(
     reason === "unauthorized"
       ? "Sesi Anda belum aktif atau telah berakhir. Silakan masuk terlebih dahulu."
@@ -21,6 +22,9 @@ function LoginForm() {
   const [infoMessage, setInfoMessage] = useState(
     reason === "logout" ? "Anda telah berhasil keluar (logout) dari panel admin." : ""
   );
+  const [isLocked, setIsLocked] = useState(false);
+  const [remainingHours, setRemainingHours] = useState<number | null>(null);
+  const [remainingAttempts, setRemainingAttempts] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -32,6 +36,7 @@ function LoginForm() {
   const executeLogin = async (userVal: string, passVal: string) => {
     setError("");
     setInfoMessage("");
+    setIsLocked(false);
     setLoading(true);
 
     try {
@@ -49,9 +54,15 @@ function LoginForm() {
         window.location.href = redirectUrl;
       } else {
         setError(data.message || "Username atau password salah");
+        if (data.locked) {
+          setIsLocked(true);
+          setRemainingHours(data.remainingHours || 72);
+        } else if (typeof data.remainingAttempts === "number") {
+          setRemainingAttempts(data.remainingAttempts);
+        }
       }
     } catch {
-      setError("Gagal terhubung ke server");
+      setError("Gagal terhubung ke server. Periksa koneksi internet Anda.");
     } finally {
       setLoading(false);
     }
@@ -59,66 +70,55 @@ function LoginForm() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    await executeLogin(username, password);
-  };
-
-  const handleQuickAdmin = async () => {
-    setUsername("admin");
-    setPassword("admin123");
-    await executeLogin("admin", "admin123");
-  };
-
-  const handleQuickWriter = async () => {
-    setUsername("penulis");
-    setPassword("penulis123");
-    await executeLogin("penulis", "penulis123");
+    if (!username.trim() || !password) {
+      setError("Silakan isi username dan password.");
+      return;
+    }
+    await executeLogin(username.trim(), password);
   };
 
   return (
     <div className="bg-white py-8 px-6 shadow-2xl rounded-3xl sm:px-10 text-[#0f172a] border border-slate-200">
+      {/* Pesan Sukses Logout */}
       {infoMessage && (
-        <div className="mb-4 p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 font-semibold flex items-center gap-2">
+        <div className="mb-5 p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 font-semibold flex items-center gap-2">
           <span>✅</span>
           <span>{infoMessage}</span>
         </div>
       )}
 
-      {error && (
-        <div className="mb-4 p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 font-semibold flex items-center gap-2">
-          <span>⚠️</span>
-          <span>{error}</span>
+      {/* Banner Peringatan Akun Terblokir 3 Hari */}
+      {isLocked && (
+        <div className="mb-5 p-4 rounded-2xl bg-red-50 border border-red-300 text-red-950 space-y-2">
+          <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-red-700">
+            <span>🔒</span>
+            <span>Akses Akun Terblokir (3 Hari)</span>
+          </div>
+          <p className="text-xs text-red-900 leading-relaxed">
+            {error || "Akun ini telah terblokir karena 3 kali percobaan gagal berturut-turut."}
+          </p>
+          <div className="p-2.5 rounded-xl bg-red-100/80 text-[11px] text-red-900 font-medium">
+            💡 <strong>Pilihan Buka Blokir:</strong> Tunggu masa blokir selesai ({remainingHours ? `${remainingHours} jam lagi` : "3 hari"}), atau minta <strong>Super Administrator</strong> untuk membuka blokir akun Anda melalui panel admin.
+          </div>
         </div>
       )}
 
-      {/* Quick 1-Click Login Buttons */}
-      <div className="mb-6 pb-6 border-b border-slate-100 space-y-2.5">
-        <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 text-center">
-          Pilihan Masuk Cepat (1-Klik)
+      {/* Pesan Error / Percobaan Tersisa */}
+      {!isLocked && error && (
+        <div className="mb-5 p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 space-y-1.5">
+          <div className="flex items-start gap-2 font-semibold">
+            <span>⚠️</span>
+            <span>{error}</span>
+          </div>
+          {typeof remainingAttempts === "number" && remainingAttempts > 0 && (
+            <div className="text-[11px] font-mono font-bold text-amber-800 bg-amber-100/80 px-2 py-1 rounded-md inline-block">
+              Sisa kesempatan: {remainingAttempts} dari 3 kali percobaan
+            </div>
+          )}
         </div>
+      )}
 
-        {/* Tombol Masuk Penulis Konten */}
-        <button
-          type="button"
-          onClick={handleQuickWriter}
-          disabled={loading}
-          className="w-full py-3 px-4 rounded-xl bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
-        >
-          <span>✍️</span>
-          <span>Masuk sebagai Penulis (Khusus Blog/Artikel)</span>
-        </button>
-
-        {/* Tombol Masuk Administrator Utama */}
-        <button
-          type="button"
-          onClick={handleQuickAdmin}
-          disabled={loading}
-          className="w-full py-3 px-4 rounded-xl bg-[#0f172a] hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
-        >
-          <span>🛡️</span>
-          <span>Masuk sebagai Administrator (Semua Akses)</span>
-        </button>
-      </div>
-
+      {/* Formulir Login Aman */}
       <form onSubmit={handleLogin} className="space-y-4">
         <div>
           <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
@@ -127,10 +127,12 @@ function LoginForm() {
           <input
             type="text"
             required
-            placeholder="admin atau penulis"
+            autoComplete="username"
+            placeholder="Masukkan username Anda"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-[#1853a7] bg-[#f8fafc]"
+            disabled={loading}
+            className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-[#1853a7] focus:ring-1 focus:ring-[#1853a7] bg-[#f8fafc] text-slate-900 transition-all disabled:opacity-50"
           />
         </div>
 
@@ -138,54 +140,56 @@ function LoginForm() {
           <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
             Password
           </label>
-          <input
-            type="password"
-            required
-            placeholder="Masukkan password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-[#1853a7] bg-[#f8fafc]"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              required
+              autoComplete="current-password"
+              placeholder="Masukkan password Anda"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+              className="w-full px-4 py-3 pr-11 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-[#1853a7] focus:ring-1 focus:ring-[#1853a7] bg-[#f8fafc] text-slate-900 transition-all disabled:opacity-50"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              tabIndex={-1}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 text-sm cursor-pointer"
+              title={showPassword ? "Sembunyikan password" : "Lihat password"}
+            >
+              {showPassword ? "🙈" : "👁️"}
+            </button>
+          </div>
         </div>
 
         <div className="pt-2">
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 px-4 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all disabled:opacity-50 cursor-pointer"
+            className="w-full py-3.5 px-4 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
           >
-            {loading ? "Memverifikasi..." : "Masuk Manual ke Dashboard →"}
+            {loading ? (
+              <>
+                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span>Memverifikasi Kredensial...</span>
+              </>
+            ) : (
+              <span>Masuk ke Dashboard →</span>
+            )}
           </button>
         </div>
       </form>
 
-      {/* Account Info Cards */}
-      <div className="mt-6 pt-5 border-t border-slate-100 text-xs space-y-3">
-        <div className="font-bold text-slate-800 text-center uppercase tracking-wider text-[11px]">
-          Informasi Akun Tersedia
+      {/* Catatan Kebijakan Keamanan */}
+      <div className="mt-6 pt-5 border-t border-slate-100 text-[11px] text-slate-500 text-center space-y-1">
+        <div className="font-semibold text-slate-700 flex items-center justify-center gap-1">
+          <span>🛡️</span>
+          <span>Proteksi Keamanan Aktif</span>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
-          {/* Akun Penulis */}
-          <div className="p-3 rounded-xl bg-orange-50 border border-orange-200 space-y-1">
-            <div className="font-bold text-orange-900 flex items-center gap-1">
-              <span>✍️</span> Penulis Konten
-            </div>
-            <div className="text-slate-600">Fokus: <strong>Blog & Artikel</strong></div>
-            <div className="font-mono text-slate-800">User: <strong className="text-[#fa824b]">penulis</strong></div>
-            <div className="font-mono text-slate-800">Pass: <strong className="text-[#fa824b]">penulis123</strong></div>
-          </div>
-
-          {/* Akun Admin */}
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-            <div className="font-bold text-slate-900 flex items-center gap-1">
-              <span>🛡️</span> Administrator
-            </div>
-            <div className="text-slate-600">Akses: <strong>Semua Fitur</strong></div>
-            <div className="font-mono text-slate-800">User: <strong className="text-[#1853a7]">admin</strong></div>
-            <div className="font-mono text-slate-800">Pass: <strong className="text-[#1853a7]">admin123</strong></div>
-          </div>
-        </div>
+        <p className="text-slate-400 text-[10px]">
+          Akun akan otomatis terblokir selama 3 hari jika gagal 3 kali berturut-turut.
+        </p>
       </div>
     </div>
   );
@@ -202,7 +206,7 @@ export default function AdminLoginPage() {
           Portal Masuk Dashboard Ladi
         </h2>
         <p className="text-xs text-slate-400">
-          Masuk sebagai Administrator atau Penulis Konten Blog
+          Masuk ke Panel Administrasi & Pengelolaan Konten
         </p>
       </div>
 
