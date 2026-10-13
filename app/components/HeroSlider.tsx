@@ -121,10 +121,16 @@ export default function HeroSlider() {
                       </span>
                     </div>
 
-                    {/* Big Clear Headline with iPhone typography */}
-                    <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.12]">
-                      {s.headline}
-                    </h1>
+                    {/* Big Clear Headline with iPhone typography (H1 untuk slide utama, H2 untuk slide berikutnya demi SEO semantik) */}
+                    {idx === 0 ? (
+                      <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.12]">
+                        {s.headline}
+                      </h1>
+                    ) : (
+                      <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.12]">
+                        {s.headline}
+                      </h2>
+                    )}
 
                     {/* Orange Decorative Underline */}
                     <div className="w-16 h-1.5 bg-[#fa824b] rounded-full shadow-[0_0_12px_rgba(250,130,75,0.6)]" />

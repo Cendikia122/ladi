@@ -99,6 +99,62 @@ export default function RootLayout({
         ],
       },
       {
+        "@type": "ProfessionalService",
+        "@id": `${Config.siteUrl}/#localservice`,
+        name: "Ladi (Layanan Digital) — Jasa Pembuatan Website & Digitalisasi UMKM",
+        url: Config.siteUrl,
+        logo: `${Config.siteUrl}/logo.png`,
+        image: `${Config.siteUrl}/logo.png`,
+        telephone: Config.contactPhone,
+        priceRange: "Rp 500.000 - Rp 5.000.000",
+        currenciesAccepted: "IDR",
+        paymentAccepted: "Bank Transfer, QRIS, Cash",
+        areaServed: [
+          { "@type": "City", name: "Bogor" },
+          { "@type": "City", name: "Depok" },
+          { "@type": "City", name: "Jakarta" },
+          { "@type": "Country", name: "Indonesia" },
+        ],
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Bogor",
+          addressRegion: "Jawa Barat",
+          addressCountry: "ID",
+        },
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: -6.5971,
+          longitude: 106.806,
+        },
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "Layanan Digitalisasi Ladi",
+          itemListElement: [
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Jasa Pembuatan Website Profesional & Panel Admin Dinamis",
+              },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Pendaftaran & Verifikasi Resmi Google Business Profile (Google Maps)",
+              },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Digital Presence System (DPS) & Pendampingan Rutin UMKM",
+              },
+            },
+          ],
+        },
+      },
+      {
         "@type": "WebSite",
         "@id": `${Config.siteUrl}/#website`,
         url: Config.siteUrl,
