@@ -1,9 +1,9 @@
 "use client";
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import LadiLogo from "../../components/LadiLogo";
-import { setClientToken } from "@/app/lib/clientAuth";
+import LadiLogo from "@/app/components/LadiLogo";
+import { setClientToken, clearClientToken } from "@/app/lib/clientAuth";
 
 function LoginForm() {
   const router = useRouter();
@@ -14,12 +14,24 @@ function LoginForm() {
   const [username, setUsername] = useState("penulis");
   const [password, setPassword] = useState("penulis123");
   const [error, setError] = useState(
-    reason === "unauthorized" ? "Sesi Anda belum aktif atau telah berakhir. Silakan masuk terlebih dahulu." : ""
+    reason === "unauthorized"
+      ? "Sesi Anda belum aktif atau telah berakhir. Silakan masuk terlebih dahulu."
+      : ""
+  );
+  const [infoMessage, setInfoMessage] = useState(
+    reason === "logout" ? "Anda telah berhasil keluar (logout) dari panel admin." : ""
   );
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (reason === "logout" || reason === "unauthorized") {
+      clearClientToken();
+    }
+  }, [reason]);
+
   const executeLogin = async (userVal: string, passVal: string) => {
     setError("");
+    setInfoMessage("");
     setLoading(true);
 
     try {
@@ -34,8 +46,7 @@ function LoginForm() {
         if (data.token) {
           setClientToken(data.token);
         }
-        router.push(redirectUrl);
-        router.refresh();
+        window.location.href = redirectUrl;
       } else {
         setError(data.message || "Username atau password salah");
       }
@@ -65,6 +76,13 @@ function LoginForm() {
 
   return (
     <div className="bg-white py-8 px-6 shadow-2xl rounded-3xl sm:px-10 text-[#0f172a] border border-slate-200">
+      {infoMessage && (
+        <div className="mb-4 p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 font-semibold flex items-center gap-2">
+          <span>✅</span>
+          <span>{infoMessage}</span>
+        </div>
+      )}
+
       {error && (
         <div className="mb-4 p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 font-semibold flex items-center gap-2">
           <span>⚠️</span>
@@ -83,7 +101,7 @@ function LoginForm() {
           type="button"
           onClick={handleQuickWriter}
           disabled={loading}
-          className="w-full py-3 px-4 rounded-xl bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+          className="w-full py-3 px-4 rounded-xl bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
         >
           <span>✍️</span>
           <span>Masuk sebagai Penulis (Khusus Blog/Artikel)</span>
@@ -94,7 +112,7 @@ function LoginForm() {
           type="button"
           onClick={handleQuickAdmin}
           disabled={loading}
-          className="w-full py-3 px-4 rounded-xl bg-[#0f172a] hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+          className="w-full py-3 px-4 rounded-xl bg-[#0f172a] hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
         >
           <span>🛡️</span>
           <span>Masuk sebagai Administrator (Semua Akses)</span>
@@ -134,7 +152,7 @@ function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 px-4 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all disabled:opacity-50"
+            className="w-full py-3.5 px-4 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all disabled:opacity-50 cursor-pointer"
           >
             {loading ? "Memverifikasi..." : "Masuk Manual ke Dashboard →"}
           </button>
@@ -189,7 +207,14 @@ export default function AdminLoginPage() {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md px-4">
-        <Suspense fallback={<div className="bg-white py-12 rounded-3xl text-center text-slate-500 text-xs">Memuat portal...</div>}>
+        <Suspense
+          fallback={
+            <div className="bg-white py-12 px-6 rounded-3xl shadow-xl text-center text-slate-500 text-xs">
+              <div className="w-8 h-8 border-2 border-[#1853a7] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+              Memuat portal login...
+            </div>
+          }
+        >
           <LoginForm />
         </Suspense>
 

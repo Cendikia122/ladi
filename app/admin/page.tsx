@@ -6,6 +6,7 @@ import { getBlogs, getEvents, getProjects, getTeamMembers } from "@/app/lib/stor
 import { checkDbConnection } from "@/app/lib/mysql";
 import { verifyToken } from "@/app/lib/auth";
 import LadiLogo from "../components/LadiLogo";
+import AdminLogoutButton from "@/app/components/AdminLogoutButton";
 
 export const dynamic = "force-dynamic";
 
@@ -72,14 +73,7 @@ export default async function AdminDashboardPage() {
             >
               Lihat Website ↗
             </Link>
-            <form action="/api/auth/logout" method="POST">
-              <button
-                type="submit"
-                className="px-4 py-2 rounded-full bg-red-600/80 hover:bg-red-600 text-white font-bold transition-all"
-              >
-                Keluar (Logout)
-              </button>
-            </form>
+            <AdminLogoutButton />
           </div>
         </div>
       </header>

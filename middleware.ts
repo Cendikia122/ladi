@@ -40,7 +40,15 @@ export function middleware(request: NextRequest) {
   }
 
   // 4. Proteksi Rute Admin (/admin)
-  if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
+  if (pathname.startsWith("/admin")) {
+    // Tangani jika ada request POST ke halaman login (mencegah error 405 Method Not Allowed / layar blank)
+    if (pathname === "/admin/login" || pathname === "/admin/login/") {
+      if (request.method === "POST") {
+        return NextResponse.redirect(new URL("/admin/login?reason=logout", request.url), 303);
+      }
+      return NextResponse.next();
+    }
+
     const token = request.cookies.get("ladi_admin_token")?.value;
 
     // Jika belum login di production, arahkan ke login
@@ -51,7 +59,7 @@ export function middleware(request: NextRequest) {
       const loginUrl = new URL("/admin/login", request.url);
       loginUrl.searchParams.set("redirect", pathname);
       loginUrl.searchParams.set("reason", "unauthorized");
-      return NextResponse.redirect(loginUrl);
+      return NextResponse.redirect(loginUrl, 303);
     }
   }
 
