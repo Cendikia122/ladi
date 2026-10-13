@@ -120,7 +120,7 @@ export default function ServicesPage() {
                 </ul>
                 <div className="pt-2">
                   <a
-                    href="https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+tertarik+Paket+EXIST"
+                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+Paket+EXIST"
                     className="block w-full text-center py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider"
                   >
                     Tanya Paket EXIST
@@ -147,7 +147,7 @@ export default function ServicesPage() {
                 </ul>
                 <div className="pt-2">
                   <a
-                    href="https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+tertarik+Paket+RISE"
+                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+Paket+RISE"
                     className="block w-full text-center py-3 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md"
                   >
                     Tanya Paket RISE
@@ -171,7 +171,7 @@ export default function ServicesPage() {
                 </ul>
                 <div className="pt-2">
                   <a
-                    href="https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+tertarik+Paket+RUN"
+                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+Paket+RUN"
                     className="block w-full text-center py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider"
                   >
                     Tanya Paket RUN
@@ -194,7 +194,7 @@ export default function ServicesPage() {
                 </ul>
                 <div className="pt-2">
                   <a
-                    href="https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+tertarik+Paket+GUARD"
+                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+Paket+GUARD"
                     className="block w-full text-center py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider"
                   >
                     Tanya Paket GUARD

@@ -11,8 +11,8 @@ function LoginForm() {
   const redirectUrl = searchParams.get("redirect") || "/admin";
   const reason = searchParams.get("reason");
 
-  const [username, setUsername] = useState("admin");
-  const [password, setPassword] = useState("admin123");
+  const [username, setUsername] = useState("penulis");
+  const [password, setPassword] = useState("penulis123");
   const [error, setError] = useState(
     reason === "unauthorized" ? "Sesi Anda belum aktif atau telah berakhir. Silakan masuk terlebih dahulu." : ""
   );
@@ -51,10 +51,16 @@ function LoginForm() {
     await executeLogin(username, password);
   };
 
-  const handleQuickLogin = async () => {
+  const handleQuickAdmin = async () => {
     setUsername("admin");
     setPassword("admin123");
     await executeLogin("admin", "admin123");
+  };
+
+  const handleQuickWriter = async () => {
+    setUsername("penulis");
+    setPassword("penulis123");
+    await executeLogin("penulis", "penulis123");
   };
 
   return (
@@ -66,20 +72,33 @@ function LoginForm() {
         </div>
       )}
 
-      {/* Quick 1-Click Login Button */}
-      <div className="mb-6 pb-6 border-b border-slate-100">
+      {/* Quick 1-Click Login Buttons */}
+      <div className="mb-6 pb-6 border-b border-slate-100 space-y-2.5">
+        <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 text-center">
+          Pilihan Masuk Cepat (1-Klik)
+        </div>
+
+        {/* Tombol Masuk Penulis Konten */}
         <button
           type="button"
-          onClick={handleQuickLogin}
+          onClick={handleQuickWriter}
           disabled={loading}
-          className="w-full py-3.5 px-4 rounded-xl bg-[#0f172a] hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+          className="w-full py-3 px-4 rounded-xl bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2 disabled:opacity-50"
         >
-          <span>⚡</span>
-          <span>Masuk Cepat (Akun Administrator Default)</span>
+          <span>✍️</span>
+          <span>Masuk sebagai Penulis (Khusus Blog/Artikel)</span>
         </button>
-        <p className="text-[11px] text-center text-slate-400 mt-2">
-          Klik untuk langsung login dengan akun bawaan sistem
-        </p>
+
+        {/* Tombol Masuk Administrator Utama */}
+        <button
+          type="button"
+          onClick={handleQuickAdmin}
+          disabled={loading}
+          className="w-full py-3 px-4 rounded-xl bg-[#0f172a] hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+        >
+          <span>🛡️</span>
+          <span>Masuk sebagai Administrator (Semua Akses)</span>
+        </button>
       </div>
 
       <form onSubmit={handleLogin} className="space-y-4">
@@ -90,7 +109,7 @@ function LoginForm() {
           <input
             type="text"
             required
-            placeholder="Masukkan username"
+            placeholder="admin atau penulis"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-[#1853a7] bg-[#f8fafc]"
@@ -122,11 +141,33 @@ function LoginForm() {
         </div>
       </form>
 
-      {/* Development Hint Box */}
-      <div className="mt-6 pt-4 border-t border-slate-100 text-center text-xs text-slate-500 space-y-1">
-        <span className="font-semibold text-slate-700">Kredensial Default:</span>
-        <div>Username: <code className="bg-slate-100 px-1 py-0.5 rounded text-[#1853a7]">admin</code></div>
-        <div>Password: <code className="bg-slate-100 px-1 py-0.5 rounded text-[#1853a7]">admin123</code></div>
+      {/* Account Info Cards */}
+      <div className="mt-6 pt-5 border-t border-slate-100 text-xs space-y-3">
+        <div className="font-bold text-slate-800 text-center uppercase tracking-wider text-[11px]">
+          Informasi Akun Tersedia
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+          {/* Akun Penulis */}
+          <div className="p-3 rounded-xl bg-orange-50 border border-orange-200 space-y-1">
+            <div className="font-bold text-orange-900 flex items-center gap-1">
+              <span>✍️</span> Penulis Konten
+            </div>
+            <div className="text-slate-600">Fokus: <strong>Blog & Artikel</strong></div>
+            <div className="font-mono text-slate-800">User: <strong className="text-[#fa824b]">penulis</strong></div>
+            <div className="font-mono text-slate-800">Pass: <strong className="text-[#fa824b]">penulis123</strong></div>
+          </div>
+
+          {/* Akun Admin */}
+          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+            <div className="font-bold text-slate-900 flex items-center gap-1">
+              <span>🛡️</span> Administrator
+            </div>
+            <div className="text-slate-600">Akses: <strong>Semua Fitur</strong></div>
+            <div className="font-mono text-slate-800">User: <strong className="text-[#1853a7]">admin</strong></div>
+            <div className="font-mono text-slate-800">Pass: <strong className="text-[#1853a7]">admin123</strong></div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -140,10 +181,10 @@ export default function AdminLoginPage() {
           <LadiLogo inverted={true} />
         </div>
         <h2 className="text-2xl font-bold tracking-tight text-white">
-          Portal Masuk Administrator
+          Portal Masuk Dashboard Ladi
         </h2>
         <p className="text-xs text-slate-400">
-          Kelola konten artikel dan pembaruan sistem Ladi
+          Masuk sebagai Administrator atau Penulis Konten Blog
         </p>
       </div>
 

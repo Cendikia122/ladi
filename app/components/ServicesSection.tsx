@@ -211,7 +211,7 @@ export default function ServicesSection() {
                   Pengerjaan transparan · Ada demo sebelum website live
                 </div>
                 <a
-                  href={`https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+tertarik+konsultasi+tentang+${encodeURIComponent(current.name)}`}
+                  href={`https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+konsultasi+tentang+${encodeURIComponent(current.name)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-6 py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider transition-all"

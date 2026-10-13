@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { getBlogById, updateBlog, deleteBlog } from "@/app/lib/storage";
-import { verifyAdmin } from "@/app/lib/auth";
+import { verifyCanManageBlogs } from "@/app/lib/auth";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -26,8 +26,8 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const admin = verifyAdmin(request);
-  if (!admin) {
+  const user = verifyCanManageBlogs(request);
+  if (!user) {
     return NextResponse.json({ success: false, message: "Akses ditolak" }, { status: 401 });
   }
 
@@ -56,8 +56,8 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const admin = verifyAdmin(request);
-  if (!admin) {
+  const user = verifyCanManageBlogs(request);
+  if (!user) {
     return NextResponse.json({ success: false, message: "Akses ditolak" }, { status: 401 });
   }
 

@@ -19,7 +19,7 @@ export default function ContactPage() {
     const text = encodeURIComponent(
       `Halo Ladi! Saya mau konsultasi / minta Digital Audit Gratis:\n\nNama: ${form.name}\nUsaha: ${form.business}\nNomor WA: ${form.phone}\nCatatan: ${form.note || "-"}\n\nMohon dibantu. Terima kasih!`
     );
-    window.open(`https://wa.me/6281298319944?text=${text}`, "_blank");
+    window.open(`https://wa.me/6282112477119?text=${text}`, "_blank");
     setSent(true);
   };
 
@@ -66,8 +66,8 @@ export default function ContactPage() {
                     </span>
                     <div>
                       <div className="text-xs text-slate-500 font-bold uppercase">WhatsApp Resmi</div>
-                      <a href="https://wa.me/6281298319944" className="text-sm font-bold text-slate-900 hover:text-[#1853a7]">
-                        +62 812-9831-9944
+                      <a href="https://wa.me/6282112477119" className="text-sm font-bold text-slate-900 hover:text-[#1853a7]">
+                        +62 821-1247-7119
                       </a>
                       <div className="text-[11px] text-emerald-600 mt-0.5">● Respons Cepat Jam Kerja</div>
                     </div>

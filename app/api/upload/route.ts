@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
-import { verifyAdmin } from "@/app/lib/auth";
+import { verifyCanManageBlogs } from "@/app/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
-  const admin = verifyAdmin(request);
-  if (!admin) {
+  const user = verifyCanManageBlogs(request);
+  if (!user) {
     return NextResponse.json(
       { success: false, message: "Akses ditolak. Silakan login terlebih dahulu." },
       { status: 401 }

@@ -57,7 +57,7 @@ export default function PricingPage() {
 
                 <div className="pt-6">
                   <a
-                    href="https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+minat+Paket+EXIST"
+                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+minat+Paket+EXIST"
                     className="block w-full text-center py-2.5 rounded-full bg-[#1853a7] text-white font-bold text-xs uppercase"
                   >
                     Pilih EXIST
@@ -92,7 +92,7 @@ export default function PricingPage() {
 
                 <div className="pt-6">
                   <a
-                    href="https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+minat+Paket+RISE"
+                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+minat+Paket+RISE"
                     className="block w-full text-center py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase shadow"
                   >
                     Pilih RISE
@@ -124,7 +124,7 @@ export default function PricingPage() {
 
                 <div className="pt-6">
                   <a
-                    href="https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+minat+Paket+RUN"
+                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+minat+Paket+RUN"
                     className="block w-full text-center py-2.5 rounded-full bg-[#1853a7] text-white font-bold text-xs uppercase"
                   >
                     Pilih RUN
@@ -154,7 +154,7 @@ export default function PricingPage() {
 
                 <div className="pt-6">
                   <a
-                    href="https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+minat+Paket+GUARD"
+                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+minat+Paket+GUARD"
                     className="block w-full text-center py-2.5 rounded-full bg-[#1853a7] text-white font-bold text-xs uppercase"
                   >
                     Pilih GUARD

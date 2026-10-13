@@ -183,7 +183,7 @@ export default function Services() {
 
               <div>
                 <a
-                  href={`https://wa.me/62XXXXXXXXXX?text=Halo+Ladi%2C+saya+ingin+konsultasi+mengenai+paket+${pkg.name}`}
+                  href={`https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+ingin+konsultasi+mengenai+paket+${pkg.name}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`w-full block text-center py-2.5 px-4 rounded-lg text-xs font-medium transition-colors duration-150 ${

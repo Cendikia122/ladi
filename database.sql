@@ -114,7 +114,7 @@ VALUES
   'Panduan langsung langkah demi langkah bagi pemilik toko fisik agar tempat usahanya muncul di peringkat 3 teratas pencarian Google Maps Bogor.',
   '<h3>Materi yang Dipelajari:</h3><ul><li>Klaim kepemilikan dan verifikasi instan Google Bisnisku</li><li>Trik memilih kategori bisnis yang minim persaingan tapi ramai pencari</li><li>Strategi mengumpulkan ulasan bintang 5 dari pelanggan setia tanpa melanggar pedoman Google</li><li>Teknik menghubungkan profil Google ke WhatsApp Penjualan langsung</li></ul>',
   'Daftar Kursi Terbatas',
-  'https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+mau+daftar+Workshop+Google+Bisnis',
+  'https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+mau+daftar+Workshop+Google+Bisnis',
   'active'
 ),
 (
@@ -125,7 +125,7 @@ VALUES
   'Sesi eksklusif untuk pemilik usaha dan manajemen senior tentang pencegahan penipuan online yang mencatut nama bisnis Anda.',
   '<h3>Pokok Pembahasan:</h3><ul><li>Mengamankan akun Google Bisnis dari upaya pembajakan pihak tak bertanggung jawab</li><li>Menangani ulasan negatif palsu dari kompetitor nakal secara legal dan tenang</li><li>Standar verifikasi resmi komunikasi WhatsApp kepada pelanggan setia</li></ul>',
   'Reservasi Kursi Eksekutif',
-  'https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+tertarik+mengikuti+Briefing+Eksekutif',
+  'https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+mengikuti+Briefing+Eksekutif',
   'active'
 ),
 (
@@ -136,7 +136,7 @@ VALUES
   'Konsultan digital Ladi datang langsung ke lokasi usaha Anda untuk mengevaluasi titik lemah dan merancang peta jalan digitalisasi tokomu.',
   '<h3>Apa yang Kami Periksa Bersama Anda:</h3><ul><li>Audit keterlihatan toko Anda di pencarian smartphone radius 5 km</li><li>Pemeriksaan nomor kontak, katalog, dan alur pemesanan pelanggan</li><li>Rekomendasi tindakan instan yang bisa langsung menaikkan panggilan telepon dan kunjungan</li></ul>',
   'Jadwalkan Konsultasi 1-on-1',
-  'https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+mau+jadwalkan+Klinik+Konsultasi+1-on-1',
+  'https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+mau+jadwalkan+Klinik+Konsultasi+1-on-1',
   'active'
 )
 ON DUPLICATE KEY UPDATE `title`=VALUES(`title`);

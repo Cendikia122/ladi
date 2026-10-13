@@ -224,7 +224,7 @@ export default async function ProjectPage() {
                       </div>
 
                       <a
-                        href={`https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+tertarik+membuat+website+seperti+studi+kasus+${encodeURIComponent(
+                        href={`https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+membuat+website+seperti+studi+kasus+${encodeURIComponent(
                           item.title
                         )}`}
                         target="_blank"

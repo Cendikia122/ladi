@@ -13,7 +13,7 @@ export default async function TeamAndEvents() {
       badge: "PPLG Wikrama Lead",
       image: "/images/team/team1.jpg",
       desc: "Memastikan arsitektur website prima, SEO maksimal, dan setiap proyek digital selesai tepat waktu dengan standar visual kelas dunia.",
-      contact: "Konsultasi Teknis",
+      focus: "Arsitektur & SEO Semantik",
     },
     {
       name: "Fajar Ramadhan",
@@ -21,7 +21,7 @@ export default async function TeamAndEvents() {
       badge: "Web & Mobile Specialist",
       image: "/images/team/team2.jpg",
       desc: "Membangun website responsif super kencang, mulus dibuka di semua tipe HP, dan terintegrasi langsung dengan database serta WhatsApp bisnis.",
-      contact: "Teknologi & Fitur",
+      focus: "Performa & Integrasi Sistem",
     },
     {
       name: "Sarah Amalia",
@@ -29,7 +29,7 @@ export default async function TeamAndEvents() {
       badge: "Client Care & Strategist",
       image: "/images/team/team3.jpg",
       desc: "Menata copywriting promosi, estetika visual foto usaha, serta mendampingi pemilik UMKM langkah demi langkah agar usahanya ramai dicari pembeli.",
-      contact: "Pendampingan Usaha",
+      focus: "Visual & Konten Promosi",
     },
   ];
 
@@ -43,7 +43,7 @@ export default async function TeamAndEvents() {
     <section id="tim-event" className="py-24 md:py-32 bg-[#f8fafc] border-b border-slate-200">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
         {/* ========================================================================= */}
-        {/* BAGIAN 1: OUR TEAM (TIM DI BALIK LADI) */}
+        {/* BAGIAN 1: OUR TEAM (TIM DI BALIK LADI) - PURELY INFORMATIVE */}
         {/* ========================================================================= */}
         <div>
           <div className="text-center max-w-2xl mx-auto mb-16">
@@ -55,16 +55,16 @@ export default async function TeamAndEvents() {
             </h2>
             <div className="decorative-line-center" />
             <p className="text-slate-600 text-base sm:text-lg">
-              Didukung oleh talenta unggulan PPLG SMK Wikrama Bogor dengan bimbingan praktisi bisnis berpengalaman, kami siap mendampingi usaha Anda dari nol hingga dipercaya di Google.
+              Didukung oleh talenta unggulan PPLG SMK Wikrama Bogor dengan bimbingan praktisi bisnis berpengalaman, kami hadir mendampingi digitalisasi usaha Anda.
             </p>
           </div>
 
-          {/* 3 Team Profile Cards (Apple / iPhone aesthetic) */}
+          {/* 3 Team Profile Cards (Informative Apple/iPhone aesthetic, No CTA button) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {teamMembers.map((member, i) => (
               <div
                 key={i}
-                className="group p-8 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 corporate-card flex flex-col items-center text-center relative overflow-hidden"
+                className="group p-8 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 corporate-card flex flex-col items-center text-center relative overflow-hidden"
               >
                 {/* Accent top gradient border */}
                 <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#1853a7] via-[#fa824b] to-[#1853a7] opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -80,8 +80,6 @@ export default async function TeamAndEvents() {
                       sizes="112px"
                     />
                   </div>
-                  {/* Active Indicator dot */}
-                  <span className="absolute bottom-1 right-1 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full shadow-sm" />
                 </div>
 
                 {/* Role Badge */}
@@ -106,20 +104,14 @@ export default async function TeamAndEvents() {
                   {member.desc}
                 </p>
 
-                {/* Footer status pill */}
-                <div className="mt-6 pt-5 w-full border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-medium">
-                  <span className="flex items-center gap-1.5 text-emerald-600 font-semibold text-[11px]">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    Siap Mendampingi
+                {/* Purely Informative Footer (No CTA / No WA Link) */}
+                <div className="mt-6 pt-4 w-full border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                  <span className="text-[11px] font-medium text-slate-500">
+                    Bidang Keahlian:
                   </span>
-                  <a
-                    href={`https://wa.me/6281298319944?text=${encodeURIComponent(`Halo ${member.name} dari tim Ladi, saya ingin konsultasi mengenai digitalisasi usaha saya.`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#1853a7] hover:text-[#fa824b] font-bold transition-colors"
-                  >
-                    Chat WA →
-                  </a>
+                  <span className="font-semibold text-slate-700 text-[11px] bg-slate-100 px-2.5 py-0.5 rounded-md">
+                    {member.focus}
+                  </span>
                 </div>
               </div>
             ))}
@@ -230,7 +222,7 @@ export default async function TeamAndEvents() {
                         Detail Acara →
                       </Link>
                       <a
-                        href={ev.btn_link || `https://wa.me/6281298319944?text=${encodeURIComponent("Halo Ladi, saya ingin daftar event: " + ev.title)}`}
+                        href={ev.btn_link || `https://wa.me/6282112477119?text=${encodeURIComponent("Halo Ladi, saya ingin daftar event: " + ev.title)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="px-4 py-2 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white text-xs font-bold transition-all shadow-sm"

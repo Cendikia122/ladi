@@ -70,12 +70,12 @@ export default function Footer() {
               <div className="flex items-start gap-2">
                 <span className="text-[#fa824b] font-bold">💬</span>
                 <a
-                  href="https://wa.me/6281298319944"
+                  href="https://wa.me/6282112477119"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors"
                 >
-                  +62 812-9831-9944 (WhatsApp)
+                  +62 821-1247-7119 (WhatsApp)
                 </a>
               </div>
               <div className="flex items-start gap-2">

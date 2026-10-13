@@ -94,7 +94,7 @@ export default function RootLayout({
         },
         sameAs: [
           "https://www.instagram.com/ladi.digital",
-          "https://wa.me/6281298319944",
+          "https://wa.me/6282112477119",
           "https://linkedin.com/company/ladi-digital",
         ],
       },

@@ -104,7 +104,7 @@ export default async function EventDetailPage({
 
   const waLink =
     event.btn_link ||
-    `https://wa.me/6281298319944?text=${encodeURIComponent(
+    `https://wa.me/6282112477119?text=${encodeURIComponent(
       `Halo Ladi, saya tertarik untuk mendaftar atau tanya informasi seputar: ${event.title}`
     )}`;
 

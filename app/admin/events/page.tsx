@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import LadiLogo from "../../components/LadiLogo";
 import { EventItem } from "@/app/lib/storage";
-import { authFetch } from "@/app/lib/clientAuth";
+import { authFetch, getClientSession } from "@/app/lib/clientAuth";
 
 export const dynamic = "force-dynamic";
 
@@ -30,8 +30,15 @@ export default function AdminEventsPage() {
   };
 
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    getClientSession().then((u) => {
+      if (u && u.role === "editor") {
+        alert("Akun Anda (Penulis Konten) dikhususkan untuk mengelola Blog & Artikel.");
+        router.push("/admin/blogs");
+        return;
+      }
+      fetchEvents();
+    });
+  }, [router]);
 
   const handleDelete = async (id: number, title: string) => {
     if (!confirm(`Hapus event "${title}"?`)) return;

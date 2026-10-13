@@ -1,6 +1,6 @@
 export default function WhatsAppButton() {
   const waLink =
-    "https://wa.me/6281298319944?text=Halo+Ladi+Consulting%2C+saya+ingin+konsultasi+infrastruktur+digital+untuk+bisnis+saya.";
+    "https://wa.me/6282112477119?text=Halo+Ladi+Consulting%2C+saya+ingin+konsultasi+infrastruktur+digital+untuk+bisnis+saya.";
 
   return (
     <aside aria-label="Kanal WhatsApp Langsung" className="fixed bottom-6 right-6 z-40">

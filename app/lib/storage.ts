@@ -403,7 +403,7 @@ export async function getEvents(limit?: number, all: boolean = false): Promise<E
         short_desc: r.short_desc || "",
         description: r.description || "",
         btn_text: r.btn_text || "Daftar Sekarang",
-        btn_link: r.btn_link || `https://wa.me/6281298319944?text=${encodeURIComponent("Halo Ladi, saya tertarik daftar event: " + r.title)}`,
+        btn_link: r.btn_link || `https://wa.me/6282112477119?text=${encodeURIComponent("Halo Ladi, saya tertarik daftar event: " + r.title)}`,
         status: r.status || "active",
         created_at: r.created_at ? new Date(r.created_at).toISOString() : new Date().toISOString(),
       }));
@@ -460,7 +460,7 @@ export async function createEvent(data: Partial<EventItem>): Promise<EventItem> 
   const short_desc = data.short_desc || "";
   const description = data.description || `<p>${short_desc}</p>`;
   const btn_text = data.btn_text || "Daftar via WhatsApp";
-  const btn_link = data.btn_link || `https://wa.me/6281298319944?text=${encodeURIComponent("Halo Ladi, saya mau daftar " + title)}`;
+  const btn_link = data.btn_link || `https://wa.me/6282112477119?text=${encodeURIComponent("Halo Ladi, saya mau daftar " + title)}`;
   const status = (data.status as "active" | "inactive") || "active";
 
   let newId = inMemoryEvents.length > 0 ? Math.max(...inMemoryEvents.map((e) => e.id)) + 1 : 1;

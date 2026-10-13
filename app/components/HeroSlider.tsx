@@ -22,7 +22,7 @@ const slides = [
       "Website resmi, Google, dan WhatsApp terhubung dalam satu sistem yang langsung bekerja untuk Anda. Hasilnya bisa dipantau transparan setiap bulan.",
     primaryCta: "Konsultasi via WhatsApp",
     secondaryCta: "Cara Kerja Ladi",
-    primaryHref: "https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+ingin+konsultasi+sistem+penjualan+digital",
+    primaryHref: "https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+ingin+konsultasi+sistem+penjualan+digital",
     secondaryHref: "#proses",
     accentStep: 1,
   },
@@ -35,7 +35,7 @@ const slides = [
     primaryCta: "Mulai Sekarang",
     secondaryCta: "Tanya Konsultan",
     primaryHref: "#konsultasi",
-    secondaryHref: "https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+mau+tanya-tanya+pendampingan+digital",
+    secondaryHref: "https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+mau+tanya-tanya+pendampingan+digital",
     accentStep: 2,
   },
 ];

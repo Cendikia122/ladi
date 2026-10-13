@@ -15,7 +15,7 @@ export default function RequestCallSection() {
     const text = encodeURIComponent(
       `Halo Ladi Layanan Digital! Saya mau minta Audit Digital Gratis untuk usaha saya:\n\nNama: ${form.name}\nNama Usaha: ${form.businessName}\nKota: ${form.city}\nWhatsApp: ${form.phone}\n\nTerima kasih!`
     );
-    window.open(`https://wa.me/6281298319944?text=${text}`, "_blank");
+    window.open(`https://wa.me/6282112477119?text=${text}`, "_blank");
     setSubmitted(true);
   };
 

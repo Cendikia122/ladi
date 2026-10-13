@@ -1,5 +1,5 @@
 export default function FinalCTA() {
-  const waLink = "https://wa.me/62XXXXXXXXXX?text=Halo+Ladi%2C+saya+ingin+mengajukan+Evaluasi+Kesiapan+Digital+untuk+bisnis+saya.";
+  const waLink = "https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+ingin+mengajukan+Evaluasi+Kesiapan+Digital+untuk+bisnis+saya.";
 
   return (
     <section className="py-32 md:py-44 border-t border-white/[0.08] bg-[#08090a] relative overflow-hidden">

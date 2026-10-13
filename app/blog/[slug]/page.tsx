@@ -197,7 +197,7 @@ export default async function BlogDetailPage({
                 </p>
                 <div className="pt-2">
                   <a
-                    href="https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+baru+baca+artikel+di+website+dan+mau+konsultasi."
+                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+baru+baca+artikel+di+website+dan+mau+konsultasi."
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block px-7 py-3 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md"

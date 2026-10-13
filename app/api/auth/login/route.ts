@@ -5,20 +5,31 @@ export async function POST(request: NextRequest) {
   try {
     const { username, password } = await request.json();
     if (!username || !password) {
-      return NextResponse.json({ success: false, message: "Username dan password wajib diisi" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: "Username dan password wajib diisi" },
+        { status: 400 }
+      );
     }
 
-    if (!validateCredentials(username, password)) {
-      return NextResponse.json({ success: false, message: "Username atau password salah" }, { status: 401 });
+    const user = validateCredentials(username, password);
+    if (!user) {
+      return NextResponse.json(
+        { success: false, message: "Username atau password salah" },
+        { status: 401 }
+      );
     }
 
-    const token = createSessionToken(username);
+    const token = createSessionToken(user.username, user.role);
 
     const response = NextResponse.json({
       success: true,
-      message: "Login berhasil",
+      message: `Login berhasil sebagai ${user.name}`,
       token,
-      user: { username },
+      user: {
+        username: user.username,
+        role: user.role,
+        name: user.name,
+      },
     });
 
     const host = request.headers.get("host") || "";

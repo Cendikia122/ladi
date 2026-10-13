@@ -97,7 +97,7 @@ export default async function EventsPage() {
                   Agenda baru sedang disiapkan oleh tim. Hubungi kami langsung jika ingin mengadakan pelatihan khusus di lokasi usaha Anda.
                 </p>
                 <a
-                  href="https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+tertarik+mengadakan+workshop+digitalisasi"
+                  href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+mengadakan+workshop+digitalisasi"
                   className="inline-block px-6 py-3 rounded-full bg-[#1853a7] text-white font-bold text-xs uppercase tracking-wider"
                 >
                   Hubungi Admin via WhatsApp →
@@ -182,7 +182,7 @@ export default async function EventsPage() {
                         <a
                           href={
                             ev.btn_link ||
-                            `https://wa.me/6281298319944?text=Halo+Ladi%2C+saya+ingin+reservasi+jadwal+event%3A+${encodeURIComponent(
+                            `https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+ingin+reservasi+jadwal+event%3A+${encodeURIComponent(
                               ev.title
                             )}`
                           }

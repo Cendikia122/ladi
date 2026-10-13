@@ -2,11 +2,13 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import LadiLogo from "../../components/LadiLogo";
-import { authFetch } from "@/app/lib/clientAuth";
+import { authFetch, getClientSession } from "@/app/lib/clientAuth";
+import { useRouter } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
 export default function AdminDatabasePage() {
+  const router = useRouter();
   const [config, setConfig] = useState({
     host: "srv1762.hstgr.io",
     user: "u941811514_admin",
@@ -53,8 +55,15 @@ export default function AdminDatabasePage() {
   };
 
   useEffect(() => {
-    loadConfig();
-  }, []);
+    getClientSession().then((u) => {
+      if (u && u.role === "editor") {
+        alert("Akun Anda (Penulis Konten) dikhususkan untuk mengelola Blog & Artikel.");
+        router.push("/admin/blogs");
+        return;
+      }
+      loadConfig();
+    });
+  }, [router]);
 
   const handleTestConnection = async () => {
     setTestResult({ loading: true });

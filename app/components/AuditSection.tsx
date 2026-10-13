@@ -12,7 +12,7 @@ export default function AuditSection() {
     { no: "10", point: "Semantik HTML & Mobile UX", note: "Hierarki dokumen bersih dan responsivitas absolut", weight: "5%" },
   ];
 
-  const waLink = "https://wa.me/62XXXXXXXXXX?text=Halo+Ladi%2C+saya+ingin+mengajukan+Evaluasi+Kesiapan+Digital+untuk+bisnis+saya.";
+  const waLink = "https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+ingin+mengajukan+Evaluasi+Kesiapan+Digital+untuk+bisnis+saya.";
 
   return (
     <section id="audit" className="py-24 md:py-36 border-t border-white/[0.08] bg-[#08090a]">
