@@ -118,6 +118,80 @@ async function ensureTables(db: mysql.Pool) {
         updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP
       )
     `);
+
+    // 5. Pastikan tabel system_settings ada untuk mencatat inisialisasi awal
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS system_settings (
+        \`key\` VARCHAR(50) PRIMARY KEY,
+        \`value\` VARCHAR(255)
+      )
+    `);
+
+    // Periksa apakah database sudah pernah di-inisialisasi
+    const [metaRows]: any = await db.query("SELECT `value` FROM system_settings WHERE `key` = 'initialized'");
+    if (!metaRows || metaRows.length === 0) {
+      try {
+        const fs = await import("fs");
+        const path = await import("path");
+        const dataDir = path.join(process.cwd(), "data");
+
+        const blogsFile = path.join(dataDir, "blogs.json");
+        if (fs.existsSync(blogsFile)) {
+          const blogs = JSON.parse(fs.readFileSync(blogsFile, "utf-8"));
+          for (const b of blogs) {
+            await db.query(
+              `INSERT INTO blogs (id, title, slug, author, date, category, thumb, thumb_full, excerpt, content, tags, status)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+               ON DUPLICATE KEY UPDATE id=id`,
+              [b.id, b.title, b.slug, b.author || "Tim Ladi", b.date || "", b.category || "PANDUAN USAHA", b.thumb || "", b.thumb_full || "", b.excerpt || "", b.content || "", b.tags || "", b.status || "published"]
+            );
+          }
+        }
+
+        const eventsFile = path.join(dataDir, "events.json");
+        if (fs.existsSync(eventsFile)) {
+          const events = JSON.parse(fs.readFileSync(eventsFile, "utf-8"));
+          for (const e of events) {
+            await db.query(
+              `INSERT INTO events (id, title, tag, thumb, date, location, short_desc, description, btn_text, btn_link, status)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+               ON DUPLICATE KEY UPDATE id=id`,
+              [e.id, e.title, e.tag || "Workshop", e.thumb || "", e.date || "", e.location || "", e.short_desc || "", e.description || "", e.btn_text || "Daftar", e.btn_link || "", e.status || "active"]
+            );
+          }
+        }
+
+        const projectsFile = path.join(dataDir, "projects.json");
+        if (fs.existsSync(projectsFile)) {
+          const projects = JSON.parse(fs.readFileSync(projectsFile, "utf-8"));
+          for (const p of projects) {
+            await db.query(
+              `INSERT INTO projects (id, title, slug, client_name, client_industry, client_location, website_url, thumb, summary, challenge, solution, results, year, status)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+               ON DUPLICATE KEY UPDATE id=id`,
+              [p.id, p.title, p.slug, p.client_name || "", p.client_industry || "", p.client_location || "", p.website_url || "", p.thumb || "", p.summary || "", p.challenge || "", p.solution || "", p.results || "", p.year || "2026", p.status || "published"]
+            );
+          }
+        }
+
+        const teamFile = path.join(dataDir, "team.json");
+        if (fs.existsSync(teamFile)) {
+          const team = JSON.parse(fs.readFileSync(teamFile, "utf-8"));
+          for (const m of team) {
+            await db.query(
+              `INSERT INTO team_members (id, name, role, badge, image, \`desc\`, focus, order_num, status)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+               ON DUPLICATE KEY UPDATE id=id`,
+              [m.id, m.name, m.role, m.badge || "Tim Ladi", m.image || "/images/team/team1.jpg", m.desc || "", m.focus || "", m.order_num || 0, m.status || "active"]
+            );
+          }
+        }
+
+        await db.query("INSERT INTO system_settings (`key`, `value`) VALUES ('initialized', 'true')");
+      } catch (seedErr) {
+        // Abaikan jika seeding gagal
+      }
+    }
   } catch (e) {
     // Abaikan jika error permission atau tabel sudah terpasang
   }

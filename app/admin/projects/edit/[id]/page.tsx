@@ -27,9 +27,30 @@ export default function EditProjectPage() {
   const [status, setStatus] = useState<"published" | "draft">("published");
 
   const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState("");
   const [isUnauthorized, setIsUnauthorized] = useState(false);
+
+  const handleDelete = async () => {
+    if (!confirm(`Hapus portfolio proyek "${title}" secara permanen?`)) return;
+    setDeleteLoading(true);
+    try {
+      const res = await authFetch(`/api/projects/${id}`, { method: "DELETE" });
+      const json = await res.json();
+      if (json.success) {
+        alert(`Berhasil! Portfolio proyek "${title}" telah dihapus.`);
+        router.push("/admin/projects");
+        router.refresh();
+      } else {
+        alert(json.message || "Gagal menghapus proyek");
+      }
+    } catch {
+      alert("Terjadi kesalahan jaringan saat menghapus proyek");
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -327,20 +348,31 @@ export default function EditProjectPage() {
             </div>
 
             {/* Submit Actions */}
-            <div className="pt-4 flex items-center justify-end gap-3 border-t border-slate-100">
-              <Link
-                href="/admin/projects"
-                className="px-6 py-3 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs"
-              >
-                Batal
-              </Link>
+            <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100">
               <button
-                type="submit"
-                disabled={loading}
-                className="px-8 py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all disabled:opacity-50"
+                type="button"
+                onClick={handleDelete}
+                disabled={deleteLoading || loading}
+                className="w-full sm:w-auto px-5 py-3 rounded-full bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs uppercase tracking-wider transition-all disabled:opacity-50"
               >
-                {loading ? "Menyimpan..." : "Simpan Perubahan Proyek →"}
+                {deleteLoading ? "Menghapus..." : "🗑️ Hapus Portfolio Ini"}
               </button>
+
+              <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+                <Link
+                  href="/admin/projects"
+                  className="px-6 py-3 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs"
+                >
+                  Batal
+                </Link>
+                <button
+                  type="submit"
+                  disabled={loading || deleteLoading}
+                  className="px-8 py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all disabled:opacity-50"
+                >
+                  {loading ? "Menyimpan..." : "Simpan Perubahan Proyek →"}
+                </button>
+              </div>
             </div>
           </form>
         </div>

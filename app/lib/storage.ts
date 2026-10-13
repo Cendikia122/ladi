@@ -167,7 +167,7 @@ export async function getBlogs(limit?: number, all: boolean = false): Promise<Bl
       sql += ` LIMIT ${Number(limit)}`;
     }
     const rows = await query<any[]>(sql);
-    if (rows && rows.length > 0) {
+    if (Array.isArray(rows)) {
       return rows.map((r) => ({
         id: r.id,
         title: r.title,
@@ -424,7 +424,7 @@ export async function getEvents(limit?: number, all: boolean = false): Promise<E
       sql += ` LIMIT ${Number(limit)}`;
     }
     const rows = await query<any[]>(sql);
-    if (rows && rows.length > 0) {
+    if (Array.isArray(rows)) {
       return rows.map((r) => ({
         id: r.id,
         title: r.title,
@@ -615,7 +615,7 @@ export async function getProjects(limit?: number, all: boolean = false): Promise
       sql += ` LIMIT ${Number(limit)}`;
     }
     const rows = await query<any[]>(sql);
-    if (rows && rows.length > 0) {
+    if (Array.isArray(rows)) {
       return rows.map((r) => ({
         id: r.id,
         title: r.title,
@@ -875,7 +875,7 @@ export async function getTeamMembers(all: boolean = false): Promise<TeamMember[]
       ? "SELECT * FROM team_members ORDER BY order_num ASC, id ASC"
       : "SELECT * FROM team_members WHERE status = 'active' ORDER BY order_num ASC, id ASC";
     const rows = await query<any[]>(sql);
-    if (rows && rows.length > 0) {
+    if (Array.isArray(rows)) {
       return rows.map((r) => ({
         id: r.id,
         name: r.name,
