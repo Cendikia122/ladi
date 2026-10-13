@@ -7,6 +7,7 @@ import LadiLogo from "../../../components/LadiLogo";
 import { authFetch } from "@/app/lib/clientAuth";
 import ImageUpload from "@/app/components/ImageUpload";
 import RichTextEditor from "@/app/components/RichTextEditor";
+import { compressDataUri } from "@/app/lib/imageCompress";
 
 export default function NewEventPage() {
   const router = useRouter();
@@ -31,13 +32,14 @@ export default function NewEventPage() {
     setIsUnauthorized(false);
 
     try {
+      const safeThumb = await compressDataUri(thumb);
       const res = await authFetch("/api/events", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title,
           tag,
-          thumb,
+          thumb: safeThumb,
           date,
           location,
           short_desc: shortDesc,
@@ -54,15 +56,20 @@ export default function NewEventPage() {
         return;
       }
 
-      const json = await res.json();
-      if (json.success) {
+      const text = await res.text();
+      let json: any = null;
+      try {
+        json = JSON.parse(text);
+      } catch {}
+
+      if (res.ok && json?.success) {
         router.push("/admin/events");
         router.refresh();
       } else {
-        setError(json.message || "Gagal menyimpan event");
+        setError(json?.message || `Gagal menyimpan (${res.status}): ${text.slice(0, 150)}`);
       }
-    } catch {
-      setError("Terjadi kesalahan jaringan");
+    } catch (err: any) {
+      setError(err?.message || "Terjadi kesalahan saat menyimpan event");
     } finally {
       setLoading(false);
     }

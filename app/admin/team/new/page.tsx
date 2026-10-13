@@ -5,6 +5,7 @@ import Link from "next/link";
 import LadiLogo from "../../../components/LadiLogo";
 import { authFetch, getClientSession } from "@/app/lib/clientAuth";
 import ImageUpload from "@/app/components/ImageUpload";
+import { compressDataUri } from "@/app/lib/imageCompress";
 
 export const dynamic = "force-dynamic";
 
@@ -45,6 +46,7 @@ export default function NewTeamMemberPage() {
     setError("");
 
     try {
+      const safeImage = await compressDataUri(image);
       const res = await authFetch("/api/team", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -52,7 +54,7 @@ export default function NewTeamMemberPage() {
           name: name.trim(),
           role: role.trim(),
           badge: badge.trim(),
-          image: image.trim(),
+          image: safeImage.trim(),
           desc: desc.trim(),
           focus: focus.trim(),
           order_num: Number(orderNum) || 1,
@@ -60,16 +62,21 @@ export default function NewTeamMemberPage() {
         }),
       });
 
-      const json = await res.json();
-      if (json.success) {
+      const text = await res.text();
+      let json: any = null;
+      try {
+        json = JSON.parse(text);
+      } catch {}
+
+      if (res.ok && json?.success) {
         alert(`Berhasil! Anggota tim "${name}" telah ditambahkan.`);
         router.push("/admin/team");
         router.refresh();
       } else {
-        setError(json.message || "Gagal menyimpan data anggota tim");
+        setError(json?.message || `Gagal menyimpan (${res.status}): ${text.slice(0, 150)}`);
       }
-    } catch {
-      setError("Terjadi kesalahan jaringan.");
+    } catch (err: any) {
+      setError(err?.message || "Terjadi kesalahan saat menyimpan data anggota tim.");
     } finally {
       setLoading(false);
     }

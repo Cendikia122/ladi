@@ -7,6 +7,7 @@ import LadiLogo from "../../../components/LadiLogo";
 import { authFetch } from "@/app/lib/clientAuth";
 import ImageUpload from "@/app/components/ImageUpload";
 import RichTextEditor from "@/app/components/RichTextEditor";
+import { compressDataUri } from "@/app/lib/imageCompress";
 
 export default function NewBlogPage() {
   const router = useRouter();
@@ -28,6 +29,7 @@ export default function NewBlogPage() {
     setIsUnauthorized(false);
 
     try {
+      const safeThumb = await compressDataUri(thumb);
       const res = await authFetch("/api/blogs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -35,8 +37,8 @@ export default function NewBlogPage() {
           title,
           category,
           author,
-          thumb,
-          thumb_full: thumb,
+          thumb: safeThumb,
+          thumb_full: safeThumb,
           excerpt,
           content,
           status,
@@ -49,15 +51,20 @@ export default function NewBlogPage() {
         return;
       }
 
-      const json = await res.json();
-      if (json.success) {
+      const text = await res.text();
+      let json: any = null;
+      try {
+        json = JSON.parse(text);
+      } catch {}
+
+      if (res.ok && json?.success) {
         router.push("/admin/blogs");
         router.refresh();
       } else {
-        setError(json.message || "Gagal menyimpan artikel");
+        setError(json?.message || `Gagal menyimpan (${res.status}): ${text.slice(0, 150)}`);
       }
-    } catch {
-      setError("Terjadi kesalahan jaringan");
+    } catch (err: any) {
+      setError(err?.message || "Terjadi kesalahan saat menyimpan artikel");
     } finally {
       setLoading(false);
     }

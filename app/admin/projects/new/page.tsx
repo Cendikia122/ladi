@@ -6,6 +6,7 @@ import LadiLogo from "../../../components/LadiLogo";
 import { authFetch } from "@/app/lib/clientAuth";
 import ImageUpload from "@/app/components/ImageUpload";
 import RichTextEditor from "@/app/components/RichTextEditor";
+import { compressDataUri } from "@/app/lib/imageCompress";
 
 export default function NewProjectPage() {
   const router = useRouter();
@@ -33,6 +34,7 @@ export default function NewProjectPage() {
     setIsUnauthorized(false);
 
     try {
+      const safeThumb = await compressDataUri(thumb);
       const res = await authFetch("/api/projects", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -42,7 +44,7 @@ export default function NewProjectPage() {
           client_industry: clientIndustry,
           client_location: clientLocation,
           website_url: websiteUrl,
-          thumb,
+          thumb: safeThumb,
           summary,
           challenge,
           solution,
@@ -58,15 +60,20 @@ export default function NewProjectPage() {
         return;
       }
 
-      const json = await res.json();
-      if (json.success) {
+      const text = await res.text();
+      let json: any = null;
+      try {
+        json = JSON.parse(text);
+      } catch {}
+
+      if (res.ok && json?.success) {
         router.push("/admin/projects");
         router.refresh();
       } else {
-        setError(json.message || "Gagal menyimpan proyek portfolio");
+        setError(json?.message || `Gagal menyimpan (${res.status}): ${text.slice(0, 150)}`);
       }
-    } catch {
-      setError("Terjadi kesalahan jaringan saat menyimpan");
+    } catch (err: any) {
+      setError(err?.message || "Terjadi kesalahan saat menyimpan proyek");
     } finally {
       setLoading(false);
     }

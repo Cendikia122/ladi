@@ -377,8 +377,9 @@ export async function updateBlog(id: number | string, data: Partial<BlogItem>): 
     return updated;
   }
 
-  if (updatedInMysql) {
-    return getBlogById(numId);
+  const fromDb = await getBlogById(numId);
+  if (fromDb) {
+    return fromDb;
   }
 
   return null;
@@ -569,8 +570,9 @@ export async function updateEvent(id: number | string, data: Partial<EventItem>)
     return updated;
   }
 
-  if (updatedInMysql) {
-    return getEventById(numId);
+  const fromDb = await getEventById(numId);
+  if (fromDb) {
+    return fromDb;
   }
 
   return null;
@@ -831,8 +833,9 @@ export async function updateProject(id: number | string, data: Partial<ProjectIt
     return updated;
   }
 
-  if (updatedInMysql) {
-    return getProjectById(numId);
+  const fromDb = await getProjectById(numId);
+  if (fromDb) {
+    return fromDb;
   }
 
   return null;
@@ -1028,8 +1031,9 @@ export async function updateTeamMember(
     return updated;
   }
 
-  if (updatedInMysql) {
-    return getTeamMemberById(numId);
+  const fromDb = await getTeamMemberById(numId);
+  if (fromDb) {
+    return fromDb;
   }
 
   return null;
