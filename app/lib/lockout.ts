@@ -45,6 +45,26 @@ function writeFallbackFile(data: Record<string, LockoutRecord>) {
   }
 }
 
+let lockoutTableEnsured = false;
+async function ensureLockoutTable(db: any) {
+  if (lockoutTableEnsured) return;
+  lockoutTableEnsured = true;
+  try {
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS login_lockouts (
+        username VARCHAR(100) PRIMARY KEY,
+        failed_attempts INT DEFAULT 0,
+        locked_until BIGINT DEFAULT 0,
+        last_attempt BIGINT DEFAULT 0,
+        ip_address VARCHAR(100) DEFAULT '',
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      )
+    `);
+  } catch {
+    // Abaikan jika tabel sudah ada atau error
+  }
+}
+
 async function getRecord(username: string): Promise<LockoutRecord> {
   const clean = username.trim().toLowerCase();
 
@@ -52,6 +72,7 @@ async function getRecord(username: string): Promise<LockoutRecord> {
   if (!isDbCircuitOpen()) {
     try {
       const db = getPool();
+      await ensureLockoutTable(db);
       const [rows]: any = await db.query(
         "SELECT username, failed_attempts, locked_until, last_attempt, ip_address FROM login_lockouts WHERE username = ?",
         [clean]
@@ -104,6 +125,7 @@ async function saveRecord(record: LockoutRecord): Promise<void> {
   if (!isDbCircuitOpen()) {
     try {
       const db = getPool();
+      await ensureLockoutTable(db);
       await db.query(
         `INSERT INTO login_lockouts (username, failed_attempts, locked_until, last_attempt, ip_address)
          VALUES (?, ?, ?, ?, ?)
@@ -220,6 +242,7 @@ export async function getAllLockouts(): Promise<
   if (!isDbCircuitOpen()) {
     try {
       const db = getPool();
+      await ensureLockoutTable(db);
       const [rows]: any = await db.query(
         "SELECT username, failed_attempts, locked_until, last_attempt FROM login_lockouts ORDER BY last_attempt DESC"
       );
