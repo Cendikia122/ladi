@@ -200,3 +200,56 @@ VALUES
 )
 ON DUPLICATE KEY UPDATE `title`=VALUES(`title`);
 
+-- -----------------------------------------------------
+-- Table: team_members
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `team_members` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL,
+  `role` VARCHAR(255) NOT NULL,
+  `badge` VARCHAR(100) DEFAULT 'Team Ladi',
+  `image` MEDIUMTEXT,
+  `desc` TEXT,
+  `focus` VARCHAR(255) DEFAULT '',
+  `order_num` INT DEFAULT 0,
+  `status` ENUM('active', 'inactive') DEFAULT 'active',
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- -----------------------------------------------------
+-- Seed Team Members
+-- -----------------------------------------------------
+INSERT INTO `team_members` (`name`, `role`, `badge`, `image`, `desc`, `focus`, `order_num`, `status`)
+VALUES 
+(
+  'Rizky Pratama',
+  'Project Lead & Digital Strategist',
+  'PPLG Wikrama Lead',
+  '/images/team/team1.jpg',
+  'Memastikan arsitektur website prima, SEO maksimal, dan setiap proyek digital selesai tepat waktu dengan standar visual kelas dunia.',
+  'Arsitektur & SEO Semantik',
+  1,
+  'active'
+),
+(
+  'Fajar Ramadhan',
+  'Lead Fullstack & UI Engineer',
+  'Web & Mobile Specialist',
+  '/images/team/team2.jpg',
+  'Membangun website responsif super kencang, mulus dibuka di semua tipe HP, dan terintegrasi langsung dengan database serta WhatsApp bisnis.',
+  'Performa & Integrasi Sistem',
+  2,
+  'active'
+),
+(
+  'Sarah Amalia',
+  'Digital Branding & Client Support',
+  'Client Care & Strategist',
+  '/images/team/team3.jpg',
+  'Menata copywriting promosi, estetika visual foto usaha, serta mendampingi pemilik UMKM langkah demi langkah agar usahanya ramai dicari pembeli.',
+  'Visual & Konten Promosi',
+  3,
+  'active'
+)
+ON DUPLICATE KEY UPDATE `name`=VALUES(`name`);

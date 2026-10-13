@@ -1,13 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getEvents } from "@/app/lib/storage";
+import { getEvents, getTeamMembers } from "@/app/lib/storage";
 
 export default async function TeamAndEvents() {
-  // Ambil data event langsung dari database / file storage
-  const events = await getEvents(3);
+  // Ambil data event & anggota tim langsung dari database / file storage
+  const [events, dynamicTeam] = await Promise.all([
+    getEvents(3),
+    getTeamMembers(false),
+  ]);
 
-  const teamMembers = [
+  const teamMembers = dynamicTeam.length > 0 ? dynamicTeam : [
     {
+      id: 1,
       name: "Rizky Pratama",
       role: "Project Lead & Digital Strategist",
       badge: "PPLG Wikrama Lead",
@@ -16,6 +20,7 @@ export default async function TeamAndEvents() {
       focus: "Arsitektur & SEO Semantik",
     },
     {
+      id: 2,
       name: "Fajar Ramadhan",
       role: "Lead Fullstack & UI Engineer",
       badge: "Web & Mobile Specialist",
@@ -24,6 +29,7 @@ export default async function TeamAndEvents() {
       focus: "Performa & Integrasi Sistem",
     },
     {
+      id: 3,
       name: "Sarah Amalia",
       role: "Digital Branding & Client Support",
       badge: "Client Care & Strategist",
@@ -59,62 +65,66 @@ export default async function TeamAndEvents() {
             </p>
           </div>
 
-          {/* 3 Team Profile Cards (Informative Apple/iPhone aesthetic, No CTA button) */}
+          {/* Dynamic Team Profile Cards (Informative Apple/iPhone aesthetic, No CTA button) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {teamMembers.map((member, i) => (
-              <div
-                key={i}
-                className="group p-8 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 corporate-card flex flex-col items-center text-center relative overflow-hidden"
-              >
-                {/* Accent top gradient border */}
-                <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#1853a7] via-[#fa824b] to-[#1853a7] opacity-0 group-hover:opacity-100 transition-opacity" />
+            {teamMembers.map((member) => {
+              const memberImg = member.image || "/images/team/team1.jpg";
+              return (
+                <div
+                  key={member.id}
+                  className="group p-8 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 corporate-card flex flex-col items-center text-center relative overflow-hidden"
+                >
+                  {/* Accent top gradient border */}
+                  <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#1853a7] via-[#fa824b] to-[#1853a7] opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                {/* Team Avatar */}
-                <div className="relative w-28 h-28 mb-5">
-                  <div className="w-full h-full rounded-2xl overflow-hidden ring-4 ring-slate-100 group-hover:ring-[#1853a7]/30 transition-all shadow-md relative bg-slate-100">
-                    <Image
-                      src={member.image}
-                      alt={member.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="112px"
-                    />
+                  {/* Team Avatar */}
+                  <div className="relative w-28 h-28 mb-5">
+                    <div className="w-full h-full rounded-2xl overflow-hidden ring-4 ring-slate-100 group-hover:ring-[#1853a7]/30 transition-all shadow-md relative bg-slate-100">
+                      <Image
+                        src={memberImg}
+                        alt={member.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        sizes="112px"
+                        unoptimized={memberImg.startsWith("data:") || memberImg.startsWith("http")}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Role Badge */}
+                  <div className="mb-2">
+                    <span className="px-3 py-1 rounded-full bg-[#1853a7]/10 text-[#1853a7] font-bold text-[11px] tracking-wide uppercase">
+                      {member.badge || "Tim Ladi"}
+                    </span>
+                  </div>
+
+                  {/* Name */}
+                  <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                    {member.name}
+                  </h3>
+
+                  {/* Subtitle Role */}
+                  <p className="text-xs font-semibold text-[#fa824b] mt-0.5 mb-3.5">
+                    {member.role}
+                  </p>
+
+                  {/* Description */}
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    {member.desc}
+                  </p>
+
+                  {/* Purely Informative Footer (No CTA / No WA Link) */}
+                  <div className="mt-6 pt-4 w-full border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                    <span className="text-[11px] font-medium text-slate-500">
+                      Bidang Keahlian:
+                    </span>
+                    <span className="font-semibold text-slate-700 text-[11px] bg-slate-100 px-2.5 py-0.5 rounded-md">
+                      {member.focus || "Digital Specialist"}
+                    </span>
                   </div>
                 </div>
-
-                {/* Role Badge */}
-                <div className="mb-2">
-                  <span className="px-3 py-1 rounded-full bg-[#1853a7]/10 text-[#1853a7] font-bold text-[11px] tracking-wide uppercase">
-                    {member.badge}
-                  </span>
-                </div>
-
-                {/* Name */}
-                <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
-                  {member.name}
-                </h3>
-
-                {/* Subtitle Role */}
-                <p className="text-xs font-semibold text-[#fa824b] mt-0.5 mb-3.5">
-                  {member.role}
-                </p>
-
-                {/* Description */}
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  {member.desc}
-                </p>
-
-                {/* Purely Informative Footer (No CTA / No WA Link) */}
-                <div className="mt-6 pt-4 w-full border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                  <span className="text-[11px] font-medium text-slate-500">
-                    Bidang Keahlian:
-                  </span>
-                  <span className="font-semibold text-slate-700 text-[11px] bg-slate-100 px-2.5 py-0.5 rounded-md">
-                    {member.focus}
-                  </span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 

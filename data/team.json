@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Rizky Pratama",
+    "role": "Project Lead & Digital Strategist",
+    "badge": "PPLG Wikrama Lead",
+    "image": "/images/team/team1.jpg",
+    "desc": "Memastikan arsitektur website prima, SEO maksimal, dan setiap proyek digital selesai tepat waktu dengan standar visual kelas dunia.",
+    "focus": "Arsitektur & SEO Semantik",
+    "order_num": 1,
+    "status": "active",
+    "created_at": "2026-10-13T10:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "name": "Fajar Ramadhan",
+    "role": "Lead Fullstack & UI Engineer",
+    "badge": "Web & Mobile Specialist",
+    "image": "/images/team/team2.jpg",
+    "desc": "Membangun website responsif super kencang, mulus dibuka di semua tipe HP, dan terintegrasi langsung dengan database serta WhatsApp bisnis.",
+    "focus": "Performa & Integrasi Sistem",
+    "order_num": 2,
+    "status": "active",
+    "created_at": "2026-10-13T10:00:00.000Z"
+  },
+  {
+    "id": 3,
+    "name": "Sarah Amalia",
+    "role": "Digital Branding & Client Support",
+    "badge": "Client Care & Strategist",
+    "image": "/images/team/team3.jpg",
+    "desc": "Menata copywriting promosi, estetika visual foto usaha, serta mendampingi pemilik UMKM langkah demi langkah agar usahanya ramai dicari pembeli.",
+    "focus": "Visual & Konten Promosi",
+    "order_num": 3,
+    "status": "active",
+    "created_at": "2026-10-13T10:00:00.000Z"
+  }
+]

@@ -54,15 +54,31 @@ export interface ProjectItem {
   updated_at?: string;
 }
 
+export interface TeamMember {
+  id: number;
+  name: string;
+  role: string;
+  badge?: string;
+  image?: string;
+  desc: string;
+  focus?: string;
+  order_num?: number;
+  status: "active" | "inactive";
+  created_at: string;
+  updated_at?: string;
+}
+
 const DATA_DIR = path.join(process.cwd(), "data");
 const BLOGS_FILE = path.join(DATA_DIR, "blogs.json");
 const EVENTS_FILE = path.join(DATA_DIR, "events.json");
 const PROJECTS_FILE = path.join(DATA_DIR, "projects.json");
+const TEAM_FILE = path.join(DATA_DIR, "team.json");
 
 // In-memory fallback
 let inMemoryBlogs: BlogItem[] = [];
 let inMemoryEvents: EventItem[] = [];
 let inMemoryProjects: ProjectItem[] = [];
+let inMemoryTeam: TeamMember[] = [];
 
 function ensureData() {
   try {
@@ -80,6 +96,10 @@ function ensureData() {
     if (fs.existsSync(PROJECTS_FILE)) {
       const raw = fs.readFileSync(PROJECTS_FILE, "utf-8");
       inMemoryProjects = JSON.parse(raw);
+    }
+    if (fs.existsSync(TEAM_FILE)) {
+      const raw = fs.readFileSync(TEAM_FILE, "utf-8");
+      inMemoryTeam = JSON.parse(raw);
     }
   } catch (err) {
     console.warn("Storage read notice:", err);
@@ -114,6 +134,17 @@ function persistProjects() {
       fs.mkdirSync(DATA_DIR, { recursive: true });
     }
     fs.writeFileSync(PROJECTS_FILE, JSON.stringify(inMemoryProjects, null, 2), "utf-8");
+  } catch (err) {
+    console.warn("File write skipped (serverless environment):", err);
+  }
+}
+
+function persistTeam() {
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    fs.writeFileSync(TEAM_FILE, JSON.stringify(inMemoryTeam, null, 2), "utf-8");
   } catch (err) {
     console.warn("File write skipped (serverless environment):", err);
   }
@@ -829,3 +860,201 @@ export async function deleteProject(id: number | string): Promise<boolean> {
 
   return deletedFromMysql || deletedFromJson;
 }
+
+// ==========================================
+// 👥 TEAM FUNCTIONS (HYBRID MYSQL + JSON)
+// ==========================================
+
+export async function getTeamMembers(all: boolean = false): Promise<TeamMember[]> {
+  // 1. Coba ambil dari MySQL terlebih dahulu
+  try {
+    const sql = all
+      ? "SELECT * FROM team_members ORDER BY order_num ASC, id ASC"
+      : "SELECT * FROM team_members WHERE status = 'active' ORDER BY order_num ASC, id ASC";
+    const rows = await query<any[]>(sql);
+    if (rows && rows.length > 0) {
+      return rows.map((r) => ({
+        id: r.id,
+        name: r.name,
+        role: r.role,
+        badge: r.badge || "",
+        image: r.image || "/images/team/team1.jpg",
+        desc: r.desc || "",
+        focus: r.focus || "",
+        order_num: r.order_num !== null && r.order_num !== undefined ? Number(r.order_num) : 0,
+        status: r.status || "active",
+        created_at: r.created_at ? new Date(r.created_at).toISOString() : new Date().toISOString(),
+        updated_at: r.updated_at ? new Date(r.updated_at).toISOString() : undefined,
+      }));
+    }
+  } catch (dbErr) {
+    // MySQL offline -> fallback ke JSON
+  }
+
+  // 2. Fallback: Baca dari File JSON
+  ensureData();
+  let list = inMemoryTeam;
+  if (!all) {
+    list = list.filter((m) => m.status === "active");
+  }
+  return [...list].sort((a, b) => (a.order_num || 0) - (b.order_num || 0));
+}
+
+export async function getTeamMemberById(id: number | string): Promise<TeamMember | null> {
+  const numId = Number(id);
+  // 1. Coba dari MySQL
+  try {
+    const rows = await query<any[]>(
+      "SELECT * FROM team_members WHERE id = ? LIMIT 1",
+      [numId]
+    );
+    if (rows && rows.length > 0) {
+      const r = rows[0];
+      return {
+        id: r.id,
+        name: r.name,
+        role: r.role,
+        badge: r.badge || "",
+        image: r.image || "/images/team/team1.jpg",
+        desc: r.desc || "",
+        focus: r.focus || "",
+        order_num: r.order_num !== null && r.order_num !== undefined ? Number(r.order_num) : 0,
+        status: r.status || "active",
+        created_at: r.created_at ? new Date(r.created_at).toISOString() : new Date().toISOString(),
+      };
+    }
+  } catch (e) {}
+
+  // 2. Fallback JSON
+  ensureData();
+  return inMemoryTeam.find((m) => m.id === numId || String(m.id) === String(id)) || null;
+}
+
+export async function createTeamMember(data: Partial<TeamMember>): Promise<TeamMember> {
+  const name = data.name || "Anggota Tim";
+  const role = data.role || "Spesialis Digital";
+  const badge = data.badge || "Tim Ladi";
+  const image = data.image || "/images/team/team1.jpg";
+  const desc = data.desc || "";
+  const focus = data.focus || "";
+  const order_num = data.order_num !== undefined ? Number(data.order_num) : 0;
+  const status: "active" | "inactive" = data.status === "inactive" ? "inactive" : "active";
+
+  ensureData();
+  const nextId = inMemoryTeam.length > 0 ? Math.max(...inMemoryTeam.map((m) => m.id)) + 1 : 1;
+  let finalId = nextId;
+
+  // Simpan ke MySQL
+  try {
+    const res = await query<any>(
+      `INSERT INTO team_members (name, role, badge, image, \`desc\`, focus, order_num, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [name, role, badge, image, desc, focus, order_num, status]
+    );
+    if (res && res.insertId) {
+      finalId = res.insertId;
+    }
+  } catch (e) {}
+
+  const newItem: TeamMember = {
+    id: finalId,
+    name,
+    role,
+    badge,
+    image,
+    desc,
+    focus,
+    order_num,
+    status,
+    created_at: new Date().toISOString(),
+  };
+
+  inMemoryTeam.push(newItem);
+  persistTeam();
+
+  return newItem;
+}
+
+export async function updateTeamMember(
+  id: number | string,
+  data: Partial<TeamMember>
+): Promise<TeamMember | null> {
+  const numId = Number(id);
+  let updatedInMysql = false;
+
+  try {
+    const res = await query<any>(
+      `UPDATE team_members SET
+        name = COALESCE(?, name),
+        role = COALESCE(?, role),
+        badge = COALESCE(?, badge),
+        image = COALESCE(?, image),
+        \`desc\` = COALESCE(?, \`desc\`),
+        focus = COALESCE(?, focus),
+        order_num = COALESCE(?, order_num),
+        status = COALESCE(?, status)
+       WHERE id = ?`,
+      [
+        data.name,
+        data.role,
+        data.badge,
+        data.image,
+        data.desc,
+        data.focus,
+        data.order_num !== undefined ? Number(data.order_num) : null,
+        data.status,
+        numId,
+      ]
+    );
+    if (res && (res.affectedRows > 0 || res.changedRows > 0)) {
+      updatedInMysql = true;
+    }
+  } catch (e) {}
+
+  ensureData();
+  const index = inMemoryTeam.findIndex((m) => m.id === numId || String(m.id) === String(id));
+
+  if (index !== -1) {
+    const existing = inMemoryTeam[index];
+    const updated: TeamMember = {
+      ...existing,
+      ...data,
+      id: existing.id,
+      updated_at: new Date().toISOString(),
+    };
+
+    inMemoryTeam[index] = updated;
+    persistTeam();
+    return updated;
+  }
+
+  if (updatedInMysql) {
+    return getTeamMemberById(numId);
+  }
+
+  return null;
+}
+
+export async function deleteTeamMember(id: number | string): Promise<boolean> {
+  const numId = Number(id);
+  let deletedFromMysql = false;
+
+  try {
+    const res = await query<any>("DELETE FROM team_members WHERE id = ?", [numId]);
+    if (res && res.affectedRows > 0) {
+      deletedFromMysql = true;
+    }
+  } catch (e) {}
+
+  ensureData();
+  const index = inMemoryTeam.findIndex((m) => m.id === numId || String(m.id) === String(id));
+  let deletedFromJson = false;
+  if (index !== -1) {
+    inMemoryTeam.splice(index, 1);
+    persistTeam();
+    deletedFromJson = true;
+  }
+
+  return deletedFromMysql || deletedFromJson;
+}
+

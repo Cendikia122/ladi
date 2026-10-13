@@ -1,7 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getBlogs, getEvents, getProjects } from "@/app/lib/storage";
+import { getBlogs, getEvents, getProjects, getTeamMembers } from "@/app/lib/storage";
 import { checkDbConnection } from "@/app/lib/mysql";
 import { verifyToken } from "@/app/lib/auth";
 import LadiLogo from "../components/LadiLogo";
@@ -27,10 +28,11 @@ export default async function AdminDashboardPage() {
 
   const isEditor = user.role === "editor";
 
-  const [allBlogs, allEvents, allProjects, dbStatus] = await Promise.all([
+  const [allBlogs, allEvents, allProjects, allTeam, dbStatus] = await Promise.all([
     getBlogs(10, true),
     getEvents(5, true),
     getProjects(5, true),
+    getTeamMembers(true),
     checkDbConnection(),
   ]);
 
@@ -38,6 +40,7 @@ export default async function AdminDashboardPage() {
   const draftCount = allBlogs.filter((b) => b.status === "draft").length;
   const activeEventsCount = allEvents.filter((e) => e.status === "active").length;
   const publishedProjectsCount = allProjects.filter((p) => p.status === "published").length;
+  const activeTeamCount = allTeam.filter((m) => m.status === "active").length;
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-[#0f172a]">
@@ -59,7 +62,7 @@ export default async function AdminDashboardPage() {
             <div className="hidden md:flex items-center gap-1.5 text-slate-300 bg-white/5 px-3 py-1.5 rounded-full border border-white/10 font-mono text-[11px]">
               <span>{isEditor ? "✍️" : "👤"}</span>
               <span>{user.username}</span>
-              <span className="text-slate-500">({isEditor ? "Penulis" : "Admin"})</span>
+              <span className="text-slate-500">({isEditor ? "Penulis" : "Super Admin"})</span>
             </div>
 
             <Link
@@ -157,7 +160,7 @@ export default async function AdminDashboardPage() {
             <p className="text-sm text-slate-600 mt-1">
               {isEditor
                 ? "Tulis artikel baru, kelola draft, dan unggah foto dokumentasi wawasan bisnis."
-                : "Kelola artikel wawasan, agenda event/workshop, studi kasus klien, dan sistem server."}
+                : "Kelola profil Our Team, artikel wawasan, agenda event/workshop, portfolio, dan server."}
             </p>
           </div>
 
@@ -166,22 +169,28 @@ export default async function AdminDashboardPage() {
               href="/admin/blogs/new"
               className="px-5 py-3 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-1.5"
             >
-              <span>+</span> Tulis Artikel Baru
+              <span>+</span> Tulis Artikel
             </Link>
 
             {!isEditor && (
               <>
                 <Link
-                  href="/admin/events/new"
-                  className="px-5 py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
+                  href="/admin/team"
+                  className="px-5 py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-1.5"
                 >
-                  + Tambah Event
+                  <span>👥</span> Kelola Our Team
+                </Link>
+                <Link
+                  href="/admin/events/new"
+                  className="px-4 py-3 rounded-full bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
+                >
+                  + Event
                 </Link>
                 <Link
                   href="/admin/projects/new"
-                  className="px-5 py-3 rounded-full bg-slate-900 hover:bg-black text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
+                  className="px-4 py-3 rounded-full bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
                 >
-                  + Tambah Portfolio
+                  + Portfolio
                 </Link>
               </>
             )}
@@ -303,7 +312,7 @@ export default async function AdminDashboardPage() {
           </div>
         ) : (
           /* =================================================================== */
-          /* TAMPILAN DASHBOARD: JIKA SUPERADMIN (LENGKAP SEMUA FITUR) */
+          /* TAMPILAN DASHBOARD: JIKA SUPERADMIN (LENGKAP TERMASUK OUR TEAM) */
           /* =================================================================== */
           <div className="space-y-8">
             {/* 4 Stats Cards */}
@@ -333,35 +342,113 @@ export default async function AdminDashboardPage() {
               </div>
 
               <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-2">
-                <span className="text-xs font-mono text-slate-500 font-bold uppercase">
-                  AKSES CEPAT
+                <span className="text-xs font-mono text-emerald-600 font-bold uppercase">
+                  OUR TEAM (TIM)
                 </span>
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  <Link
-                    href="/admin/blogs"
-                    className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700"
-                  >
-                    Blogs
-                  </Link>
-                  <Link
-                    href="/admin/events"
-                    className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700"
-                  >
-                    Events
-                  </Link>
-                  <Link
-                    href="/admin/projects"
-                    className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700"
-                  >
-                    Portfolio
+                <div className="text-3xl font-extrabold text-emerald-600">{activeTeamCount}</div>
+                <div className="text-xs text-slate-500">
+                  <Link href="/admin/team" className="text-[#1853a7] font-bold hover:underline">
+                    Kelola profil tim ({allTeam.length}) →
                   </Link>
                 </div>
-                <div className="text-xs text-slate-500">Kelola dan edit konten</div>
               </div>
             </div>
 
-            {/* Grid 3 Kolom: Blogs, Events & Projects */}
+            {/* Quick Access Bar */}
+            <div className="p-5 rounded-2xl bg-white border border-slate-200 flex flex-wrap items-center justify-between gap-4 text-xs">
+              <div className="flex items-center gap-2 font-bold text-slate-700">
+                <span>⚡ Akses Cepat Super Admin:</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  href="/admin/team"
+                  className="px-3.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#1853a7] font-bold"
+                >
+                  👥 Our Team ({allTeam.length})
+                </Link>
+                <Link
+                  href="/admin/blogs"
+                  className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold"
+                >
+                  📰 Blogs ({allBlogs.length})
+                </Link>
+                <Link
+                  href="/admin/events"
+                  className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold"
+                >
+                  📅 Events ({allEvents.length})
+                </Link>
+                <Link
+                  href="/admin/projects"
+                  className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold"
+                >
+                  💼 Portfolio ({allProjects.length})
+                </Link>
+                <Link
+                  href="/admin/database"
+                  className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold"
+                >
+                  ⚙️ Database MySQL
+                </Link>
+              </div>
+            </div>
+
+            {/* Grid 3 Kolom: Our Team, Blogs & Events */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Our Team Card */}
+              <div className="rounded-3xl bg-white border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between">
+                <div>
+                  <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+                    <div>
+                      <h2 className="font-bold text-slate-900 text-base">Profil Our Team</h2>
+                      <p className="text-xs text-slate-500">Tampil di beranda website</p>
+                    </div>
+                    <Link href="/admin/team" className="text-xs font-bold text-[#1853a7] hover:underline">
+                      Kelola ({allTeam.length}) →
+                    </Link>
+                  </div>
+
+                  <div className="divide-y divide-slate-100">
+                    {allTeam.slice(0, 3).map((m) => (
+                      <div
+                        key={m.id}
+                        className="p-4 flex items-center justify-between gap-3 hover:bg-slate-50 transition-colors"
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="relative w-10 h-10 rounded-xl overflow-hidden ring-1 ring-slate-200 shrink-0 bg-slate-100">
+                            <Image
+                              src={m.image || "/images/team/team1.jpg"}
+                              alt={m.name}
+                              fill
+                              className="object-cover"
+                              sizes="40px"
+                              unoptimized={m.image?.startsWith("data:") || m.image?.startsWith("http")}
+                            />
+                          </div>
+                          <div className="min-w-0">
+                            <div className="font-bold text-sm text-slate-900 truncate">{m.name}</div>
+                            <div className="text-xs text-slate-500 truncate">{m.role}</div>
+                          </div>
+                        </div>
+
+                        <Link
+                          href={`/admin/team/edit/${m.id}`}
+                          className="px-2.5 py-1 rounded bg-slate-100 text-[#1853a7] text-xs font-bold shrink-0 hover:bg-slate-200"
+                        >
+                          Edit
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="p-3 bg-[#f8fafc] border-t border-slate-100 text-center">
+                  <Link href="/admin/team/new" className="text-xs font-bold text-[#1853a7] hover:underline">
+                    + Tambah Anggota Tim Baru
+                  </Link>
+                </div>
+              </div>
+
               {/* Recent Blogs */}
               <div className="rounded-3xl bg-white border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between">
                 <div>
@@ -376,7 +463,7 @@ export default async function AdminDashboardPage() {
                   </div>
 
                   <div className="divide-y divide-slate-100">
-                    {allBlogs.slice(0, 4).map((b) => (
+                    {allBlogs.slice(0, 3).map((b) => (
                       <div
                         key={b.id}
                         className="p-4 flex items-center justify-between gap-3 hover:bg-slate-50 transition-colors"
@@ -405,77 +492,50 @@ export default async function AdminDashboardPage() {
                 </div>
               </div>
 
-              {/* Recent Events */}
+              {/* Recent Events & Projects */}
               <div className="rounded-3xl bg-white border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between">
                 <div>
                   <div className="p-5 border-b border-slate-100 flex items-center justify-between">
                     <div>
-                      <h2 className="font-bold text-slate-900 text-base">Event & Workshop</h2>
-                      <p className="text-xs text-slate-500">Agenda edukasi UMKM</p>
+                      <h2 className="font-bold text-slate-900 text-base">Agenda & Portfolio</h2>
+                      <p className="text-xs text-slate-500">Event & studi kasus</p>
                     </div>
                     <Link href="/admin/events" className="text-xs font-bold text-[#1853a7] hover:underline">
-                      Kelola ({allEvents.length}) →
+                      Semua ({allEvents.length + allProjects.length}) →
                     </Link>
                   </div>
 
                   <div className="divide-y divide-slate-100">
-                    {allEvents.slice(0, 4).map((e) => (
+                    {allEvents.slice(0, 2).map((e) => (
                       <div
                         key={e.id}
-                        className="p-4 flex items-center justify-between gap-3 hover:bg-slate-50 transition-colors"
+                        className="p-3.5 flex items-center justify-between gap-3 hover:bg-slate-50 transition-colors"
                       >
                         <div className="min-w-0">
-                          <div className="font-bold text-sm text-slate-900 truncate">{e.title}</div>
-                          <div className="text-xs text-slate-500 mt-0.5">
-                            {e.date} · {e.location}
-                          </div>
+                          <span className="text-[10px] font-bold text-[#1853a7] bg-blue-50 px-2 py-0.5 rounded">EVENT</span>
+                          <div className="font-bold text-xs text-slate-900 truncate mt-1">{e.title}</div>
                         </div>
                         <Link
                           href={`/admin/events/edit/${e.id}`}
-                          className="px-2.5 py-1 rounded bg-slate-100 text-[#1853a7] text-xs font-bold shrink-0 hover:bg-slate-200"
+                          className="px-2 py-1 rounded bg-slate-100 text-[#1853a7] text-xs font-bold shrink-0 hover:bg-slate-200"
                         >
                           Edit
                         </Link>
                       </div>
                     ))}
-                  </div>
-                </div>
 
-                <div className="p-3 bg-[#f8fafc] border-t border-slate-100 text-center">
-                  <Link href="/admin/events/new" className="text-xs font-bold text-[#1853a7] hover:underline">
-                    + Tambah Event Baru
-                  </Link>
-                </div>
-              </div>
-
-              {/* Recent Projects */}
-              <div className="rounded-3xl bg-white border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between">
-                <div>
-                  <div className="p-5 border-b border-slate-100 flex items-center justify-between">
-                    <div>
-                      <h2 className="font-bold text-slate-900 text-base">Portfolio Klien</h2>
-                      <p className="text-xs text-slate-500">Studi kasus digitalisasi</p>
-                    </div>
-                    <Link href="/admin/projects" className="text-xs font-bold text-[#1853a7] hover:underline">
-                      Kelola ({allProjects.length}) →
-                    </Link>
-                  </div>
-
-                  <div className="divide-y divide-slate-100">
-                    {allProjects.slice(0, 4).map((p) => (
+                    {allProjects.slice(0, 2).map((p) => (
                       <div
                         key={p.id}
-                        className="p-4 flex items-center justify-between gap-3 hover:bg-slate-50 transition-colors"
+                        className="p-3.5 flex items-center justify-between gap-3 hover:bg-slate-50 transition-colors"
                       >
                         <div className="min-w-0">
-                          <div className="font-bold text-sm text-slate-900 truncate">{p.title}</div>
-                          <div className="text-xs text-slate-500 mt-0.5">
-                            {p.client_name} · {p.year || "2026"}
-                          </div>
+                          <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded">PORTFOLIO</span>
+                          <div className="font-bold text-xs text-slate-900 truncate mt-1">{p.title}</div>
                         </div>
                         <Link
                           href={`/admin/projects/edit/${p.id}`}
-                          className="px-2.5 py-1 rounded bg-slate-100 text-[#1853a7] text-xs font-bold shrink-0 hover:bg-slate-200"
+                          className="px-2 py-1 rounded bg-slate-100 text-[#1853a7] text-xs font-bold shrink-0 hover:bg-slate-200"
                         >
                           Edit
                         </Link>
@@ -484,9 +544,13 @@ export default async function AdminDashboardPage() {
                   </div>
                 </div>
 
-                <div className="p-3 bg-[#f8fafc] border-t border-slate-100 text-center">
-                  <Link href="/admin/projects/new" className="text-xs font-bold text-[#1853a7] hover:underline">
-                    + Tambah Proyek Baru
+                <div className="p-3 bg-[#f8fafc] border-t border-slate-100 flex items-center justify-around text-xs font-bold">
+                  <Link href="/admin/events/new" className="text-[#1853a7] hover:underline">
+                    + Event
+                  </Link>
+                  <span className="text-slate-300">|</span>
+                  <Link href="/admin/projects/new" className="text-indigo-600 hover:underline">
+                    + Portfolio
                   </Link>
                 </div>
               </div>
