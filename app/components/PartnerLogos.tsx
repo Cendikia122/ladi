@@ -27,7 +27,7 @@ export default function PartnerLogos() {
               <div className="font-bold text-sm text-[#0f172a]">
                 {s.name}
               </div>
-              <div className="text-[11px] text-slate-500 mt-1">
+              <div className="text-[11px] text-slate-600 mt-1">
                 {s.note}
               </div>
             </div>

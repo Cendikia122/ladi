@@ -49,7 +49,7 @@ export default function PricingPage() {
                   </div>
 
                   <div className="py-4 border-y border-slate-100">
-                    <span className="text-[11px] text-slate-400 font-medium block">Mulai dari</span>
+                    <span className="text-[11px] text-slate-600 font-medium block">Mulai dari</span>
                     <div className="text-3xl font-black text-[#1853a7]">Rp 299.000</div>
                     <div className="text-[11px] text-slate-500 mt-0.5">Sekali Bayar · 5 Hari Kerja Siap</div>
                   </div>
@@ -67,6 +67,7 @@ export default function PricingPage() {
                   <Link
                     href="/services/paket-exist"
                     className="block w-full text-center py-2.5 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider transition-all"
+                    aria-label="Pilih Paket EXIST untuk website bisnis Anda"
                   >
                     Mulai dari sini. →
                   </Link>
@@ -75,6 +76,7 @@ export default function PricingPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block w-full text-center py-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-[11px] transition-all"
+                    aria-label="Tanya via WhatsApp tentang Paket EXIST"
                   >
                     Tanya via WA 💬
                   </a>
@@ -83,12 +85,12 @@ export default function PricingPage() {
 
               {/* RISE */}
               <div className="p-7 rounded-3xl bg-white border-2 border-[#1853a7] shadow-xl corporate-card flex flex-col justify-between relative">
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#fa824b] text-white text-[10px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full whitespace-nowrap shadow-sm">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#c2410c] text-white text-[10px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full whitespace-nowrap shadow-sm">
                   ⭐ PALING POPULER
                 </span>
                 <div className="space-y-4">
                   <div>
-                    <span className="text-[10px] font-bold text-[#fa824b] uppercase tracking-wider block">
+                    <span className="text-[10px] font-bold text-[#c2410c] uppercase tracking-wider block">
                       BISNIS BERKEMBANG
                     </span>
                     <h3 className="text-xl font-extrabold text-slate-900 mt-1">Paket RISE</h3>
@@ -98,7 +100,7 @@ export default function PricingPage() {
                   </div>
 
                   <div className="py-4 border-y border-slate-100">
-                    <span className="text-[11px] text-slate-400 font-medium block">Mulai dari</span>
+                    <span className="text-[11px] text-slate-600 font-medium block">Mulai dari</span>
                     <div className="text-3xl font-black text-[#1853a7]">Rp 999.000</div>
                     <div className="text-[11px] text-slate-500 mt-0.5">Sekali Bayar · 7–10 Hari Kerja</div>
                   </div>
@@ -116,7 +118,8 @@ export default function PricingPage() {
                 <div className="pt-6 space-y-2">
                   <Link
                     href="/services/paket-rise"
-                    className="block w-full text-center py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
+                    className="block w-full text-center py-2.5 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
+                    aria-label="Pilih Paket RISE untuk naik level sekarang"
                   >
                     Naik Level Sekarang →
                   </Link>
@@ -125,6 +128,7 @@ export default function PricingPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block w-full text-center py-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-[11px] transition-all"
+                    aria-label="Tanya via WhatsApp tentang Paket RISE"
                   >
                     Tanya via WA 💬
                   </a>
@@ -145,7 +149,7 @@ export default function PricingPage() {
                   </div>
 
                   <div className="py-4 border-y border-slate-100">
-                    <span className="text-[11px] text-slate-400 font-medium block">Mulai dari</span>
+                    <span className="text-[11px] text-slate-600 font-medium block">Mulai dari</span>
                     <div className="text-3xl font-black text-[#1853a7]">Rp 2.499.000</div>
                     <div className="text-[11px] text-slate-500 mt-0.5">Sekali Bayar · 10–14 Hari Kerja</div>
                   </div>
@@ -163,6 +167,7 @@ export default function PricingPage() {
                   <Link
                     href="/services/paket-run"
                     className="block w-full text-center py-2.5 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider transition-all"
+                    aria-label="Pilih Paket RUN untuk jualan mandiri dan booking online"
                   >
                     Siap Jualan Mandiri →
                   </Link>
@@ -171,6 +176,7 @@ export default function PricingPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block w-full text-center py-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-[11px] transition-all"
+                    aria-label="Tanya via WhatsApp tentang Paket RUN"
                   >
                     Tanya via WA 💬
                   </a>
@@ -181,7 +187,7 @@ export default function PricingPage() {
               <div className="p-7 rounded-3xl bg-white border border-slate-200 shadow-sm corporate-card flex flex-col justify-between">
                 <div className="space-y-4">
                   <div>
-                    <span className="text-[10px] font-bold text-[#fa824b] uppercase tracking-wider block">
+                    <span className="text-[10px] font-bold text-[#c2410c] uppercase tracking-wider block">
                       PAKET SPESIAL
                     </span>
                     <h3 className="text-xl font-extrabold text-slate-900 mt-1">Paket GUARD</h3>
@@ -191,7 +197,7 @@ export default function PricingPage() {
                   </div>
 
                   <div className="py-4 border-y border-slate-100">
-                    <span className="text-[11px] text-slate-400 font-medium block">Mulai</span>
+                    <span className="text-[11px] text-slate-600 font-medium block">Mulai</span>
                     <div className="text-2xl font-black text-[#1853a7]">Rp 300rb – 500rb</div>
                     <div className="text-[11px] text-slate-500 mt-0.5">/ bulan · Dipantau 24 Jam Nonstop</div>
                   </div>
@@ -209,6 +215,7 @@ export default function PricingPage() {
                   <Link
                     href="/services/paket-guard"
                     className="block w-full text-center py-2.5 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider transition-all"
+                    aria-label="Pilih Paket GUARD untuk perawatan dan keamanan website"
                   >
                     Pasang Penjaganya →
                   </Link>
@@ -217,6 +224,7 @@ export default function PricingPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block w-full text-center py-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-[11px] transition-all"
+                    aria-label="Tanya via WhatsApp tentang Paket GUARD"
                   >
                     Tanya via WA 💬
                   </a>
@@ -231,7 +239,7 @@ export default function PricingPage() {
                 Mulai dulu dengan <strong>Digital Audit Gratis 15 Menit</strong>. Kami beri tahu apa yang benar-benar dibutuhkan usaha Anda tanpa buang biaya berlebih.
               </p>
               <div className="pt-2">
-                <Link href="/contact-us" className="text-xs font-bold text-[#fa824b] hover:underline">
+                <Link href="/contact-us" className="text-xs font-bold text-[#c2410c] hover:underline" aria-label="Minta Audit Usaha Gratis Sekarang di kontak Ladi">
                   Minta Audit Usaha Gratis Sekarang →
                 </Link>
               </div>

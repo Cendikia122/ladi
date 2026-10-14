@@ -50,7 +50,8 @@ export default function AboutSection() {
             <div className="pt-2">
               <a
                 href="#konsultasi"
-                className="inline-flex items-center gap-2 font-bold text-sm text-[#1853a7] hover:text-[#fa824b] transition-colors"
+                className="inline-flex items-center gap-2 font-bold text-sm text-[#1853a7] hover:text-[#c2410c] transition-colors"
+                aria-label="Konsultasikan usaha Anda secara gratis dengan tim Ladi"
               >
                 <span>Konsultasikan Usaha Anda Secara Gratis</span>
                 <span>→</span>

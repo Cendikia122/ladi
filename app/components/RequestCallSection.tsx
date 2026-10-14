@@ -25,7 +25,7 @@ export default function RequestCallSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Text Column */}
           <div className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#fa824b] text-white font-bold text-xs uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#c2410c] text-white font-bold text-xs uppercase tracking-wider">
               100% GRATIS · SELESAI 15-20 MENIT
             </div>
 
@@ -41,15 +41,15 @@ export default function RequestCallSection() {
 
             <div className="space-y-3 pt-2 text-sm text-slate-100">
               <div className="flex items-center gap-2.5">
-                <span className="w-6 h-6 rounded-full bg-[#fa824b] text-white flex items-center justify-center font-bold text-xs shrink-0">✓</span>
+                <span className="w-6 h-6 rounded-full bg-white/20 text-white flex items-center justify-center font-bold text-xs shrink-0">✓</span>
                 <span>Tanpa tekanan beli — laporan jadi milik Anda</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-6 h-6 rounded-full bg-[#fa824b] text-white flex items-center justify-center font-bold text-xs shrink-0">✓</span>
+                <span className="w-6 h-6 rounded-full bg-white/20 text-white flex items-center justify-center font-bold text-xs shrink-0">✓</span>
                 <span>Hasil langsung dikirim via WhatsApp</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-6 h-6 rounded-full bg-[#fa824b] text-white flex items-center justify-center font-bold text-xs shrink-0">✓</span>
+                <span className="w-6 h-6 rounded-full bg-white/20 text-white flex items-center justify-center font-bold text-xs shrink-0">✓</span>
                 <span>Konsultasi santai dan mudah dimengerti</span>
               </div>
             </div>
@@ -62,7 +62,7 @@ export default function RequestCallSection() {
                 <h3 className="text-2xl font-extrabold text-[#0f172a]">
                   Minta Audit Usaha Gratis
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                <p className="text-xs sm:text-sm text-slate-600 mt-1">
                   Cukup isi data singkat di bawah ini:
                 </p>
               </div>
@@ -123,7 +123,8 @@ export default function RequestCallSection() {
 
                   <button
                     type="submit"
-                    className="w-full py-4 px-6 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-sm sm:text-base uppercase tracking-wider shadow-lg shadow-[#fa824b]/30 transition-all hover:-translate-y-0.5 active:translate-y-0 mt-2"
+                    aria-label="Kirim formulir audit usaha via WhatsApp sekarang"
+                    className="w-full py-4 px-6 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-sm sm:text-base uppercase tracking-wider shadow-lg shadow-[#c2410c]/30 transition-all hover:-translate-y-0.5 active:translate-y-0 mt-2 cursor-pointer"
                   >
                     Kirim via WhatsApp Sekarang →
                   </button>

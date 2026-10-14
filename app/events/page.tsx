@@ -7,7 +7,7 @@ import WhatsAppButton from "../components/WhatsAppButton";
 import { getEvents } from "@/app/lib/storage";
 import { Config } from "@/app/lib/config";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 120;
 
 export const metadata = {
   title: "Event & Workshop Digitalisasi Bisnis — Ladi (Layanan Digital)",
@@ -136,7 +136,7 @@ export default async function EventsPage() {
                           {/* Status Pill */}
                           <div className="absolute top-4 right-4">
                             <span className="px-2.5 py-0.5 rounded-full bg-emerald-500 text-white font-bold text-[10px] tracking-wider uppercase shadow-md flex items-center gap-1">
-                              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                              <span className="w-1.5 h-1.5 rounded-full bg-white" />
                               Terbuka
                             </span>
                           </div>
@@ -158,7 +158,7 @@ export default async function EventsPage() {
 
                           {/* Title */}
                           <h2 className="text-xl font-extrabold text-[#0f172a] group-hover:text-[#1853a7] transition-colors leading-snug line-clamp-2">
-                            <Link href={`/events/${ev.id}`}>
+                            <Link href={`/events/${ev.id}`} aria-label={`Lihat program acara ${ev.title}`}>
                               {ev.title}
                             </Link>
                           </h2>
@@ -175,6 +175,7 @@ export default async function EventsPage() {
                         <Link
                           href={`/events/${ev.id}`}
                           className="w-full block py-2.5 rounded-xl border border-slate-200 hover:border-[#1853a7] hover:bg-blue-50/50 text-[#1853a7] font-bold text-xs uppercase tracking-wider text-center transition-all"
+                          aria-label={`Lihat rincian program ${ev.title}`}
                         >
                           Lihat Rincian Program →
                         </Link>
@@ -188,7 +189,8 @@ export default async function EventsPage() {
                           }
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-full block py-2.5 rounded-xl bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider text-center shadow-sm transition-all"
+                          className="w-full block py-2.5 rounded-xl bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider text-center shadow-sm transition-all"
+                          aria-label={`Reservasi tanggal via WhatsApp untuk ${ev.title}`}
                         >
                           {ev.btn_text || "Reservasi Tanggal / WhatsApp"}
                         </a>

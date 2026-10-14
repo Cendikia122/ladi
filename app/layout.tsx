@@ -1,8 +1,30 @@
 import type { Metadata } from "next";
+import { Poppins, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Config } from "@/app/lib/config";
 import NavigationProgress from "@/app/components/NavigationProgress";
 import PageTransition from "@/app/components/PageTransition";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-poppins",
+  display: "swap",
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-plus-jakarta",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Ladi (Layanan Digital) — Bisnis Anda Hidup di Internet Global",
@@ -168,14 +190,11 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="id" className="scroll-smooth bg-[#f8fafc]">
+    <html
+      lang="id"
+      className={`${poppins.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} scroll-smooth bg-[#f8fafc]`}
+    >
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
-          rel="stylesheet"
-        />
         {/* Explicit Cache-Busted Favicons for Custom Domain */}
         <link rel="icon" type="image/png" sizes="32x32" href="/icon.png?v=3" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icon.png?v=3" />

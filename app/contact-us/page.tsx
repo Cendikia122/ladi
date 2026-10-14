@@ -61,12 +61,12 @@ export default function ContactPage() {
 
                 <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
                   <div className="flex items-start gap-3.5">
-                    <span className="w-10 h-10 rounded-xl bg-[#fa824b]/15 text-[#fa824b] flex items-center justify-center font-bold text-lg shrink-0">
+                    <span className="w-10 h-10 rounded-xl bg-orange-100/70 text-[#c2410c] flex items-center justify-center font-bold text-lg shrink-0">
                       💬
                     </span>
                     <div>
                       <div className="text-xs text-slate-500 font-bold uppercase">WhatsApp Resmi</div>
-                      <a href="https://wa.me/6282112477119" className="text-sm font-bold text-slate-900 hover:text-[#1853a7]">
+                      <a href="https://wa.me/6282112477119" className="text-sm font-bold text-slate-900 hover:text-[#1853a7]" aria-label="Hubungi WhatsApp Resmi Ladi di +62 821-1247-7119">
                         +62 821-1247-7119
                       </a>
                       <div className="text-[11px] text-emerald-600 mt-0.5">● Respons Cepat Jam Kerja</div>
@@ -175,7 +175,8 @@ export default function ContactPage() {
 
                       <button
                         type="submit"
-                        className="w-full py-4 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-sm uppercase tracking-wider shadow-lg transition-all"
+                        className="w-full py-4 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-sm uppercase tracking-wider shadow-lg transition-all"
+                        aria-label="Kirim pesan dan hubungi via WhatsApp sekarang"
                       >
                         Hubungi via WhatsApp Sekarang →
                       </button>

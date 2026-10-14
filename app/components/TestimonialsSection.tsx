@@ -100,7 +100,7 @@ export default function TestimonialsSection() {
                 <div className="p-6 sm:p-7 space-y-4">
                   {/* Rating Stars & Maps Rating */}
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1 text-[#fa824b]">
+                    <div className="flex items-center gap-1 text-amber-500">
                       {Array.from({ length: 5 }).map((_, j) => (
                         <svg key={j} width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -109,7 +109,7 @@ export default function TestimonialsSection() {
                       <span className="text-xs font-bold text-slate-800 ml-1">5.0</span>
                     </div>
 
-                    <span className="text-[11px] font-medium text-slate-500">
+                    <span className="text-[11px] font-medium text-slate-600">
                       📍 {t.mapsRating}
                     </span>
                   </div>
@@ -143,10 +143,10 @@ export default function TestimonialsSection() {
                       {t.author}
                       <span className="text-blue-500 text-xs" title="Klien Terverifikasi">✓</span>
                     </div>
-                    <div className="text-xs text-slate-500 truncate">
+                    <div className="text-xs text-slate-600 truncate">
                       {t.role} · {t.business}
                     </div>
-                    <div className="text-[11px] text-slate-400 truncate">
+                    <div className="text-[11px] text-slate-600 truncate">
                       {t.location}
                     </div>
                   </div>

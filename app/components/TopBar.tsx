@@ -35,12 +35,12 @@ export default function TopBar() {
 
         {/* Right Side: Operational Status & Social Icons */}
         <div className="flex items-center gap-4 text-[12px]">
-          <div className="hidden lg:flex items-center gap-1.5 text-slate-400 font-mono text-[11px]">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="hidden lg:flex items-center gap-1.5 text-slate-300 font-mono text-[11px]">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
             <span>Senin - Jumat · 08.00 - 18.00 WIB</span>
           </div>
 
-          <div className="flex items-center gap-3 text-slate-400 pl-2 sm:border-l sm:border-slate-800">
+          <div className="flex items-center gap-3 text-slate-300 pl-2 sm:border-l sm:border-slate-800">
             {/* LinkedIn */}
             <a href="#" className="hover:text-[#fa824b] transition-colors" aria-label="LinkedIn">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

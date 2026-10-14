@@ -74,6 +74,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors"
+                  aria-label="Hubungi WhatsApp Ladi di +62 821-1247-7119"
                 >
                   +62 821-1247-7119 (WhatsApp)
                 </a>
@@ -87,7 +88,8 @@ export default function Footer() {
             <div className="pt-3">
               <Link
                 href="/contact-us"
-                className="inline-block px-5 py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider transition-all"
+                className="inline-block px-5 py-2.5 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider transition-all"
+                aria-label="Minta Cek Usaha Gratis ke halaman kontak Ladi"
               >
                 Minta Cek Usaha Gratis →
               </Link>
@@ -96,14 +98,14 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar with Admin Portal Access */}
-        <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+        <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-400">
           <div>
             © {currentYear} Ladi — Layanan Digital. Seluruh hak cipta dilindungi.
           </div>
           <div className="flex items-center gap-4 text-slate-400">
             <span>Bisnis Anda Hidup di Internet Global.</span>
             <span>·</span>
-            <Link href="/admin/login" className="hover:text-[#fa824b] transition-colors font-mono text-[11px]">
+            <Link href="/admin/login" className="hover:text-white transition-colors font-mono text-[11px]" aria-label="Masuk ke Portal Admin Ladi">
               Portal Admin
             </Link>
           </div>

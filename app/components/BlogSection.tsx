@@ -24,6 +24,7 @@ export default async function BlogSection() {
 
           <Link
             href="/blog"
+            aria-label="Lihat semua artikel wawasan dan edukasi bisnis Ladi"
             className="px-6 py-3 rounded-full bg-white border border-slate-300 hover:border-[#1853a7] text-slate-800 hover:text-[#1853a7] font-bold text-xs uppercase tracking-wider transition-all self-start sm:self-auto shadow-sm"
           >
             Lihat Semua Artikel →
@@ -54,10 +55,10 @@ export default async function BlogSection() {
 
                   <div className="p-7 space-y-3">
                     <div className="flex items-center justify-between text-xs font-mono">
-                      <span className="text-[#fa824b] font-bold uppercase">
+                      <span className="text-[#c2410c] font-bold uppercase">
                         {item.category}
                       </span>
-                      <span className="text-slate-400">
+                      <span className="text-slate-600">
                         {item.date}
                       </span>
                     </div>
@@ -75,7 +76,8 @@ export default async function BlogSection() {
               <div className="p-7 pt-0 border-t border-slate-100 mt-6">
                 <Link
                   href={`/blog/${item.slug}`}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1853a7] hover:text-[#fa824b] transition-colors"
+                  aria-label={`Baca selengkapnya artikel: ${item.title}`}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1853a7] hover:text-[#c2410c] transition-colors"
                 >
                   <span>Baca Selengkapnya</span>
                   <span>→</span>

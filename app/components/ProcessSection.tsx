@@ -50,7 +50,7 @@ export default function ProcessSection() {
                   <div className="w-20 h-20 rounded-2xl bg-[#1853a7] text-white flex items-center justify-center font-extrabold text-2xl shadow-md shadow-[#1853a7]/20">
                     {step.num}
                   </div>
-                  <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-[#fa824b] text-white text-xs font-bold flex items-center justify-center shadow">
+                  <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-[#c2410c] text-white text-xs font-bold flex items-center justify-center shadow">
                     {idx + 1}
                   </span>
                 </div>
@@ -70,17 +70,18 @@ export default function ProcessSection() {
         {/* Simple Guarantee Box */}
         <div className="mt-16 p-6 rounded-2xl bg-[#f8fafc] border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <div className="flex items-center gap-3">
-            <span className="w-10 h-10 rounded-full bg-[#fa824b]/15 text-[#fa824b] flex items-center justify-center font-bold text-lg shrink-0">
+            <span className="w-10 h-10 rounded-full bg-orange-100 text-[#c2410c] flex items-center justify-center font-bold text-lg shrink-0">
               🛡️
             </span>
             <div>
               <div className="text-sm font-bold text-slate-900">Sistem DP 50% & Demo Sebelum Launching</div>
-              <div className="text-xs text-slate-500">Anda melihat hasil jadinya terlebih dahulu sebelum melakukan pelunasan.</div>
+              <div className="text-xs text-slate-600">Anda melihat hasil jadinya terlebih dahulu sebelum melakukan pelunasan.</div>
             </div>
           </div>
 
           <a
             href="#konsultasi"
+            aria-label="Mulai konsultasi usaha dari langkah 1"
             className="px-6 py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider transition-all"
           >
             Mulai dari Langkah 1 →

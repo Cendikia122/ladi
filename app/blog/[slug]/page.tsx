@@ -8,7 +8,16 @@ import WhatsAppButton from "../../components/WhatsAppButton";
 import { getBlogBySlug, getBlogs } from "@/app/lib/storage";
 import { Config } from "@/app/lib/config";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 120;
+
+export async function generateStaticParams() {
+  try {
+    const blogs = await getBlogs();
+    return blogs.map((b) => ({ slug: b.slug }));
+  } catch {
+    return [];
+  }
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -198,7 +207,7 @@ export default async function BlogDetailPage({
 
               {/* Consultation Callout at Article End */}
               <div className="mt-12 p-8 rounded-2xl bg-[#f8fafc] border-2 border-[#1853a7]/30 text-center space-y-3">
-                <span className="text-xs font-bold text-[#fa824b] uppercase font-mono">
+                <span className="text-xs font-bold text-[#c2410c] uppercase font-mono">
                   SOLUSI PRAKTIS UNTUK BISNIS ANDA
                 </span>
                 <h3 className="text-2xl font-bold text-[#0f172a]">
@@ -212,7 +221,8 @@ export default async function BlogDetailPage({
                     href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+baru+baca+artikel+di+website+dan+mau+konsultasi."
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block px-7 py-3 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md"
+                    className="inline-block px-7 py-3 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider shadow-md"
+                    aria-label="Konsultasi gratis via WhatsApp dengan tim Ladi"
                   >
                     Konsultasi Gratis via WhatsApp →
                   </a>
@@ -227,7 +237,7 @@ export default async function BlogDetailPage({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {related.map((r) => (
                     <div key={r.id} className="p-6 rounded-2xl bg-white border border-slate-200 corporate-card">
-                      <span className="text-[11px] font-mono text-[#fa824b] font-bold uppercase">{r.category}</span>
+                      <span className="text-[11px] font-mono text-[#c2410c] font-bold uppercase">{r.category}</span>
                       <h4 className="font-bold text-base text-slate-900 mt-1 mb-2 hover:text-[#1853a7]">
                         <Link href={`/blog/${r.slug}`}>{r.title}</Link>
                       </h4>

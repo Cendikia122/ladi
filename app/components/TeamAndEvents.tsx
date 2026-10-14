@@ -104,7 +104,7 @@ export default async function TeamAndEvents() {
                   </h3>
 
                   {/* Subtitle Role */}
-                  <p className="text-xs font-semibold text-[#fa824b] mt-0.5 mb-3.5">
+                  <p className="text-xs font-semibold text-[#c2410c] mt-0.5 mb-3.5">
                     {member.role}
                   </p>
 
@@ -148,6 +148,7 @@ export default async function TeamAndEvents() {
 
             <Link
               href="/events"
+              aria-label="Lihat semua agenda event dan workshop Ladi"
               className="px-6 py-3 rounded-full bg-white border border-slate-300 hover:border-[#1853a7] text-slate-800 hover:text-[#1853a7] font-bold text-xs uppercase tracking-wider transition-all self-start sm:self-auto shadow-sm"
             >
               Semua Agenda Event →
@@ -156,8 +157,8 @@ export default async function TeamAndEvents() {
 
           {events.length === 0 ? (
             <div className="p-12 text-center bg-white rounded-3xl border border-slate-200 shadow-sm space-y-2">
-              <p className="text-slate-500 text-sm">Belum ada agenda event aktif.</p>
-              <Link href="/events" className="text-xs text-[#1853a7] font-bold hover:underline">
+              <p className="text-slate-600 text-sm">Belum ada agenda event aktif.</p>
+              <Link href="/events" aria-label="Lihat arsip event Ladi" className="text-xs text-[#1853a7] font-bold hover:underline">
                 Lihat arsip event →
               </Link>
             </div>
@@ -193,8 +194,8 @@ export default async function TeamAndEvents() {
 
                         {/* Status Open Pill */}
                         <div className="absolute top-3.5 right-3.5">
-                          <span className="px-2.5 py-0.5 rounded-full bg-emerald-500 text-white font-bold text-[10px] tracking-wider uppercase shadow-md flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                          <span className="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-bold text-[10px] tracking-wider uppercase shadow-md flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_4px_#ffffff]" />
                             Terbuka
                           </span>
                         </div>
@@ -202,12 +203,12 @@ export default async function TeamAndEvents() {
 
                       {/* Card Content */}
                       <div className="p-6 sm:p-7 space-y-3.5">
-                        <div className="space-y-1 text-xs text-slate-500">
+                        <div className="space-y-1 text-xs text-slate-600">
                           <div className="flex items-center gap-2 font-semibold text-[#1853a7]">
                             <span>🗓️</span>
                             <span className="truncate">{ev.date}</span>
                           </div>
-                          <div className="flex items-center gap-2 font-medium text-slate-600">
+                          <div className="flex items-center gap-2 font-medium text-slate-700">
                             <span>📍</span>
                             <span className="truncate">{ev.location}</span>
                           </div>
@@ -227,15 +228,17 @@ export default async function TeamAndEvents() {
                     <div className="p-6 pt-0 border-t border-slate-100 flex items-center justify-between mt-4">
                       <Link
                         href={`/events/${ev.id}`}
-                        className="text-xs font-bold text-[#1853a7] hover:text-[#fa824b] transition-colors"
+                        aria-label={`Detail acara workshop: ${ev.title}`}
+                        className="text-xs font-bold text-[#1853a7] hover:text-[#c2410c] transition-colors"
                       >
                         Detail Acara →
                       </Link>
                       <a
                         href={ev.btn_link || `https://wa.me/6282112477119?text=${encodeURIComponent("Halo Ladi, saya ingin daftar event: " + ev.title)}`}
+                        aria-label={`Daftar sekarang untuk event: ${ev.title}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-4 py-2 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white text-xs font-bold transition-all shadow-sm"
+                        className="px-4 py-2 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-bold transition-all shadow-sm"
                       >
                         {ev.btn_text || "Daftar Sekarang"}
                       </a>

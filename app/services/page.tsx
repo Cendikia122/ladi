@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import WhatsAppButton from "../components/WhatsAppButton";
 import { getServicePackages } from "@/app/lib/storage";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 120;
 
 export const metadata = {
   title: "Layanan & Spesifikasi — Ladi (Layanan Digital)",
@@ -137,14 +137,14 @@ export default async function ServicesPage() {
                     }`}
                   >
                     {pkg.badge_popular && (
-                      <span className="absolute -top-3 right-6 bg-[#fa824b] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
+                      <span className="absolute -top-3 right-6 bg-[#c2410c] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
                         ⭐ PALING DIMINATI
                       </span>
                     )}
 
                     <div className="space-y-4">
                       <div className="space-y-1">
-                        <span className="text-xs font-bold text-[#fa824b] uppercase tracking-wider">
+                        <span className="text-xs font-bold text-[#c2410c] uppercase tracking-wider">
                           {pkg.tag}
                         </span>
                         <h3 className="text-2xl font-extrabold text-slate-900">{pkg.name}</h3>
@@ -159,7 +159,7 @@ export default async function ServicesPage() {
                           </div>
                         </div>
                         {pkg.original_price && (
-                          <div className="text-xs text-slate-400 line-through font-semibold">
+                          <div className="text-xs text-slate-600 line-through font-semibold">
                             {pkg.original_price}
                           </div>
                         )}
@@ -182,9 +182,10 @@ export default async function ServicesPage() {
                         href={`/services/${pkg.slug}`}
                         className={`block w-full text-center py-3.5 rounded-full font-bold text-xs uppercase tracking-wider shadow-sm transition-all ${
                           pkg.badge_popular
-                            ? "bg-[#fa824b] hover:bg-[#e5723b] text-white shadow-md hover:shadow-lg"
+                            ? "bg-[#c2410c] hover:bg-[#9a3412] text-white shadow-md hover:shadow-lg"
                             : "bg-[#1853a7] hover:bg-[#0f3d7d] text-white"
                         }`}
+                        aria-label={`Lihat contoh website dan fitur lengkap ${pkg.name}`}
                       >
                         Lihat Contoh Website & Fitur Lengkap →
                       </Link>
@@ -194,6 +195,7 @@ export default async function ServicesPage() {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="block w-full text-center py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition-all"
+                        aria-label={`Konsultasi via WhatsApp untuk ${pkg.name}`}
                       >
                         Konsultasi via WhatsApp 💬
                       </a>

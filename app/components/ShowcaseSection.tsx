@@ -2,8 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { getProjects } from "@/app/lib/storage";
 
-export const dynamic = "force-dynamic";
-
 export default async function ShowcaseSection() {
   // Ambil data murni langsung dari database (Tabel projects)
   const projects = await getProjects(4);
@@ -28,6 +26,7 @@ export default async function ShowcaseSection() {
 
           <Link
             href="/project"
+            aria-label="Lihat semua portofolio dan hasil karya digital Ladi"
             className="px-6 py-3 rounded-full bg-white border border-slate-300 hover:border-[#1853a7] text-slate-800 hover:text-[#1853a7] font-bold text-xs uppercase tracking-wider transition-all self-start sm:self-auto shadow-sm"
           >
             Lihat Semua Portofolio →
@@ -39,7 +38,7 @@ export default async function ShowcaseSection() {
           <div className="p-16 text-center bg-[#f8fafc] rounded-3xl border border-slate-200 shadow-sm space-y-4 max-w-xl mx-auto">
             <span className="text-4xl block">💼</span>
             <h3 className="text-xl font-bold text-slate-800">Portofolio Sedang Diperbarui</h3>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-600">
               Data portofolio dan studi kasus klien tersambung langsung ke database. Hubungi kami untuk melihat dokumentasi proyek.
             </p>
           </div>
@@ -55,7 +54,7 @@ export default async function ShowcaseSection() {
                     <span className="font-mono text-xs px-3 py-1 rounded-full bg-[#1853a7]/10 text-[#1853a7] font-bold uppercase">
                       {p.client_industry || "UMKM"}
                     </span>
-                    <span className="text-xs text-slate-500 font-medium">
+                    <span className="text-xs text-slate-600 font-medium">
                       📍 {p.client_location || "Bogor, Jawa Barat"}
                     </span>
                   </div>
@@ -64,7 +63,7 @@ export default async function ShowcaseSection() {
                     <h3 className="text-2xl font-extrabold text-[#0f172a] tracking-tight">
                       {p.title}
                     </h3>
-                    <div className="text-xs text-[#fa824b] font-bold uppercase mt-1">
+                    <div className="text-xs text-[#c2410c] font-bold uppercase mt-1">
                       {p.client_name}
                     </div>
                   </div>
@@ -97,6 +96,7 @@ export default async function ShowcaseSection() {
                     {p.website_url && (
                       <a
                         href={p.website_url}
+                        aria-label={`Kunjungi website resmi ${p.client_name}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="shrink-0 text-[#1853a7] hover:underline font-bold text-[11px] inline-flex items-center gap-1 ml-2"
@@ -121,7 +121,8 @@ export default async function ShowcaseSection() {
           <div className="pt-2">
             <Link
               href="/contact-us"
-              className="inline-block px-8 py-3 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md"
+              aria-label="Mulai konsultasi usaha Anda dengan Ladi"
+              className="inline-block px-8 py-3 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider shadow-md"
             >
               Mulai Konsultasi Usaha Anda →
             </Link>

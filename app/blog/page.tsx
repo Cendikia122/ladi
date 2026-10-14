@@ -7,7 +7,7 @@ import WhatsAppButton from "../components/WhatsAppButton";
 import { getBlogs } from "@/app/lib/storage";
 import { Config } from "@/app/lib/config";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export const metadata = {
   title: "Wawasan & Panduan Bisnis Digital — Ladi (Layanan Digital)",
@@ -144,7 +144,8 @@ export default async function BlogIndexPage() {
 
                       <Link
                         href={`/blog/${b.slug}`}
-                        className="inline-flex items-center gap-1.5 font-bold text-[#1853a7] group-hover:text-[#fa824b] transition-colors"
+                        className="inline-flex items-center gap-1.5 font-bold text-[#1853a7] group-hover:text-[#c2410c] transition-colors"
+                        aria-label={`Baca artikel lengkap: ${b.title}`}
                       >
                         <span>Baca Lengkap</span>
                         <span>→</span>
@@ -157,7 +158,7 @@ export default async function BlogIndexPage() {
 
             {/* Bottom Audit Invitation */}
             <div className="mt-16 p-8 sm:p-10 rounded-3xl bg-[#1853a7] text-white text-center space-y-4 max-w-2xl mx-auto shadow-xl">
-              <span className="font-mono text-xs text-[#fa824b] font-bold uppercase tracking-wider block">
+              <span className="font-mono text-xs text-orange-200 font-bold uppercase tracking-wider block">
                 AUDIT KEBERADAAN DIGITAL
               </span>
               <h3 className="text-2xl sm:text-3xl font-extrabold">Ingin Usaha Anda Tampil Resmi di Google?</h3>
@@ -167,7 +168,8 @@ export default async function BlogIndexPage() {
               <div className="pt-2">
                 <Link
                   href="/contact-us"
-                  className="inline-block px-8 py-3.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
+                  className="inline-block px-8 py-3.5 rounded-full bg-white hover:bg-slate-100 text-[#1853a7] font-bold text-xs uppercase tracking-wider shadow-md transition-all"
+                  aria-label="Minta Audit Usaha Gratis ke halaman kontak Ladi"
                 >
                   Minta Audit Usaha Gratis →
                 </Link>

@@ -321,10 +321,21 @@ export async function query<T = any>(sql: string, params: any[] = []): Promise<T
 
   try {
     const db = getPool();
-    await ensureTables(db);
     const [rows] = await db.query(sql, params);
     return rows as T;
   } catch (error: any) {
+    // Jika tabel belum ada (ER_NO_SUCH_TABLE atau errno 1146), inisialisasi tabel sekali dan coba lagi
+    if (error?.code === "ER_NO_SUCH_TABLE" || error?.errno === 1146) {
+      try {
+        const db = getPool();
+        await ensureTables(db);
+        const [rows] = await db.query(sql, params);
+        return rows as T;
+      } catch (retryErr) {
+        markDbOffline(60000);
+        throw retryErr;
+      }
+    }
     // Tandai offline selama 60 detik agar request berikutnya instan dari JSON
     markDbOffline(60000);
     throw error;

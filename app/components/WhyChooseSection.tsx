@@ -41,7 +41,7 @@ export default function WhyChooseSection() {
                   key={i}
                   className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-sm flex items-start gap-4 corporate-card"
                 >
-                  <div className="w-8 h-8 rounded-full bg-[#fa824b]/15 text-[#fa824b] font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-8 h-8 rounded-full bg-orange-100 text-[#c2410c] font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">
                     ✓
                   </div>
                   <div>
@@ -61,7 +61,7 @@ export default function WhyChooseSection() {
           <div className="lg:col-span-5">
             <div className="rounded-3xl bg-[#0f172a] text-white p-7 sm:p-8 shadow-2xl border border-slate-800 space-y-6">
               <div>
-                <span className="text-xs font-mono text-[#fa824b] font-bold uppercase tracking-wider block mb-1">
+                <span className="text-xs font-mono text-amber-400 font-bold uppercase tracking-wider block mb-1">
                   PERBEDAAN NYATA
                 </span>
                 <h3 className="text-2xl font-bold text-white">
@@ -76,7 +76,7 @@ export default function WhyChooseSection() {
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-[#1853a7]/30 border border-[#1853a7]/60">
-                  <div className="text-[#fa824b] font-bold">Ladi (Layanan Digital):</div>
+                  <div className="text-amber-400 font-bold">Ladi (Layanan Digital):</div>
                   <div className="text-white font-semibold mt-1">✓ Dibuatkan, dirawat, dan dilaporkan dampaknya tiap bulan.</div>
                 </div>
 
@@ -86,7 +86,7 @@ export default function WhyChooseSection() {
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-[#1853a7]/30 border border-[#1853a7]/60">
-                  <div className="text-[#fa824b] font-bold">Ladi (Layanan Digital):</div>
+                  <div className="text-amber-400 font-bold">Ladi (Layanan Digital):</div>
                   <div className="text-white font-semibold mt-1">✓ Komunikasi santai dan langsung bantu atasi masalah Anda.</div>
                 </div>
               </div>
@@ -94,7 +94,8 @@ export default function WhyChooseSection() {
               <div className="pt-2">
                 <a
                   href="#konsultasi"
-                  className="block w-full py-3.5 text-center rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider transition-all"
+                  aria-label="Konsultasi gratis dengan tim Ladi sekarang"
+                  className="block w-full py-3.5 text-center rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider transition-all"
                 >
                   Konsultasi dengan Teman Ladi →
                 </a>

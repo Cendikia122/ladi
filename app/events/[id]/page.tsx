@@ -8,7 +8,16 @@ import WhatsAppButton from "../../components/WhatsAppButton";
 import { getEventById, getEvents } from "@/app/lib/storage";
 import { Config } from "@/app/lib/config";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 120;
+
+export async function generateStaticParams() {
+  try {
+    const events = await getEvents();
+    return events.map((e) => ({ id: String(e.id) }));
+  } catch {
+    return [];
+  }
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -197,8 +206,9 @@ export default async function EventDetailPage({
                         key={oe.id}
                         href={`/events/${oe.id}`}
                         className="p-6 rounded-2xl bg-white border border-slate-200 hover:border-[#1853a7] transition-all corporate-card block"
+                        aria-label={`Lihat agenda acara ${oe.title}`}
                       >
-                        <span className="text-[11px] font-mono text-[#fa824b] font-bold uppercase">{oe.tag}</span>
+                        <span className="text-[11px] font-mono text-[#c2410c] font-bold uppercase">{oe.tag}</span>
                         <h4 className="font-bold text-slate-900 text-base mt-1 line-clamp-1">{oe.title}</h4>
                         <p className="text-xs text-slate-500 mt-1">📍 {oe.location}</p>
                       </Link>
@@ -222,22 +232,22 @@ export default async function EventDetailPage({
 
                 <div className="space-y-4 text-xs">
                   <div>
-                    <span className="text-slate-400 font-mono uppercase block font-semibold">Hotline WhatsApp</span>
+                    <span className="text-slate-500 font-mono uppercase block font-semibold">Hotline WhatsApp</span>
                     <span className="font-bold text-slate-800 text-sm">{Config.contactPhone}</span>
                   </div>
 
                   <div>
-                    <span className="text-slate-400 font-mono uppercase block font-semibold">Email</span>
+                    <span className="text-slate-500 font-mono uppercase block font-semibold">Email</span>
                     <span className="font-bold text-slate-800 text-sm">contact@layanandigital.id</span>
                   </div>
 
                   <div>
-                    <span className="text-slate-400 font-mono uppercase block font-semibold">Lokasi</span>
+                    <span className="text-slate-500 font-mono uppercase block font-semibold">Lokasi</span>
                     <span className="font-bold text-slate-800 text-sm">{event.location}</span>
                   </div>
 
                   <div>
-                    <span className="text-slate-400 font-mono uppercase block font-semibold">Jadwal / Waktu</span>
+                    <span className="text-slate-500 font-mono uppercase block font-semibold">Jadwal / Waktu</span>
                     <span className="font-bold text-[#1853a7] text-sm">{event.date}</span>
                   </div>
                 </div>
@@ -248,6 +258,7 @@ export default async function EventDetailPage({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full py-4 px-6 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 text-center"
+                    aria-label={`Daftar atau minta info lebih lanjut untuk acara ${event.title}`}
                   >
                     <span>💬</span>
                     <span>{event.btn_text || "Daftar / Info Lebih Lanjut"}</span>
@@ -255,7 +266,7 @@ export default async function EventDetailPage({
                 </div>
 
                 {/* Social Share & Brand */}
-                <div className="pt-4 border-t border-slate-100 flex items-center justify-center gap-4 text-slate-400 text-xs">
+                <div className="pt-4 border-t border-slate-100 flex items-center justify-center gap-4 text-slate-600 text-xs">
                   <span>Bagikan Acara:</span>
                   <a
                     href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
@@ -263,7 +274,8 @@ export default async function EventDetailPage({
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-bold text-emerald-600 hover:underline"
+                    className="font-bold text-emerald-700 hover:underline"
+                    aria-label={`Bagikan info acara ${event.title} via WhatsApp`}
                   >
                     WhatsApp ↗
                   </a>

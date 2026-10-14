@@ -162,20 +162,20 @@ export default function ServicesSection() {
               >
                 <div>
                   <span className={`text-[10px] font-bold uppercase tracking-wider ${
-                    activeTab === idx ? "text-[#fa824b]" : "text-slate-500"
+                    activeTab === idx ? "text-amber-300" : "text-slate-600"
                   }`}>
                     {pkg.tag}
                   </span>
                   <div className="text-lg font-bold mt-0.5 tracking-tight">
                     {pkg.name}
                   </div>
-                  <div className={`text-xs mt-1 font-semibold ${activeTab === idx ? "text-amber-300" : "text-[#1853a7]"}`}>
+                  <div className={`text-xs mt-1 font-semibold ${activeTab === idx ? "text-amber-200" : "text-[#1853a7]"}`}>
                     {pkg.price}
                   </div>
                 </div>
 
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0 ml-2 ${
-                  activeTab === idx ? "bg-[#fa824b] text-white" : "bg-slate-100 text-slate-400"
+                  activeTab === idx ? "bg-[#c2410c] text-white" : "bg-slate-100 text-slate-600"
                 }`}>
                   →
                 </div>
@@ -186,7 +186,8 @@ export default function ServicesSection() {
               <p className="text-xs text-slate-600 font-medium">Bingung memilih paket yang pas?</p>
               <Link
                 href="/contact-us"
-                className="inline-block w-full py-3 px-4 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm"
+                aria-label="Konsultasi dan audit 10 poin gratis bersama tim Ladi"
+                className="inline-block w-full py-3 px-4 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm"
               >
                 Konsultasi & Audit 10 Poin Gratis →
               </Link>
@@ -199,12 +200,12 @@ export default function ServicesSection() {
               {/* Header Box */}
               <div className="border-b border-slate-100 pb-6 space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="px-3 py-1 rounded-full bg-[#fa824b]/15 text-[#fa824b] text-xs font-bold uppercase tracking-wider">
+                  <span className="px-3 py-1 rounded-full bg-orange-100 text-[#c2410c] text-xs font-bold uppercase tracking-wider">
                     {current.tag}
                   </span>
                   <div className="text-right">
                     <span className="text-2xl font-black text-[#1853a7] block">{current.price}</span>
-                    <span className="text-[11px] text-slate-400 font-medium">{current.period}</span>
+                    <span className="text-[11px] text-slate-600 font-medium">{current.period}</span>
                   </div>
                 </div>
 
@@ -238,13 +239,14 @@ export default function ServicesSection() {
 
               {/* Bottom Action */}
               <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100">
-                <div className="text-xs text-slate-500 text-center sm:text-left">
+                <div className="text-xs text-slate-600 text-center sm:text-left">
                   ✅ DP 50% di awal · Pelunasan setelah website siap tayang
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
                   <Link
                     href={`/services/${current.slug}`}
+                    aria-label={`Lihat landing page dan contoh untuk ${current.name}`}
                     className="flex-1 sm:flex-none px-6 py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider text-center transition-all shadow-sm"
                   >
                     Lihat Landing Page & Contoh →
@@ -252,9 +254,10 @@ export default function ServicesSection() {
 
                   <a
                     href={`https://wa.me/6282112477119?text=${encodeURIComponent(current.waMessage)}`}
+                    aria-label={`Chat WhatsApp untuk pemesanan ${current.name}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 sm:flex-none px-5 py-3 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider text-center transition-all shadow-sm"
+                    className="flex-1 sm:flex-none px-5 py-3 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider text-center transition-all shadow-sm"
                   >
                     Chat WA 💬
                   </a>

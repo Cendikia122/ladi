@@ -11,7 +11,7 @@ export default function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -59,7 +59,8 @@ export default function Navbar() {
             <div className="hidden sm:flex items-center gap-3">
               <Link
                 href="/contact-us"
-                className="px-5 py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-[#fa824b]/20 hover:shadow-lg transition-all hover:-translate-y-0.5 active:translate-y-0"
+                aria-label="Audit Usaha Gratis - Konsultasi Sekarang"
+                className="px-5 py-2.5 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-[#c2410c]/20 hover:shadow-lg transition-all hover:-translate-y-0.5 active:translate-y-0"
               >
                 Audit Usaha Gratis
               </Link>
@@ -99,7 +100,8 @@ export default function Navbar() {
             <div className="pt-2">
               <Link
                 href="/contact-us"
-                className="block w-full text-center py-3 rounded-full bg-[#fa824b] text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-[#fa824b]/25"
+                aria-label="Audit Usaha Gratis - Menu Navigasi"
+                className="block w-full text-center py-3 rounded-full bg-[#c2410c] text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-[#c2410c]/25"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Audit Usaha Gratis

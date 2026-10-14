@@ -7,7 +7,7 @@ import WhatsAppButton from "../components/WhatsAppButton";
 import { getProjects } from "@/app/lib/storage";
 import { Config } from "@/app/lib/config";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 120;
 
 export const metadata = {
   title: "Portofolio & Studi Kasus Klien — Ladi (Layanan Digital)",
@@ -147,11 +147,11 @@ export default async function ProjectPage() {
                           <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-500 mt-1">
                             <span className="text-slate-800 font-bold">{item.client_name}</span>
                             <span>•</span>
-                            <span className="text-[#fa824b] uppercase font-bold">{item.client_industry}</span>
+                            <span className="text-[#c2410c] uppercase font-bold">{item.client_industry}</span>
                             <span>•</span>
                             <span>📍 {item.client_location}</span>
                             <span>•</span>
-                            <span className="font-mono text-slate-400">{item.year || "2026"}</span>
+                            <span className="font-mono text-slate-600">{item.year || "2026"}</span>
                           </div>
                         </div>
                       </div>
@@ -163,6 +163,7 @@ export default async function ProjectPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="px-5 py-2.5 rounded-full border border-slate-300 hover:border-[#1853a7] hover:bg-blue-50/50 text-[#1853a7] font-bold text-xs inline-flex items-center gap-1.5 transition-all self-start md:self-center shrink-0 shadow-sm"
+                          aria-label={`Kunjungi situs resmi klien ${item.title}`}
                         >
                           <span>Kunjungi Website Klien</span>
                           <span className="text-sm">↗</span>
@@ -229,7 +230,8 @@ export default async function ProjectPage() {
                         )}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-6 py-3 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md shrink-0"
+                        className="px-6 py-3 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md shrink-0"
+                        aria-label={`Konsultasikan usaha serupa dengan proyek ${item.title}`}
                       >
                         Konsultasikan Usaha Serupa →
                       </a>
@@ -257,7 +259,8 @@ export default async function ProjectPage() {
               <div className="pt-2">
                 <Link
                   href="/contact-us"
-                  className="inline-block px-8 py-3.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-lg transition-all"
+                  className="inline-block px-8 py-3.5 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider shadow-lg transition-all"
+                  aria-label="Hubungi Tim Ladi Sekarang untuk konsultasi"
                 >
                   Hubungi Tim Ladi Sekarang →
                 </Link>

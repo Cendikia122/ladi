@@ -8,7 +8,16 @@ import WhatsAppButton from "../../components/WhatsAppButton";
 import { getServicePackageBySlug, getServicePackages } from "@/app/lib/storage";
 import { Config } from "@/app/lib/config";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 120;
+
+export async function generateStaticParams() {
+  try {
+    const packages = await getServicePackages();
+    return packages.map((p) => ({ slug: p.slug }));
+  } catch {
+    return [];
+  }
+}
 
 export async function generateMetadata({
   params,
@@ -210,7 +219,8 @@ export default async function ServiceDetailPage({
                     href={waUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="py-4 px-8 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-sm uppercase tracking-wider shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-center group cursor-pointer"
+                    className="py-4 px-8 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-sm uppercase tracking-wider shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-center group cursor-pointer"
+                    aria-label={`Pesan paket ${pkg.name} via WhatsApp`}
                   >
                     <span>💬</span>
                     <span>{pkg.cta_text || "Pesan Paket Ini via WhatsApp"}</span>
@@ -521,7 +531,7 @@ export default async function ServiceDetailPage({
                   className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-4 flex flex-col justify-between"
                 >
                   <div className="space-y-2">
-                    <span className="text-[11px] font-bold text-[#fa824b] uppercase tracking-wider">
+                    <span className="text-[11px] font-bold text-[#c2410c] uppercase tracking-wider">
                       {item.tag}
                     </span>
                     <h4 className="text-lg font-bold text-slate-900">{item.name}</h4>
@@ -532,6 +542,7 @@ export default async function ServiceDetailPage({
                   <Link
                     href={`/services/${item.slug}`}
                     className="block w-full py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-bold text-xs uppercase tracking-wider transition-colors"
+                    aria-label={`Lihat rincian paket ${item.name}`}
                   >
                     Lihat Rincian Paket →
                   </Link>
@@ -557,7 +568,8 @@ export default async function ServiceDetailPage({
                 href={waUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto py-4 px-8 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs sm:text-sm uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2"
+                className="w-full sm:w-auto py-4 px-8 rounded-full bg-white hover:bg-slate-100 text-[#1853a7] font-bold text-xs sm:text-sm uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2"
+                aria-label={`Pesan paket ${pkg.name} via WhatsApp sekarang`}
               >
                 <span>💬</span>
                 <span>Pesan Paket Ini via WhatsApp</span>

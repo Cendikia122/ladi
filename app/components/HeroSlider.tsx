@@ -93,7 +93,7 @@ export default function HeroSlider() {
       />
 
       {/* Decorative Floating Ambient Glow */}
-      <div className="absolute -top-32 -left-32 w-96 h-96 bg-[#1853a7]/30 rounded-full blur-3xl pointer-events-none animate-pulse" />
+      <div className="absolute -top-32 -left-32 w-96 h-96 bg-[#1853a7]/30 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-32 right-10 w-96 h-96 bg-[#fa824b]/15 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24 w-full">
@@ -113,9 +113,9 @@ export default function HeroSlider() {
                   }`}
                 >
                   <div className="space-y-6">
-                    {/* Tag Pill with Pulse Indicator */}
+                    {/* Tag Pill with Crisp Indicator */}
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#fa824b]/20 border border-[#fa824b]/40 backdrop-blur-sm shadow-sm">
-                      <span className="w-2 h-2 rounded-full bg-[#fa824b] animate-ping" />
+                      <span className="w-2 h-2 rounded-full bg-[#fa824b] shadow-[0_0_8px_#fa824b]" />
                       <span className="text-[#fa824b] font-bold text-xs tracking-wider uppercase">
                         {s.tag}
                       </span>
@@ -140,17 +140,19 @@ export default function HeroSlider() {
                       {s.subhead}
                     </p>
 
-                    {/* Action Buttons */}
+                    {/* Action Buttons with Accessible Contrast & Distinct Aria-Labels */}
                     <div className="flex flex-wrap items-center gap-4 pt-3">
                       <a
                         href={s.primaryHref}
-                        className="px-8 py-4 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-sm sm:text-base uppercase tracking-wider shadow-lg shadow-[#fa824b]/30 transition-all hover:-translate-y-0.5 active:translate-y-0"
+                        aria-label={`${s.primaryCta} - ${s.headline}`}
+                        className="px-8 py-4 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-sm sm:text-base uppercase tracking-wider shadow-lg shadow-[#c2410c]/30 transition-all hover:-translate-y-0.5 active:translate-y-0"
                       >
                         {s.primaryCta} →
                       </a>
 
                       <a
                         href={s.secondaryHref}
+                        aria-label={`${s.secondaryCta} - ${s.headline}`}
                         className="px-7 py-4 rounded-full bg-white/10 hover:bg-white/20 text-white font-semibold text-sm sm:text-base border border-white/25 transition-all hover:-translate-y-0.5"
                       >
                         {s.secondaryCta}
@@ -184,7 +186,7 @@ export default function HeroSlider() {
               <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                 <span className="text-xs font-bold text-slate-400 font-mono">STATUS BISNIS ANDA</span>
                 <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
                   ONLINE 24/7
                 </span>
               </div>
@@ -276,6 +278,7 @@ export default function HeroSlider() {
                       className="absolute inset-y-0 left-0 bg-[#fa824b] rounded-full"
                       style={{
                         width: "100%",
+                        transformOrigin: "left",
                         animation: isPaused ? "none" : `slideProgress ${SLIDE_DURATION}ms linear forwards`,
                       }}
                     />
@@ -308,18 +311,6 @@ export default function HeroSlider() {
           </div>
         </div>
       </div>
-
-      {/* Slide Progress Keyframe Style */}
-      <style jsx>{`
-        @keyframes slideProgress {
-          from {
-            width: 0%;
-          }
-          to {
-            width: 100%;
-          }
-        }
-      `}</style>
     </section>
   );
 }

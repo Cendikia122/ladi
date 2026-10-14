@@ -14,8 +14,7 @@ import BlogSection from "./components/BlogSection";
 import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 60; // ISR: disajikan instan dari Edge CDN, refresh otomatis tiap 60 detik atau via on-demand revalidation
 
 export default function Home() {
   return (
