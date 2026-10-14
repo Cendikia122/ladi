@@ -1,29 +1,12 @@
 import type { Metadata } from "next";
-import { Poppins, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Config } from "@/app/lib/config";
-import NavigationProgress from "@/app/components/NavigationProgress";
-import PageTransition from "@/app/components/PageTransition";
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-poppins",
-  display: "swap",
-});
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
   variable: "--font-plus-jakarta",
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-jetbrains-mono",
-  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -61,12 +44,14 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico?v=2", sizes: "any" },
-      { url: "/icon.png?v=2", type: "image/png", sizes: "512x512" },
+      { url: "/favicon.ico?v=3", sizes: "any" },
+      { url: "/icon.png?v=3", type: "image/png", sizes: "32x32" },
+      { url: "/icon.png?v=3", type: "image/png", sizes: "16x16" },
+      { url: "/icon.png?v=3", type: "image/png", sizes: "512x512" },
     ],
-    shortcut: "/favicon.ico?v=2",
+    shortcut: "/favicon.ico?v=3",
     apple: [
-      { url: "/apple-touch-icon.png?v=2", sizes: "180x180", type: "image/png" },
+      { url: "/apple-touch-icon.png?v=3", sizes: "180x180", type: "image/png" },
     ],
   },
   robots: {
@@ -192,22 +177,14 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${poppins.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} scroll-smooth bg-[#f8fafc]`}
+      className={`${plusJakartaSans.variable} scroll-smooth bg-[#f8fafc]`}
     >
-      <head>
-        {/* Explicit Cache-Busted Favicons for Custom Domain */}
-        <link rel="icon" type="image/png" sizes="32x32" href="/icon.png?v=3" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/icon.png?v=3" />
-        <link rel="shortcut icon" href="/favicon.ico?v=3" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3" />
+      <body className="antialiased bg-[#f8fafc] text-[#0f172a] selection:bg-[#c2410c] selection:text-white">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }}
         />
-      </head>
-      <body className="antialiased bg-[#f8fafc] text-[#0f172a] selection:bg-[#fa824b] selection:text-white">
-        <NavigationProgress />
-        <PageTransition>{children}</PageTransition>
+        {children}
       </body>
     </html>
   );

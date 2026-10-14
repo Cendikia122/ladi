@@ -23,7 +23,7 @@ export default function LadiLogo({
           alt="Ladi (Layanan Digital)"
           width={width}
           height={height}
-          priority
+          priority={!inverted}
           className="object-contain h-auto"
           style={{ width: `${width}px`, height: `${height}px` }}
         />
@@ -34,7 +34,7 @@ export default function LadiLogo({
           className={`hidden sm:inline-block font-mono text-[9px] font-bold tracking-widest uppercase pl-2.5 border-l ${
             inverted
               ? "text-slate-400 border-slate-700"
-              : "text-slate-500 border-slate-300"
+              : "text-slate-600 border-slate-300"
           }`}
         >
           Layanan Digital

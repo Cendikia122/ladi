@@ -71,22 +71,22 @@ export default function WhyChooseSection() {
 
               <div className="space-y-4 text-xs sm:text-sm pt-2 border-t border-slate-800">
                 <div className="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/80">
-                  <div className="text-slate-400">Vendor / Jasa Lain:</div>
+                  <div className="text-slate-300 font-medium">Vendor / Jasa Lain:</div>
                   <div className="text-slate-200 font-semibold mt-1">✗ Selesai bikin website, urusan selesai.</div>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-[#1853a7]/30 border border-[#1853a7]/60">
-                  <div className="text-amber-400 font-bold">Ladi (Layanan Digital):</div>
+                  <div className="text-amber-300 font-bold">Ladi (Layanan Digital):</div>
                   <div className="text-white font-semibold mt-1">✓ Dibuatkan, dirawat, dan dilaporkan dampaknya tiap bulan.</div>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/80">
-                  <div className="text-slate-400">Vendor / Jasa Lain:</div>
+                  <div className="text-slate-300 font-medium">Vendor / Jasa Lain:</div>
                   <div className="text-slate-200 font-semibold mt-1">✗ Bahasa teknis sulit dimengerti.</div>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-[#1853a7]/30 border border-[#1853a7]/60">
-                  <div className="text-amber-400 font-bold">Ladi (Layanan Digital):</div>
+                  <div className="text-amber-300 font-bold">Ladi (Layanan Digital):</div>
                   <div className="text-white font-semibold mt-1">✓ Komunikasi santai dan langsung bantu atasi masalah Anda.</div>
                 </div>
               </div>

@@ -114,8 +114,8 @@ export default async function TeamAndEvents() {
                   </p>
 
                   {/* Purely Informative Footer (No CTA / No WA Link) */}
-                  <div className="mt-6 pt-4 w-full border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                    <span className="text-[11px] font-medium text-slate-500">
+                  <div className="mt-6 pt-4 w-full border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                    <span className="text-[11px] font-medium text-slate-600">
                       Bidang Keahlian:
                     </span>
                     <span className="font-semibold text-slate-700 text-[11px] bg-slate-100 px-2.5 py-0.5 rounded-md">

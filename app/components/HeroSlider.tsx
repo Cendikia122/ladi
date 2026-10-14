@@ -45,7 +45,12 @@ const SLIDE_DURATION = 6500; // 6.5s per slide
 export default function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Auto-play timer with pause on hover
   useEffect(() => {
@@ -85,16 +90,16 @@ export default function HeroSlider() {
       {/* Background Ambience & Soft Atmospheric Gradients */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#0f172a] via-[#0f172a]/95 to-[#1853a7]/65 z-10 pointer-events-none" />
       <div
-        className="absolute inset-0 opacity-15 z-0 pointer-events-none transition-opacity duration-1000"
+        className="absolute inset-0 opacity-15 z-0 pointer-events-none"
         style={{
           backgroundImage: `radial-gradient(circle at 75% 50%, #1853a7 0%, transparent 60%), linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px)`,
           backgroundSize: "100% 100%, 56px 56px, 56px 56px",
         }}
       />
 
-      {/* Decorative Floating Ambient Glow */}
-      <div className="absolute -top-32 -left-32 w-96 h-96 bg-[#1853a7]/30 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-32 right-10 w-96 h-96 bg-[#fa824b]/15 rounded-full blur-3xl pointer-events-none" />
+      {/* Decorative Floating Ambient Glow - Light on mobile for high FPS */}
+      <div className="hidden sm:block absolute -top-32 -left-32 w-80 h-80 bg-[#1853a7]/20 rounded-full blur-2xl pointer-events-none" />
+      <div className="hidden sm:block absolute -bottom-32 right-10 w-80 h-80 bg-[#fa824b]/10 rounded-full blur-2xl pointer-events-none" />
 
       <div className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -106,17 +111,17 @@ export default function HeroSlider() {
               return (
                 <div
                   key={s.id}
-                  className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                  className={`${isMounted ? "transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" : ""} ${
                     isActive
                       ? "opacity-100 translate-x-0 scale-100 pointer-events-auto relative z-10"
                       : "opacity-0 -translate-x-6 scale-[0.98] pointer-events-none absolute inset-0 z-0"
                   }`}
                 >
                   <div className="space-y-6">
-                    {/* Tag Pill with Crisp Indicator */}
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#fa824b]/20 border border-[#fa824b]/40 backdrop-blur-sm shadow-sm">
+                    {/* Tag Pill with Crisp Indicator & WCAG AA Contrast */}
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-950/60 border border-orange-500/40 backdrop-blur-sm shadow-sm">
                       <span className="w-2 h-2 rounded-full bg-[#fa824b] shadow-[0_0_8px_#fa824b]" />
-                      <span className="text-[#fa824b] font-bold text-xs tracking-wider uppercase">
+                      <span className="text-orange-200 font-bold text-xs tracking-wider uppercase">
                         {s.tag}
                       </span>
                     </div>
@@ -133,7 +138,7 @@ export default function HeroSlider() {
                     )}
 
                     {/* Orange Decorative Underline */}
-                    <div className="w-16 h-1.5 bg-[#fa824b] rounded-full shadow-[0_0_12px_rgba(250,130,75,0.6)]" />
+                    <div className="w-16 h-1.5 bg-[#c2410c] rounded-full shadow-[0_0_12px_rgba(194,65,12,0.6)]" />
 
                     {/* Short Subhead with High Readability */}
                     <p className="text-base sm:text-xl text-slate-200 leading-relaxed max-w-2xl font-normal">
@@ -162,15 +167,15 @@ export default function HeroSlider() {
                     {/* 3 Simple Pillars */}
                     <div className="pt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs sm:text-sm text-slate-300 border-t border-slate-700/60">
                       <div className="flex items-center gap-2">
-                        <span className="text-[#fa824b] font-bold text-base">✓</span>
+                        <span className="text-amber-400 font-bold text-base">✓</span>
                         <span>Tidak Perlu Paham Teknis</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[#fa824b] font-bold text-base">✓</span>
+                        <span className="text-amber-400 font-bold text-base">✓</span>
                         <span>Diurus Total dari A sampai Z</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[#fa824b] font-bold text-base">✓</span>
+                        <span className="text-amber-400 font-bold text-base">✓</span>
                         <span>Laporan Dampak Bulanan</span>
                       </div>
                     </div>
@@ -244,7 +249,8 @@ export default function HeroSlider() {
               <div className="pt-2 text-center">
                 <a
                   href="#konsultasi"
-                  className="text-xs font-bold text-[#fa824b] hover:text-[#e5723b] transition-colors inline-flex items-center gap-1.5"
+                  aria-label="Minta Cek Gratis Bisnis Saya ke bagian formulir konsultasi"
+                  className="text-xs font-bold text-amber-300 hover:text-white transition-colors inline-flex items-center gap-1.5"
                 >
                   <span>Minta Cek Gratis Bisnis Saya</span>
                   <span>→</span>
@@ -275,7 +281,7 @@ export default function HeroSlider() {
                   {/* Active Progress Filling Bar */}
                   {isActive ? (
                     <div
-                      className="absolute inset-y-0 left-0 bg-[#fa824b] rounded-full"
+                      className="absolute inset-y-0 left-0 bg-[#c2410c] rounded-full"
                       style={{
                         width: "100%",
                         transformOrigin: "left",
