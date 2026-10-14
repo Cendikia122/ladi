@@ -167,6 +167,64 @@ async function ensureTables(db: mysql.Pool) {
       )
     `);
 
+    // Selalu sinkronkan service_packages dari services.json ke MySQL Hostinger
+    try {
+      const fs = await import("fs");
+      const path = await import("path");
+      const servicesFile = path.join(process.cwd(), "data", "services.json");
+      if (fs.existsSync(servicesFile)) {
+        const services = JSON.parse(fs.readFileSync(servicesFile, "utf-8"));
+        for (const s of services) {
+          await db.query(
+            `INSERT INTO service_packages (id, name, slug, tag, subtitle, target_audience, price, original_price, period, timeline, deliverables, example_websites, audit_report_sample, description, faqs, cta_text, cta_whatsapp_text, badge_popular, status, order_num)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+             ON DUPLICATE KEY UPDATE 
+               name=VALUES(name),
+               slug=VALUES(slug),
+               tag=VALUES(tag),
+               subtitle=VALUES(subtitle),
+               target_audience=VALUES(target_audience),
+               price=VALUES(price),
+               original_price=VALUES(original_price),
+               period=VALUES(period),
+               timeline=VALUES(timeline),
+               deliverables=VALUES(deliverables),
+               example_websites=VALUES(example_websites),
+               audit_report_sample=VALUES(audit_report_sample),
+               description=VALUES(description),
+               faqs=VALUES(faqs),
+               cta_text=VALUES(cta_text),
+               cta_whatsapp_text=VALUES(cta_whatsapp_text),
+               badge_popular=VALUES(badge_popular),
+               status=VALUES(status),
+               order_num=VALUES(order_num)`,
+            [
+              s.id,
+              s.name,
+              s.slug,
+              s.tag || "PAKET LADI",
+              s.subtitle || "",
+              s.target_audience || "",
+              s.price || "",
+              s.original_price || "",
+              s.period || "Sekali Bayar",
+              s.timeline || "5–7 Hari",
+              s.deliverables || "[]",
+              s.example_websites || "[]",
+              s.audit_report_sample || "{}",
+              s.description || "",
+              s.faqs || "[]",
+              s.cta_text || "Pesan via WhatsApp",
+              s.cta_whatsapp_text || "",
+              s.badge_popular ? 1 : 0,
+              s.status || "active",
+              s.order_num || 0,
+            ]
+          );
+        }
+      }
+    } catch {}
+
     // Periksa apakah database sudah pernah di-inisialisasi
     const [metaRows]: any = await db.query("SELECT `value` FROM system_settings WHERE `key` = 'initialized'");
     if (!metaRows || metaRows.length === 0) {

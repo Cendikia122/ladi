@@ -1,111 +1,132 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 
 const packages = [
   {
     id: "exist",
-    tag: "LANGKAH PERDANA",
+    tag: "SOLUSI AWAL UNTUK BISNIS KECIL",
     name: "Paket EXIST",
-    subtitle: "Mulai Hadir di Internet Global",
-    summary: "Cocok untuk usaha yang ingin segera punya kehadiran resmi dan mudah ditemukan saat dicari calon pembeli.",
+    slug: "paket-exist",
+    price: "Mulai dari Rp 299.000",
+    period: "Sekali Bayar · 5 Hari Kerja Siap",
+    subtitle: "Biar Bisnismu Muncul Resmi di Internet",
+    summary: "Cocok untuk UMKM & bisnis lokal yang ingin mulai terlihat online dengan biaya paling terjangkau.",
+    ctaText: "Mulai dari sini. →",
+    waMessage: "Halo Ladi, saya tertarik dengan Paket EXIST (Mulai Rp 299.000). Biar bisnismu muncul resmi di internet.",
     features: [
       {
-        title: "Website Resmi 1 Halaman",
-        desc: "Tampilan profesional dan rapi saat dibuka di HP maupun komputer.",
+        title: "Landing Page Cepat 1 Halaman",
+        desc: "Tampilan profesional dan sangat cepat saat dibuka di smartphone maupun komputer.",
       },
       {
-        title: "Profil Resmi di Google",
-        desc: "Usaha Anda muncul lengkap dengan nama, alamat, foto, dan jam buka.",
+        title: "Setup & Verifikasi Google Business Profile",
+        desc: "Titik peta Google Maps resmi lengkap dengan nama, alamat, foto, dan jam operasional.",
       },
       {
-        title: "Tombol WhatsApp Langsung",
-        desc: "Calon pelanggan cukup klik satu tombol untuk langsung chat dengan Anda.",
+        title: "Tombol Order WhatsApp Otomatis",
+        desc: "Calon pembeli cukup tekan satu tombol untuk langsung chat dan order ke nomor Anda.",
       },
       {
-        title: "Fondasi Pencarian Dasar",
-        desc: "Nama bisnis Anda terdaftar resmi sehingga tidak tertukar dengan kompetitor.",
+        title: "Aktif & Siap Pakai dalam 5 Hari Kerja",
+        desc: "Pengerjaan kilat dan siap pakai tanpa perlu Anda pusing urusan teknis.",
       },
     ],
   },
   {
     id: "rise",
-    tag: "PALING DIMINATI",
+    tag: "PALING POPULER",
     name: "Paket RISE",
-    subtitle: "Website Bisnis Lengkap & Otoritas",
-    summary: "Untuk bisnis yang ingin tampil kredibel, memiliki profil layanan mendalam, dan mendatangkan pelanggan secara rutin.",
+    slug: "paket-rise",
+    price: "Mulai dari Rp 999.000",
+    period: "Sekali Bayar · 7–10 Hari Kerja",
+    subtitle: "Profil Lengkap & Profesional untuk Bisnis Jasa / Toko",
+    summary: "Cocok untuk bisnis yang ingin tampil lebih profesional, dipercaya calon pelanggan, dan memiliki profil portofolio mendalam.",
+    ctaText: "Naik Level Sekarang →",
+    waMessage: "Halo Ladi, saya tertarik dengan Paket RISE (Mulai Rp 999.000). Saya ingin profil lengkap & profesional untuk bisnis saya.",
     features: [
       {
         title: "Website Lengkap 5–7 Halaman",
-        desc: "Halaman Beranda, Tentang Kami, Layanan/Produk, Galeri, dan Kontak.",
+        desc: "Halaman Beranda, Menu/Layanan, Galeri Portofolio, Tentang Kami, dan Kontak resmi.",
       },
       {
-        title: "Optimasi Pencarian Google",
-        desc: "Bisnis Anda lebih mudah muncul di urutan atas saat orang mencari jasa Anda.",
+        title: "Terhubung Google Analytics",
+        desc: "Pantau pengunjung secara transparan untuk mengetahui perkembangan bisnis setiap hari.",
       },
       {
-        title: "Laporan Dampak Pertama (30 Hari)",
-        desc: "Anda menerima laporan berapa orang yang melihat dan menghubungi bisnis Anda.",
+        title: "Desain Khusus Brand Anda",
+        desc: "Tampilan eksklusif sesuai warna dan karakter usaha Anda, super responsif di HP.",
       },
       {
-        title: "Bantuan Update & Revisi",
-        desc: "Perubahan foto atau teks didampingi tim Ladi selama 3 bulan pertama.",
+        title: "Gratis Laporan Performa Perdana (30 Hari)",
+        desc: "Laporan pertumbuhan pengunjung dan klik WhatsApp dikirimkan setelah 30 hari website tayang.",
       },
     ],
   },
   {
     id: "run",
-    tag: "SISTEM PENUH",
+    tag: "SOLUSI MANDIRI",
     name: "Paket RUN",
-    subtitle: "Ekosistem Digital & Transaksi",
-    summary: "Untuk bisnis yang siap menerima pesanan, reservasi, atau pembayaran digital secara otomatis.",
+    slug: "paket-run",
+    price: "Mulai dari Rp 2.499.000",
+    period: "Sekali Bayar · Siap Jualan 24 Jam",
+    subtitle: "Sistem Toko Online & Booking Mandiri",
+    summary: "Cocok untuk bisnis yang ingin menerima pesanan dan booking secara online tanpa ribet.",
+    ctaText: "Siap Jualan Mandiri →",
+    waMessage: "Halo Ladi, saya tertarik dengan Paket RUN (Mulai Rp 2.499.000). Saya ingin website sistem toko online & booking mandiri dengan QRIS otomatis.",
     features: [
       {
-        title: "Sistem Toko / Booking Online",
-        desc: "Pelanggan bisa langsung memesan produk atau menjadwalkan layanan sendiri.",
+        title: "Katalog Produk / Sistem Booking Terpadu",
+        desc: "Pelanggan bisa memesan produk atau menjadwalkan layanan secara mandiri 24 jam nonstop.",
       },
       {
-        title: "Pembayaran QRIS Otomatis",
-        desc: "Dukungan pembayaran digital praktis dari semua aplikasi perbankan & e-wallet.",
+        title: "Integrasi Pembayaran QRIS Otomatis",
+        desc: "Dukungan transaksi instan dari semua bank (BCA, Mandiri, BRI, BNI) dan dompet digital (GoPay, OVO, Dana).",
       },
       {
-        title: "Template Balas Cepat WhatsApp",
-        desc: "Pesan otomatis ramah agar pelanggan terlayani walau di luar jam operasional.",
+        title: "WhatsApp Auto-Reply Template",
+        desc: "Format balasan pesan otomatis profesional agar pesanan pembeli langsung terlayani cepat.",
       },
       {
-        title: "Laporan Dampak Selama 3 Bulan",
-        desc: "Pantauan rutin perkembangan interaksi pembeli bersama konsultan Ladi.",
+        title: "Siap Jualan Mandiri 24 Jam Nonstop",
+        desc: "Otomatisasi penuh tanpa perlu melayani chat manual satu per satu secara melelahkan.",
       },
     ],
   },
   {
     id: "guard",
-    tag: "PENDAMPINGAN RUTIN",
+    tag: "PAKET SPESIAL",
     name: "Paket GUARD",
-    subtitle: "Pemeliharaan & Laporan Bulanan",
-    summary: "Seperti memiliki staf teknologi pribadi. Kami rawat websitenya, perbarui infonya, dan laporkan hasilnya setiap bulan.",
+    slug: "paket-guard",
+    price: "Mulai Rp 300.000 – 500.000",
+    period: "/ bulan · Dipantau 24 Jam Nonstop",
+    subtitle: "Satpam Digital Bisnismu",
+    summary: "Website tetap aman, terawat, dan berjalan tanpa bikin kamu repot. Kamu fokus menjalankan bisnis, Ladi yang menjaga digitalnya.",
+    ctaText: "Pasang Penjaganya →",
+    waMessage: "Halo Ladi, saya tertarik berlangganan Paket GUARD (Mulai Rp 300.000 – 500.000 / bulan). Saya ingin website tetap aman, terawat, dan dipantau 24 jam.",
     features: [
       {
-        title: "Laporan Dampak Tiap Bulan",
-        desc: "Dikirim langsung ke WA Anda: berapa kali muncul, berapa telepon dan chat masuk.",
+        title: "Website Dipantau 24 Jam",
+        desc: "Pemantauan keamanan server dan stabilitas kecepatan agar website selalu aktif lancar.",
       },
       {
-        title: "Bantuan Update Konten Rutin",
-        desc: "Mau ganti harga, tambah foto produk, atau ubah info? Cukup kirim ke kami.",
+        title: "Bebas Error & Maintenance Rutin",
+        desc: "Perawatan rutin domain, hosting, dan SSL tanpa perlu Anda khawatir kendala teknis.",
       },
       {
-        title: "Keamanan & Kelancaran Website",
-        desc: "Website dipantau agar selalu cepat dibuka dan bebas dari gangguan teknis.",
+        title: "Update Konten Rutin",
+        desc: "Mau ganti harga, tambah foto produk, atau upload info baru? Cukup kirim ke WA kami.",
       },
       {
-        title: "Jalur Prioritas WhatsApp",
-        desc: "Pertanyaan atau kendala Anda dijawab cepat tanpa antre lama.",
+        title: "Laporan Pengunjung Dikirim Tiap Bulan ke WhatsApp",
+        desc: "Laporan angka nyata langsung dikirim ke WhatsApp Anda setiap akhir bulan.",
       },
     ],
   },
 ];
 
 export default function ServicesSection() {
-  const [activeTab, setActiveTab] = useState(1); // Default to RISE (Paling Diminati)
+  const [activeTab, setActiveTab] = useState(1); // Default to RISE (Paling Populer)
   const current = packages[activeTab];
 
   return (
@@ -133,7 +154,7 @@ export default function ServicesSection() {
               <button
                 key={pkg.id}
                 onClick={() => setActiveTab(idx)}
-                className={`w-full text-left p-5 rounded-2xl transition-all duration-200 border flex items-center justify-between ${
+                className={`w-full text-left p-5 rounded-2xl transition-all duration-200 border flex items-center justify-between cursor-pointer ${
                   activeTab === idx
                     ? "bg-[#1853a7] text-white border-[#1853a7] shadow-lg shadow-[#1853a7]/20"
                     : "bg-white text-slate-800 border-slate-200 hover:border-[#1853a7]/40 hover:bg-slate-50"
@@ -148,8 +169,8 @@ export default function ServicesSection() {
                   <div className="text-lg font-bold mt-0.5 tracking-tight">
                     {pkg.name}
                   </div>
-                  <div className={`text-xs mt-1 ${activeTab === idx ? "text-slate-200" : "text-slate-500"}`}>
-                    {pkg.subtitle}
+                  <div className={`text-xs mt-1 font-semibold ${activeTab === idx ? "text-amber-300" : "text-[#1853a7]"}`}>
+                    {pkg.price}
                   </div>
                 </div>
 
@@ -162,43 +183,53 @@ export default function ServicesSection() {
             ))}
 
             <div className="p-5 rounded-2xl bg-white border border-slate-200 text-center mt-6 space-y-2">
-              <p className="text-xs text-slate-600">Bingung pilih yang mana?</p>
-              <a
-                href="#konsultasi"
-                className="inline-block w-full py-3 px-4 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider transition-all"
+              <p className="text-xs text-slate-600 font-medium">Bingung memilih paket yang pas?</p>
+              <Link
+                href="/contact-us"
+                className="inline-block w-full py-3 px-4 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm"
               >
-                Minta Rekomendasi Gratis
-              </a>
+                Konsultasi & Audit 10 Poin Gratis →
+              </Link>
             </div>
           </div>
 
-          {/* Right: Selected Package Content (Clean 2x2 Grid) */}
+          {/* Right: Selected Package Content */}
           <div className="lg:col-span-8">
-            <div className="p-7 sm:p-10 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-8">
-              <div className="border-b border-slate-100 pb-6">
-                <span className="text-xs font-bold text-[#fa824b] uppercase tracking-wider">
-                  {current.tag}
-                </span>
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-[#0f172a] mt-1">
-                  {current.name} — <span className="text-[#1853a7]">{current.subtitle}</span>
-                </h3>
-                <p className="text-slate-600 text-sm sm:text-base mt-2 leading-relaxed">
-                  {current.summary}
-                </p>
+            <div className="p-7 sm:p-10 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-7">
+              {/* Header Box */}
+              <div className="border-b border-slate-100 pb-6 space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="px-3 py-1 rounded-full bg-[#fa824b]/15 text-[#fa824b] text-xs font-bold uppercase tracking-wider">
+                    {current.tag}
+                  </span>
+                  <div className="text-right">
+                    <span className="text-2xl font-black text-[#1853a7] block">{current.price}</span>
+                    <span className="text-[11px] text-slate-400 font-medium">{current.period}</span>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-[#0f172a]">
+                    {current.name} — <span className="text-[#1853a7]">&ldquo;{current.subtitle}&rdquo;</span>
+                  </h3>
+                  <p className="text-slate-600 text-sm sm:text-base mt-2 leading-relaxed">
+                    {current.summary}
+                  </p>
+                </div>
               </div>
 
               {/* 4 Feature Items */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {current.features.map((f, i) => (
                   <div
                     key={i}
-                    className="p-5 rounded-2xl bg-[#f8fafc] border border-slate-200/90 space-y-2"
+                    className="p-5 rounded-2xl bg-[#f8fafc] border border-slate-200/90 space-y-1.5"
                   >
-                    <div className="flex items-center gap-2 text-[#fa824b] font-bold text-sm">
-                      <span className="w-5 h-5 rounded-full bg-[#fa824b]/20 flex items-center justify-center text-xs">✓</span>
-                      <span className="text-slate-900 font-bold">{f.title}</span>
+                    <div className="flex items-center gap-2 text-emerald-600 font-bold text-sm">
+                      <span className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs shrink-0">✓</span>
+                      <span className="text-slate-900 font-bold text-xs sm:text-sm">{f.title}</span>
                     </div>
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed pl-7">
+                    <p className="text-xs text-slate-600 leading-relaxed pl-7">
                       {f.desc}
                     </p>
                   </div>
@@ -206,18 +237,28 @@ export default function ServicesSection() {
               </div>
 
               {/* Bottom Action */}
-              <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100">
+              <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100">
                 <div className="text-xs text-slate-500 text-center sm:text-left">
-                  Pengerjaan transparan · Ada demo sebelum website live
+                  ✅ DP 50% di awal · Pelunasan setelah website siap tayang
                 </div>
-                <a
-                  href={`https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+konsultasi+tentang+${encodeURIComponent(current.name)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider transition-all"
-                >
-                  Tanya Paket Ini via WA →
-                </a>
+
+                <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                  <Link
+                    href={`/services/${current.slug}`}
+                    className="flex-1 sm:flex-none px-6 py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider text-center transition-all shadow-sm"
+                  >
+                    Lihat Landing Page & Contoh →
+                  </Link>
+
+                  <a
+                    href={`https://wa.me/6282112477119?text=${encodeURIComponent(current.waMessage)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 sm:flex-none px-5 py-3 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider text-center transition-all shadow-sm"
+                  >
+                    Chat WA 💬
+                  </a>
+                </div>
               </div>
             </div>
           </div>

@@ -37,127 +37,188 @@ export default function PricingPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
               {/* EXIST */}
               <div className="p-7 rounded-3xl bg-white border border-slate-200 shadow-sm corporate-card flex flex-col justify-between">
-                <div>
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">LANGKAH AWAL</span>
-                  <h3 className="text-xl font-extrabold text-slate-900 mt-1">EXIST</h3>
-                  <p className="text-xs text-slate-500 mt-1">Mulai hadir resmi di internet.</p>
+                <div className="space-y-4">
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                      SOLUSI AWAL
+                    </span>
+                    <h3 className="text-xl font-extrabold text-slate-900 mt-1">Paket EXIST</h3>
+                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                      &ldquo;Biar Bisnismu Muncul Resmi di Internet&rdquo;
+                    </p>
+                  </div>
 
-                  <div className="my-5 pb-5 border-b border-slate-100">
-                    <div className="text-2xl font-extrabold text-[#1853a7]">Rp 500.000</div>
-                    <div className="text-[11px] text-slate-400">Satu kali bayar (DP 50%)</div>
+                  <div className="py-4 border-y border-slate-100">
+                    <span className="text-[11px] text-slate-400 font-medium block">Mulai dari</span>
+                    <div className="text-3xl font-black text-[#1853a7]">Rp 299.000</div>
+                    <div className="text-[11px] text-slate-500 mt-0.5">Sekali Bayar · 5 Hari Kerja Siap</div>
                   </div>
 
                   <ul className="space-y-2 text-xs text-slate-600">
-                    <li>✓ Landing page 1 halaman</li>
-                    <li>✓ Setup Google Business resmi</li>
-                    <li>✓ Tombol WhatsApp langsung</li>
-                    <li>✓ Pendaftaran SEO dasar</li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Landing Page Cepat 1 Halaman</span></li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Setup & Verifikasi Google Business Profile</span></li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Tombol Order WhatsApp Otomatis</span></li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Aktif & Siap Pakai dalam 5 Hari Kerja</span></li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Konsultasi & Audit Digital 10 Poin Gratis</span></li>
                   </ul>
                 </div>
 
-                <div className="pt-6">
-                  <a
-                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+minat+Paket+EXIST"
-                    className="block w-full text-center py-2.5 rounded-full bg-[#1853a7] text-white font-bold text-xs uppercase"
+                <div className="pt-6 space-y-2">
+                  <Link
+                    href="/services/paket-exist"
+                    className="block w-full text-center py-2.5 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider transition-all"
                   >
-                    Pilih EXIST
+                    Mulai dari sini. →
+                  </Link>
+                  <a
+                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+dengan+Paket+EXIST+(Mulai+Rp+299.000).+Biar+bisnismu+muncul+resmi+di+internet."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full text-center py-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-[11px] transition-all"
+                  >
+                    Tanya via WA 💬
                   </a>
                 </div>
               </div>
 
               {/* RISE */}
               <div className="p-7 rounded-3xl bg-white border-2 border-[#1853a7] shadow-xl corporate-card flex flex-col justify-between relative">
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#fa824b] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full whitespace-nowrap">
-                  PALING DIMINATI
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#fa824b] text-white text-[10px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full whitespace-nowrap shadow-sm">
+                  ⭐ PALING POPULER
                 </span>
-                <div>
-                  <span className="text-xs font-bold text-[#fa824b] uppercase tracking-wider">BISNIS SERIUS</span>
-                  <h3 className="text-xl font-extrabold text-slate-900 mt-1">RISE</h3>
-                  <p className="text-xs text-slate-500 mt-1">Website lengkap & terpercaya.</p>
+                <div className="space-y-4">
+                  <div>
+                    <span className="text-[10px] font-bold text-[#fa824b] uppercase tracking-wider block">
+                      BISNIS BERKEMBANG
+                    </span>
+                    <h3 className="text-xl font-extrabold text-slate-900 mt-1">Paket RISE</h3>
+                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                      &ldquo;Profil Lengkap & Profesional untuk Bisnis Jasa / Toko&rdquo;
+                    </p>
+                  </div>
 
-                  <div className="my-5 pb-5 border-b border-slate-100">
-                    <div className="text-2xl font-extrabold text-[#1853a7]">Rp 1.000.000 – 1,5 Jt</div>
-                    <div className="text-[11px] text-slate-400">Satu kali bayar (DP 50%)</div>
+                  <div className="py-4 border-y border-slate-100">
+                    <span className="text-[11px] text-slate-400 font-medium block">Mulai dari</span>
+                    <div className="text-3xl font-black text-[#1853a7]">Rp 999.000</div>
+                    <div className="text-[11px] text-slate-500 mt-0.5">Sekali Bayar · 7–10 Hari Kerja</div>
                   </div>
 
                   <ul className="space-y-2 text-xs text-slate-600">
-                    <li>✓ Semua fitur EXIST</li>
-                    <li>✓ Website 5–7 halaman lengkap</li>
-                    <li>✓ Optimasi pencarian Google</li>
-                    <li>✓ Setup Google Analytics</li>
-                    <li>✓ Laporan hasil perdana 30 hari</li>
-                    <li>✓ Revisi selama 3 bulan</li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Website Lengkap 5–7 Halaman (Menu, Galeri, Profil)</span></li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Terhubung Google Analytics (Pantau Pengunjung)</span></li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Desain Khusus Brand Anda (Responsif di HP)</span></li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Gratis Laporan Performa Perdana (30 Hari)</span></li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Setup & Verifikasi Google Business Profile</span></li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Konsultasi & Audit Digital 10 Poin Gratis</span></li>
                   </ul>
                 </div>
 
-                <div className="pt-6">
-                  <a
-                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+minat+Paket+RISE"
-                    className="block w-full text-center py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase shadow"
+                <div className="pt-6 space-y-2">
+                  <Link
+                    href="/services/paket-rise"
+                    className="block w-full text-center py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
                   >
-                    Pilih RISE
+                    Naik Level Sekarang →
+                  </Link>
+                  <a
+                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+dengan+Paket+RISE+(Mulai+Rp+999.000).+Saya+ingin+profil+lengkap+%26+profesional+untuk+bisnis+saya."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full text-center py-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-[11px] transition-all"
+                  >
+                    Tanya via WA 💬
                   </a>
                 </div>
               </div>
 
               {/* RUN */}
               <div className="p-7 rounded-3xl bg-white border border-slate-200 shadow-sm corporate-card flex flex-col justify-between">
-                <div>
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">EKOSISTEM PENUH</span>
-                  <h3 className="text-xl font-extrabold text-slate-900 mt-1">RUN</h3>
-                  <p className="text-xs text-slate-500 mt-1">Toko online & sistem transaksi.</p>
+                <div className="space-y-4">
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                      SOLUSI MANDIRI
+                    </span>
+                    <h3 className="text-xl font-extrabold text-slate-900 mt-1">Paket RUN</h3>
+                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                      &ldquo;Sistem Toko Online & Booking Mandiri&rdquo;
+                    </p>
+                  </div>
 
-                  <div className="my-5 pb-5 border-b border-slate-100">
-                    <div className="text-2xl font-extrabold text-[#1853a7]">Rp 2,5 – 3,5 Jt</div>
-                    <div className="text-[11px] text-slate-400">Satu kali bayar (DP 50%)</div>
+                  <div className="py-4 border-y border-slate-100">
+                    <span className="text-[11px] text-slate-400 font-medium block">Mulai dari</span>
+                    <div className="text-3xl font-black text-[#1853a7]">Rp 2.499.000</div>
+                    <div className="text-[11px] text-slate-500 mt-0.5">Sekali Bayar · 10–14 Hari Kerja</div>
                   </div>
 
                   <ul className="space-y-2 text-xs text-slate-600">
-                    <li>✓ Semua fitur RISE</li>
-                    <li>✓ Toko online / booking online</li>
-                    <li>✓ Pembayaran QRIS otomatis</li>
-                    <li>✓ Template balas cepat WA</li>
-                    <li>✓ Laporan rutin 3 bulan</li>
-                    <li>✓ Sesi konsultasi strategi 60 mnt</li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Katalog Produk / Sistem Booking Terpadu</span></li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Integrasi Pembayaran QRIS Otomatis</span></li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>WhatsApp Auto-Reply Template</span></li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Siap Jualan Mandiri 24 Jam Nonstop</span></li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Semua Fitur Paket RISE Lengkap</span></li>
                   </ul>
                 </div>
 
-                <div className="pt-6">
-                  <a
-                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+minat+Paket+RUN"
-                    className="block w-full text-center py-2.5 rounded-full bg-[#1853a7] text-white font-bold text-xs uppercase"
+                <div className="pt-6 space-y-2">
+                  <Link
+                    href="/services/paket-run"
+                    className="block w-full text-center py-2.5 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider transition-all"
                   >
-                    Pilih RUN
+                    Siap Jualan Mandiri →
+                  </Link>
+                  <a
+                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+dengan+Paket+RUN+(Mulai+Rp+2.499.000).+Saya+ingin+website+toko+online+%26+booking+mandiri+dengan+QRIS."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full text-center py-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-[11px] transition-all"
+                  >
+                    Tanya via WA 💬
                   </a>
                 </div>
               </div>
 
               {/* GUARD */}
               <div className="p-7 rounded-3xl bg-white border border-slate-200 shadow-sm corporate-card flex flex-col justify-between">
-                <div>
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">PENDAMPINGAN</span>
-                  <h3 className="text-xl font-extrabold text-slate-900 mt-1">GUARD</h3>
-                  <p className="text-xs text-slate-500 mt-1">Pemeliharaan & laporan bulanan.</p>
+                <div className="space-y-4">
+                  <div>
+                    <span className="text-[10px] font-bold text-[#fa824b] uppercase tracking-wider block">
+                      PAKET SPESIAL
+                    </span>
+                    <h3 className="text-xl font-extrabold text-slate-900 mt-1">Paket GUARD</h3>
+                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                      &ldquo;Satpam Digital Bisnismu&rdquo;
+                    </p>
+                  </div>
 
-                  <div className="my-5 pb-5 border-b border-slate-100">
-                    <div className="text-2xl font-extrabold text-[#1853a7]">Rp 300 – 500rb</div>
-                    <div className="text-[11px] text-slate-400">per bulan (Opsional)</div>
+                  <div className="py-4 border-y border-slate-100">
+                    <span className="text-[11px] text-slate-400 font-medium block">Mulai</span>
+                    <div className="text-2xl font-black text-[#1853a7]">Rp 300rb – 500rb</div>
+                    <div className="text-[11px] text-slate-500 mt-0.5">/ bulan · Dipantau 24 Jam Nonstop</div>
                   </div>
 
                   <ul className="space-y-2 text-xs text-slate-600">
-                    <li>✓ Rawat sistem & keamanan web</li>
-                    <li>✓ Update info & produk 1-2x/bln</li>
-                    <li>✓ Laporan Dampak Bulanan di WA</li>
-                    <li>✓ Respons prioritas via WhatsApp</li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Website dipantau 24 jam</span></li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Bebas error & maintenance rutin</span></li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Update konten rutin</span></li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Laporan Pengunjung dikirim tiap bulan ke WhatsApp</span></li>
+                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Konsultasi & Audit Digital 10 Poin Gratis</span></li>
                   </ul>
                 </div>
 
-                <div className="pt-6">
-                  <a
-                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+minat+Paket+GUARD"
-                    className="block w-full text-center py-2.5 rounded-full bg-[#1853a7] text-white font-bold text-xs uppercase"
+                <div className="pt-6 space-y-2">
+                  <Link
+                    href="/services/paket-guard"
+                    className="block w-full text-center py-2.5 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider transition-all"
                   >
-                    Pilih GUARD
+                    Pasang Penjaganya →
+                  </Link>
+                  <a
+                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+berlangganan+Paket+GUARD+(Mulai+Rp+300.000+%E2%80%93+500.000+/+bulan).+Saya+ingin+website+tetap+aman+dan+terawat."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full text-center py-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-[11px] transition-all"
+                  >
+                    Tanya via WA 💬
                   </a>
                 </div>
               </div>
