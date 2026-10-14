@@ -68,17 +68,44 @@ export interface TeamMember {
   updated_at?: string;
 }
 
+export interface ServicePackage {
+  id: number;
+  name: string;
+  slug: string;
+  tag: string;
+  subtitle: string;
+  target_audience: string;
+  price: string;
+  original_price?: string;
+  period?: string;
+  timeline: string;
+  deliverables: string;
+  example_websites?: string;
+  audit_report_sample?: string;
+  description: string;
+  faqs?: string;
+  cta_text?: string;
+  cta_whatsapp_text?: string;
+  badge_popular?: boolean | number;
+  status: "active" | "inactive";
+  order_num?: number;
+  created_at: string;
+  updated_at?: string;
+}
+
 const DATA_DIR = path.join(process.cwd(), "data");
 const BLOGS_FILE = path.join(DATA_DIR, "blogs.json");
 const EVENTS_FILE = path.join(DATA_DIR, "events.json");
 const PROJECTS_FILE = path.join(DATA_DIR, "projects.json");
 const TEAM_FILE = path.join(DATA_DIR, "team.json");
+const SERVICES_FILE = path.join(DATA_DIR, "services.json");
 
 // In-memory fallback
 let inMemoryBlogs: BlogItem[] = [];
 let inMemoryEvents: EventItem[] = [];
 let inMemoryProjects: ProjectItem[] = [];
 let inMemoryTeam: TeamMember[] = [];
+let inMemoryServices: ServicePackage[] = [];
 
 function ensureData() {
   try {
@@ -100,6 +127,10 @@ function ensureData() {
     if (fs.existsSync(TEAM_FILE)) {
       const raw = fs.readFileSync(TEAM_FILE, "utf-8");
       inMemoryTeam = JSON.parse(raw);
+    }
+    if (fs.existsSync(SERVICES_FILE)) {
+      const raw = fs.readFileSync(SERVICES_FILE, "utf-8");
+      inMemoryServices = JSON.parse(raw);
     }
   } catch (err) {
     console.warn("Storage read notice:", err);
@@ -145,6 +176,17 @@ function persistTeam() {
       fs.mkdirSync(DATA_DIR, { recursive: true });
     }
     fs.writeFileSync(TEAM_FILE, JSON.stringify(inMemoryTeam, null, 2), "utf-8");
+  } catch (err) {
+    console.warn("File write skipped (serverless environment):", err);
+  }
+}
+
+function persistServices() {
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    fs.writeFileSync(SERVICES_FILE, JSON.stringify(inMemoryServices, null, 2), "utf-8");
   } catch (err) {
     console.warn("File write skipped (serverless environment):", err);
   }
@@ -1056,6 +1098,274 @@ export async function deleteTeamMember(id: number | string): Promise<boolean> {
   if (index !== -1) {
     inMemoryTeam.splice(index, 1);
     persistTeam();
+    deletedFromJson = true;
+  }
+
+  return deletedFromMysql || deletedFromJson;
+}
+
+// ==============================================================================
+// SERVICE PACKAGES / PRODUK LAYANAN (Landing Page Iklan & CRUD Super Admin)
+// ==============================================================================
+
+export async function getServicePackages(all = false): Promise<ServicePackage[]> {
+  try {
+    const sql = all
+      ? "SELECT * FROM service_packages ORDER BY order_num ASC, id ASC"
+      : "SELECT * FROM service_packages WHERE status = 'active' ORDER BY order_num ASC, id ASC";
+    const rows = await query<any[]>(sql);
+    if (rows && rows.length > 0) {
+      return rows.map((r) => ({
+        id: Number(r.id),
+        name: r.name,
+        slug: r.slug,
+        tag: r.tag || "PAKET LADI",
+        subtitle: r.subtitle || "",
+        target_audience: r.target_audience || "",
+        price: r.price || "",
+        original_price: r.original_price || "",
+        period: r.period || "Sekali Bayar",
+        timeline: r.timeline || "5–7 Hari",
+        deliverables: r.deliverables || "[]",
+        example_websites: r.example_websites || "[]",
+        audit_report_sample: r.audit_report_sample || "{}",
+        description: r.description || "",
+        faqs: r.faqs || "[]",
+        cta_text: r.cta_text || "Pesan via WhatsApp",
+        cta_whatsapp_text: r.cta_whatsapp_text || "",
+        badge_popular: Boolean(r.badge_popular),
+        status: r.status || "active",
+        order_num: Number(r.order_num || 0),
+        created_at: r.created_at ? new Date(r.created_at).toISOString() : new Date().toISOString(),
+        updated_at: r.updated_at ? new Date(r.updated_at).toISOString() : undefined,
+      }));
+    }
+  } catch (e) {
+    // Fallback ke JSON
+  }
+
+  ensureData();
+  const list = all ? inMemoryServices : inMemoryServices.filter((s) => s.status === "active");
+  return list.sort((a, b) => (a.order_num || 0) - (b.order_num || 0));
+}
+
+export async function getServicePackageBySlug(slug: string): Promise<ServicePackage | null> {
+  const clean = slug.trim().toLowerCase();
+  try {
+    const rows = await query<any[]>("SELECT * FROM service_packages WHERE slug = ? LIMIT 1", [clean]);
+    if (rows && rows.length > 0) {
+      const r = rows[0];
+      return {
+        id: Number(r.id),
+        name: r.name,
+        slug: r.slug,
+        tag: r.tag || "PAKET LADI",
+        subtitle: r.subtitle || "",
+        target_audience: r.target_audience || "",
+        price: r.price || "",
+        original_price: r.original_price || "",
+        period: r.period || "Sekali Bayar",
+        timeline: r.timeline || "5–7 Hari",
+        deliverables: r.deliverables || "[]",
+        example_websites: r.example_websites || "[]",
+        audit_report_sample: r.audit_report_sample || "{}",
+        description: r.description || "",
+        faqs: r.faqs || "[]",
+        cta_text: r.cta_text || "Pesan via WhatsApp",
+        cta_whatsapp_text: r.cta_whatsapp_text || "",
+        badge_popular: Boolean(r.badge_popular),
+        status: r.status || "active",
+        order_num: Number(r.order_num || 0),
+        created_at: r.created_at ? new Date(r.created_at).toISOString() : new Date().toISOString(),
+        updated_at: r.updated_at ? new Date(r.updated_at).toISOString() : undefined,
+      };
+    }
+  } catch (e) {
+    // Fallback ke JSON
+  }
+
+  ensureData();
+  return inMemoryServices.find((s) => s.slug.toLowerCase() === clean) || null;
+}
+
+export async function getServicePackageById(id: number | string): Promise<ServicePackage | null> {
+  const numId = Number(id);
+  try {
+    const rows = await query<any[]>("SELECT * FROM service_packages WHERE id = ? LIMIT 1", [numId]);
+    if (rows && rows.length > 0) {
+      const r = rows[0];
+      return {
+        id: Number(r.id),
+        name: r.name,
+        slug: r.slug,
+        tag: r.tag || "PAKET LADI",
+        subtitle: r.subtitle || "",
+        target_audience: r.target_audience || "",
+        price: r.price || "",
+        original_price: r.original_price || "",
+        period: r.period || "Sekali Bayar",
+        timeline: r.timeline || "5–7 Hari",
+        deliverables: r.deliverables || "[]",
+        example_websites: r.example_websites || "[]",
+        audit_report_sample: r.audit_report_sample || "{}",
+        description: r.description || "",
+        faqs: r.faqs || "[]",
+        cta_text: r.cta_text || "Pesan via WhatsApp",
+        cta_whatsapp_text: r.cta_whatsapp_text || "",
+        badge_popular: Boolean(r.badge_popular),
+        status: r.status || "active",
+        order_num: Number(r.order_num || 0),
+        created_at: r.created_at ? new Date(r.created_at).toISOString() : new Date().toISOString(),
+        updated_at: r.updated_at ? new Date(r.updated_at).toISOString() : undefined,
+      };
+    }
+  } catch (e) {
+    // Fallback ke JSON
+  }
+
+  ensureData();
+  return inMemoryServices.find((s) => s.id === numId || String(s.id) === String(id)) || null;
+}
+
+export async function createServicePackage(data: Partial<ServicePackage>): Promise<ServicePackage> {
+  ensureData();
+  const nextId = inMemoryServices.length > 0 ? Math.max(...inMemoryServices.map((s) => s.id)) + 1 : 1;
+
+  const newPackage: ServicePackage = {
+    id: nextId,
+    name: data.name || "Paket Baru",
+    slug: data.slug || `paket-${Date.now()}`,
+    tag: data.tag || "PAKET LADI",
+    subtitle: data.subtitle || "",
+    target_audience: data.target_audience || "",
+    price: data.price || "Rp 0",
+    original_price: data.original_price || "",
+    period: data.period || "Sekali Bayar",
+    timeline: data.timeline || "5–7 Hari",
+    deliverables: data.deliverables || "[]",
+    example_websites: data.example_websites || "[]",
+    audit_report_sample: data.audit_report_sample || "{}",
+    description: data.description || "",
+    faqs: data.faqs || "[]",
+    cta_text: data.cta_text || "Pesan via WhatsApp",
+    cta_whatsapp_text: data.cta_whatsapp_text || "",
+    badge_popular: data.badge_popular ? 1 : 0,
+    status: data.status || "active",
+    order_num: typeof data.order_num === "number" ? data.order_num : inMemoryServices.length + 1,
+    created_at: new Date().toISOString(),
+  };
+
+  try {
+    const res = await query<any>(
+      `INSERT INTO service_packages (name, slug, tag, subtitle, target_audience, price, original_price, period, timeline, deliverables, example_websites, audit_report_sample, description, faqs, cta_text, cta_whatsapp_text, badge_popular, status, order_num)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        newPackage.name,
+        newPackage.slug,
+        newPackage.tag,
+        newPackage.subtitle,
+        newPackage.target_audience,
+        newPackage.price,
+        newPackage.original_price || "",
+        newPackage.period,
+        newPackage.timeline,
+        newPackage.deliverables,
+        newPackage.example_websites || "[]",
+        newPackage.audit_report_sample || "{}",
+        newPackage.description,
+        newPackage.faqs || "[]",
+        newPackage.cta_text,
+        newPackage.cta_whatsapp_text || "",
+        newPackage.badge_popular ? 1 : 0,
+        newPackage.status,
+        newPackage.order_num,
+      ]
+    );
+    if (res && res.insertId) {
+      newPackage.id = res.insertId;
+    }
+  } catch (e) {
+    // Fallback ke JSON
+  }
+
+  inMemoryServices.push(newPackage);
+  persistServices();
+  return newPackage;
+}
+
+export async function updateServicePackage(
+  id: number | string,
+  data: Partial<ServicePackage>
+): Promise<ServicePackage | null> {
+  const numId = Number(id);
+
+  try {
+    const fields: string[] = [];
+    const values: any[] = [];
+
+    if (data.name !== undefined) { fields.push("name = ?"); values.push(data.name); }
+    if (data.slug !== undefined) { fields.push("slug = ?"); values.push(data.slug); }
+    if (data.tag !== undefined) { fields.push("tag = ?"); values.push(data.tag); }
+    if (data.subtitle !== undefined) { fields.push("subtitle = ?"); values.push(data.subtitle); }
+    if (data.target_audience !== undefined) { fields.push("target_audience = ?"); values.push(data.target_audience); }
+    if (data.price !== undefined) { fields.push("price = ?"); values.push(data.price); }
+    if (data.original_price !== undefined) { fields.push("original_price = ?"); values.push(data.original_price); }
+    if (data.period !== undefined) { fields.push("period = ?"); values.push(data.period); }
+    if (data.timeline !== undefined) { fields.push("timeline = ?"); values.push(data.timeline); }
+    if (data.deliverables !== undefined) { fields.push("deliverables = ?"); values.push(data.deliverables); }
+    if (data.example_websites !== undefined) { fields.push("example_websites = ?"); values.push(data.example_websites); }
+    if (data.audit_report_sample !== undefined) { fields.push("audit_report_sample = ?"); values.push(data.audit_report_sample); }
+    if (data.description !== undefined) { fields.push("description = ?"); values.push(data.description); }
+    if (data.faqs !== undefined) { fields.push("faqs = ?"); values.push(data.faqs); }
+    if (data.cta_text !== undefined) { fields.push("cta_text = ?"); values.push(data.cta_text); }
+    if (data.cta_whatsapp_text !== undefined) { fields.push("cta_whatsapp_text = ?"); values.push(data.cta_whatsapp_text); }
+    if (data.badge_popular !== undefined) { fields.push("badge_popular = ?"); values.push(data.badge_popular ? 1 : 0); }
+    if (data.status !== undefined) { fields.push("status = ?"); values.push(data.status); }
+    if (data.order_num !== undefined) { fields.push("order_num = ?"); values.push(data.order_num); }
+
+    if (fields.length > 0) {
+      values.push(numId);
+      await query<any>(`UPDATE service_packages SET ${fields.join(", ")} WHERE id = ?`, values);
+    }
+  } catch (e) {
+    // Fallback ke JSON
+  }
+
+  ensureData();
+  const index = inMemoryServices.findIndex((s) => s.id === numId || String(s.id) === String(id));
+  if (index !== -1) {
+    const existing = inMemoryServices[index];
+    const updated: ServicePackage = {
+      ...existing,
+      ...data,
+      id: existing.id,
+      updated_at: new Date().toISOString(),
+    };
+    inMemoryServices[index] = updated;
+    persistServices();
+    return updated;
+  }
+
+  return await getServicePackageById(numId);
+}
+
+export async function deleteServicePackage(id: number | string): Promise<boolean> {
+  const numId = Number(id);
+  let deletedFromMysql = false;
+
+  try {
+    const res = await query<any>("DELETE FROM service_packages WHERE id = ?", [numId]);
+    if (res && res.affectedRows > 0) {
+      deletedFromMysql = true;
+    }
+  } catch (e) {}
+
+  ensureData();
+  const index = inMemoryServices.findIndex((s) => s.id === numId || String(s.id) === String(id));
+  let deletedFromJson = false;
+  if (index !== -1) {
+    inMemoryServices.splice(index, 1);
+    persistServices();
     deletedFromJson = true;
   }
 

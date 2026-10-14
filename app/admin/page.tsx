@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getBlogs, getEvents, getProjects, getTeamMembers } from "@/app/lib/storage";
+import { getBlogs, getEvents, getProjects, getTeamMembers, getServicePackages } from "@/app/lib/storage";
 import { checkDbConnection } from "@/app/lib/mysql";
 import { verifyToken } from "@/app/lib/auth";
 import LadiLogo from "../components/LadiLogo";
@@ -30,11 +30,12 @@ export default async function AdminDashboardPage() {
 
   const isEditor = user.role === "editor";
 
-  const [allBlogs, allEvents, allProjects, allTeam, dbStatus] = await Promise.all([
+  const [allBlogs, allEvents, allProjects, allTeam, allPackages, dbStatus] = await Promise.all([
     getBlogs(10, true),
     getEvents(5, true),
     getProjects(5, true),
     getTeamMembers(true),
+    getServicePackages(true),
     checkDbConnection(),
   ]);
 
@@ -43,6 +44,7 @@ export default async function AdminDashboardPage() {
   const activeEventsCount = allEvents.filter((e) => e.status === "active").length;
   const publishedProjectsCount = allProjects.filter((p) => p.status === "published").length;
   const activeTeamCount = allTeam.filter((m) => m.status === "active").length;
+  const activePackagesCount = allPackages.filter((p) => p.status === "active").length;
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-[#0f172a]">
@@ -175,10 +177,16 @@ export default async function AdminDashboardPage() {
             {!isEditor && (
               <>
                 <Link
-                  href="/admin/team"
+                  href="/admin/services"
                   className="px-5 py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-1.5"
                 >
-                  <span>👥</span> Kelola Our Team
+                  <span>📦</span> Kelola Paket ({allPackages.length})
+                </Link>
+                <Link
+                  href="/admin/team"
+                  className="px-4 py-3 rounded-full bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-1.5"
+                >
+                  <span>👥</span> Our Team
                 </Link>
                 <Link
                   href="/admin/events/new"
@@ -315,40 +323,52 @@ export default async function AdminDashboardPage() {
           /* TAMPILAN DASHBOARD: JIKA SUPERADMIN (LENGKAP TERMASUK OUR TEAM) */
           /* =================================================================== */
           <div className="space-y-8">
-            {/* 4 Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-2">
-                <span className="text-xs font-mono text-slate-500 font-bold uppercase">
+            {/* 5 Stats Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+              <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-1.5">
+                <span className="text-[11px] font-mono text-purple-600 font-bold uppercase">
+                  PAKET PRODUK
+                </span>
+                <div className="text-3xl font-extrabold text-purple-600">{activePackagesCount}</div>
+                <div className="text-[11px] text-slate-500">
+                  <Link href="/admin/services" className="text-[#1853a7] font-bold hover:underline">
+                    Kelola {allPackages.length} paket →
+                  </Link>
+                </div>
+              </div>
+
+              <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-1.5">
+                <span className="text-[11px] font-mono text-slate-500 font-bold uppercase">
                   ARTIKEL TAYANG
                 </span>
                 <div className="text-3xl font-extrabold text-[#1853a7]">{publishedCount}</div>
-                <div className="text-xs text-slate-500">Dari total {allBlogs.length} artikel</div>
+                <div className="text-[11px] text-slate-500">Dari total {allBlogs.length} artikel</div>
               </div>
 
-              <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-2">
-                <span className="text-xs font-mono text-[#fa824b] font-bold uppercase">
+              <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-1.5">
+                <span className="text-[11px] font-mono text-[#fa824b] font-bold uppercase">
                   EVENT AKTIF
                 </span>
                 <div className="text-3xl font-extrabold text-[#fa824b]">{activeEventsCount}</div>
-                <div className="text-xs text-slate-500">Dari total {allEvents.length} event terdaftar</div>
+                <div className="text-[11px] text-slate-500">Dari {allEvents.length} terdaftar</div>
               </div>
 
-              <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-2">
-                <span className="text-xs font-mono text-indigo-600 font-bold uppercase">
+              <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-1.5">
+                <span className="text-[11px] font-mono text-indigo-600 font-bold uppercase">
                   PORTFOLIO KLIEN
                 </span>
                 <div className="text-3xl font-extrabold text-indigo-600">{publishedProjectsCount}</div>
-                <div className="text-xs text-slate-500">Dari total {allProjects.length} studi kasus</div>
+                <div className="text-[11px] text-slate-500">Dari {allProjects.length} studi kasus</div>
               </div>
 
-              <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-2">
-                <span className="text-xs font-mono text-emerald-600 font-bold uppercase">
+              <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-1.5">
+                <span className="text-[11px] font-mono text-emerald-600 font-bold uppercase">
                   OUR TEAM (TIM)
                 </span>
                 <div className="text-3xl font-extrabold text-emerald-600">{activeTeamCount}</div>
-                <div className="text-xs text-slate-500">
+                <div className="text-[11px] text-slate-500">
                   <Link href="/admin/team" className="text-[#1853a7] font-bold hover:underline">
-                    Kelola profil tim ({allTeam.length}) →
+                    Kelola tim ({allTeam.length}) →
                   </Link>
                 </div>
               </div>
@@ -360,6 +380,12 @@ export default async function AdminDashboardPage() {
                 <span>⚡ Akses Cepat Super Admin:</span>
               </div>
               <div className="flex flex-wrap gap-2">
+                <Link
+                  href="/admin/services"
+                  className="px-3.5 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold"
+                >
+                  📦 Paket Produk ({allPackages.length})
+                </Link>
                 <Link
                   href="/admin/team"
                   className="px-3.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#1853a7] font-bold"

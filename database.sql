@@ -43,41 +43,74 @@ CREATE TABLE IF NOT EXISTS `blogs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -----------------------------------------------------
--- Seed Blogs
+-- Seed Blogs (SEO Topic Clusters)
 -- -----------------------------------------------------
 INSERT INTO `blogs` (`title`, `slug`, `author`, `date`, `category`, `excerpt`, `content`, `tags`, `status`)
 VALUES 
 (
-  'Kenapa Bisnis Lokal di Bogor Wajib Ada di Google Maps?',
-  'kenapa-bisnis-lokal-di-bogor-wajib-ada-di-google-maps',
+  'Panduan Lengkap Cara Mendaftarkan Tempat Usaha di Google Maps & Google Bisnisku (Cepat Terverifikasi di 2026)',
+  'panduan-cara-mendaftar-google-maps-usaha-cepat-terverifikasi',
+  'Tim Ladi',
+  '14 Oktober 2026',
+  'PANDUAN USAHA',
+  'Langkah demi langkah mendaftarkan toko fisik atau jasa ke Google Maps dan Google Bisnisku agar langsung muncul di pencarian lokal dan mendatangkan pelanggan baru setiap hari.',
+  '<p>Pernahkah Anda menyadari bahwa sebelum seseorang melangkah ke toko fisik atau memesan jasa servis, hal pertama yang mereka lakukan adalah membuka ponsel dan mengetik di Google? Kata kunci seperti <em>\"bengkel terdekat\"</em>, <em>\"katering enak di sekitar sini\"</em>, atau <em>\"klinik gigi buka sekarang\"</em> adalah pencarian berdaya beli sangat tinggi.</p><p>Jika nama tempat usaha Anda belum terdaftar resmi di Google Maps dan Profil Bisnis Google, calon pelanggan tersebut 100% akan diarahkan ke tempat usaha kompetitor Anda.</p><h2>Mengapa Google Maps Sangat Krusial untuk Bisnis Lokal?</h2><p>Lebih dari <strong>82% pengguna smartphone</strong> menggunakan pencarian lokal sebelum berkunjung. Tiga bisnis teratas yang disorot langsung di peta Google (Google Local 3-Pack) mendapatkan mayoritas panggilan telepon dan kunjungan rute.</p><div class=\"callout-box\"><h4>💡 Bukti Nyata Hasil Optimasi Google Maps</h4><p>Pada studi kasus <strong>Bengkel Motor Budi Jaya</strong> yang kami tangani, perbaikan titik koordinat Google Maps dan integrasi tombol panggilan cepat terbukti meningkatkan panggilan darurat servis hingga <strong>+340%</strong> hanya dalam 30 hari. <a href=\"/project\">Baca studi kasus lengkapnya di sini →</a></p></div><p>Jika Anda merasa repot mengurus pendaftaran dan verifikasi video Google Bisnisku, tim <strong>Ladi</strong> siap mendampingi Anda hingga lokasi bisnis resmi terverifikasi melalui <a href=\"/services/paket-exist\">Paket EXIST Ladi</a>.</p>',
+  'Google Maps, SEO Lokal, Panduan UMKM, Google Bisnisku',
+  'published'
+),
+(
+  'Berapa Biaya Pembuatan Website UMKM Profesional di 2026? Rincian Lengkap & Tips Hemat',
+  'berapa-biaya-pembuatan-website-umkm-profesional',
+  'Tim Ladi',
+  '10 Oktober 2026',
+  'TIPS PRAKTIS',
+  'Simak rincian transparan biaya domain, hosting, dan jasa pembuatan website untuk bisnis kecil dan UMKM agar tidak tertipu harga mahal tanpa hasil nyata.',
+  '<p>Salah satu pertanyaan paling umum pemilik usaha adalah: <em>\"Berapa sebenarnya biaya wajar untuk membuat website bisnis yang profesional?\"</em></p><p>Sebuah website profesional memerlukan domain resmi (.com/.id), cloud hosting cepat, serta copywriting dan optimasi SEO terstruktur agar mudah ditemukan pembeli di Google.</p><div class=\"callout-box\"><h4>🎯 Contoh Implementasi Riil</h4><p>Mitra kami di bidang kuliner korporat, <strong>Katering Sari Rasa Ibu Hj. Nunung</strong>, menaikkan omzet pesanan kantor hingga <strong>+180%</strong> setelah memiliki website katalog menu resmi. <a href=\"/project\">Pelajari studi kasusnya di halaman Proyek Ladi →</a></p></div><p>Di <strong>Ladi</strong>, kami menyediakan paket transparan mulai dari <a href=\"/services/paket-exist\">Paket EXIST (Rp 950.000)</a> hingga <a href=\"/services/paket-rise\">Paket RISE (Rp 2.450.000)</a> yang sudah termasuk domain, hosting, dan optimasi SEO tanpa biaya tersembunyi.</p>',
+  'Biaya Website, Harga Website UMKM, Tips Bisnis, Jasa Pembuatan Website',
+  'published'
+),
+(
+  'Mengapa Bisnis Tidak Boleh Bergantung Hanya pada Marketplace di Tahun 2026',
+  'mengapa-bisnis-tidak-boleh-bergantung-marketplace',
+  'Tim Ladi',
+  '05 Oktober 2026',
+  'STRATEGI BISNIS',
+  'Potongan biaya komisi terus naik dan akun sewaktu-waktu bisa dibatasi. Inilah pentingnya memiliki website mandiri sebagai aset kedaulatan usaha Anda.',
+  '<p>Banyak pemilik usaha merasa sudah cukup hanya berjualan di marketplace. Namun menjadikannya satu-satunya tumpuan memiliki risiko besar: komisi admin naik, perang harga banting-bantingan, dan data pelanggan tidak bisa Anda miliki.</p><div class=\"callout-box\"><h4>📈 Studi Kasus Nyata</h4><p>Mitra kami, <strong>Pusat Oleh-Oleh Khas Bogor Bu Ratna</strong>, berhasil meningkatkan penjualan wisatawan luar kota sebesar <strong>+210%</strong> dengan mengandalkan website mandiri dan Google SEO tanpa terjebak perang harga. <a href=\"/project\">Baca detail hasilnya di halaman Portofolio Klien →</a></p></div><p>Bangun kedaulatan digital usaha Anda sekarang dengan <a href=\"/services/paket-rise\">Paket RISE Website Lengkap</a> bersama tim Ladi.</p>',
+  'Strategi Bisnis, Marketplace, Website Mandiri, Kedaulatan Digital',
+  'published'
+),
+(
+  'Landing Page vs Website Profil Perusahaan: Mana yang Lebih Tepat untuk Usaha Anda?',
+  'perbedaan-landing-page-dan-website-company-profile',
+  'Tim Ladi',
+  '01 Oktober 2026',
+  'PANDUAN USAHA',
+  'Jangan salah pilih jenis website. Pahami perbedaan mendasar tujuan, struktur, dan potensi konversi antara landing page 1 halaman dengan website multi-halaman.',
+  '<p>Memilih format website yang tepat menentukan kesuksesan pemasaran online Anda. Landing page 1 halaman fokus pada konversi cepat dan satu penawaran spesifik, sementara Website Profil Perusahaan (Company Profile) membangun kepercayaan jangka panjang dan otoritas SEO di Google.</p><div class=\"callout-box\"><h4>🏥 Studi Kasus Terkait</h4><p>Pada proyek <strong>Klinik Gigi drg. Sejahtera</strong>, integrasi website profil dan sistem booking online menghilangkan antrean ruang tunggu dan mengumpulkan 120+ ulasan positif di Google. <a href=\"/project\">Lihat detail proyek klinik gigi di sini →</a></p></div><p>Konsultasikan pilihan terbaik untuk usaha Anda melalui <a href=\"/services/paket-exist\">Paket EXIST</a> atau <a href=\"/services/paket-rise\">Paket RISE</a>.</p>',
+  'Landing Page, Company Profile, Desain Web, Strategi UMKM',
+  'published'
+),
+(
+  'Kenapa Usaha Bagus Anda Masih Sepi di Google? (Dan Solusi Praktis Agar Cepat Muncul)',
+  'kenapa-usaha-bagus-sepi-di-google',
   'Tim Ladi',
   '28 September 2026',
   'PANDUAN USAHA',
-  'Lebih dari 80% konsumen mencari tempat makan, bengkel, atau klinik terdekat lewat smartphone mereka. Jangan biarkan toko Anda tak terlihat.',
-  '<p>Pernahkah Anda bertanya mengapa pelanggan baru jarang mampir ke toko fisik Anda, padahal lokasi Anda berada di pinggir jalan yang cukup ramai? Jawabannya sederhana: <strong>sebelum orang melangkah keluar rumah atau memutar setir kendaraan, mata mereka terlebih dahulu melihat layar ponsel pintar.</strong></p><h3>Perilaku Konsumen Modern di Kota Bogor</h3><p>Ketika seseorang mencari bengkel, kafe untuk rapat santai, atau apotek darurat, mereka tidak lagi bertanya ke orang di pinggir jalan. Mereka membuka Google Maps dan mengetik <em>\"bengkel terdekat\"</em> atau <em>\"katering enak di bogor\"</em>.</p><p>Jika profil Google Bisnis Anda belum terverifikasi, alamat Anda salah sematan, atau tidak memiliki ulasan bintang lima, calon pelanggan tersebut akan langsung beralih ke kompetitor Anda dalam hitungan 3 detik.</p><h3>Langkah Praktis yang Perlu Anda Lakukan:</h3><ul><li>Klaim dan verifikasi titik lokasi bisnis Anda di Google Bisnisku.</li><li>Lengkapi jam operasional, nomor WhatsApp yang aktif, dan foto toko yang terang.</li><li>Ajak pelanggan setia memberikan ulasan jujur beserta foto.</li></ul><p>Tim Ladi siap membantu mengurus seluruh proses legalitas profil digital bisnis Anda hingga terdaftar resmi dan muncul di peringkat teratas pencarian lokal.</p>',
-  'Google Maps, SEO Lokal, UMKM Bogor',
+  'Bukan karena produk Anda kalah saing, tapi karena alamat dan profil bisnis Anda belum terdaftar secara terstruktur di radar pencarian Google.',
+  '<p>Banyak usaha dengan produk bagus sepi karena belum terdaftar di radar Google. Pelanggan zaman modern mencari bukti ulasan, titik GPS akurat, dan tombol WhatsApp instan sebelum berbelanja.</p><p>Simak panduan kami di <a href=\"/blog/panduan-cara-mendaftar-google-maps-usaha-cepat-terverifikasi\">Panduan Pendaftaran Google Maps</a> atau hubungi tim <strong>Ladi</strong> untuk solusi lengkap digitalisasi bisnis Anda.</p>',
+  'Panduan Usaha, Google, SEO Lokal, Kredibilitas Bisnis',
   'published'
 ),
 (
-  '5 Kesalahan Fatal Pemilik Toko Saat Go Digital',
-  '5-kesalahan-fatal-pemilik-toko-saat-go-digital',
+  'Cara Mengubah WhatsApp Bisnis Menjadi Mesin Penjualan Otomatis untuk Toko Anda',
+  'cara-mengubah-whatsapp-bisnis-jadi-mesin-penjualan-otomatis',
   'Tim Ladi',
-  '24 September 2026',
-  'STRATEGI DIGITAL',
-  'Bikin akun Instagram tapi tidak pernah dibalas, atau nomor kontak mati saat pelanggan mau beli. Simak evaluasi penting ini.',
-  '<p>Banyak pemilik usaha senior merasa sudah \"go digital\" hanya karena memiliki akun media sosial. Namun bulan demi bulan berlalu, tidak ada satu pun transaksi yang masuk dari internet. Mengapa hal ini bisa terjadi?</p><h3>1. Nomor Kontak Tidak Responsif atau Terputus</h3><p>Pelanggan internet memiliki tingkat kesabaran yang sangat rendah. Jika mereka menekan tombol WhatsApp dan tidak dibalas dalam 15 menit, mereka akan langsung berpindah ke toko lain.</p><h3>2. Titik Peta Google Melenceng</h3><p>Tidak ada yang lebih menjengkelkan bagi pembeli selain diarahkan Google Maps ke gang buntu atau rumah kosong. Pastikan titik koordinat GPS Anda akurat hingga ke nomor pintu toko.</p><h3>3. Tidak Memiliki Bukti Kepercayaan (Social Proof)</h3><p>Konsumen yang belum pernah berkunjung membutuhkan rasa aman. Foto tim yang ramah, foto etalase yang rapi, dan testimoni pelanggan lama adalah modal terbesar Anda di dunia maya.</p>',
-  'Tips Bisnis, Digitalisasi, UMKM',
-  'published'
-),
-(
-  'Cara Mudah Mengelola WhatsApp Bisnis Tanpa Bikin Pusing',
-  'cara-mudah-mengelola-whatsapp-bisnis-tanpa-bikin-pusing',
-  'Tim Ladi',
-  '19 September 2026',
+  '22 September 2026',
   'TUTORIAL',
-  'Panduan sederhana menyiapkan katalog produk, pesan otomatis di luar jam kerja, dan template balasan cepat untuk calon pembeli.',
-  '<p>WhatsApp Bisnis adalah senjata paling ampuh dan paling murah untuk UMKM di Indonesia. Sayangnya, banyak pengusaha masih menggunakan WhatsApp pribadi biasa untuk melayani ratusan pembeli.</p><h3>Fitur WhatsApp Bisnis yang Wajib Anda Pasang Hari Ini:</h3><ul><li><strong>Katalog Digital:</strong> Pajang foto produk lengkap dengan harga, sehingga Anda tidak perlu bolak-balik kirim foto manual.</li><li><strong>Pesan Salam (Greeting Message):</strong> Sambut pelanggan secara instan saat mereka pertama kali menyapa.</li><li><strong>Balasan Cepat (Quick Replies):</strong> Simpan format rekening bank, ongkos kirim, dan alamat toko dengan satu tombol pintas.</li></ul><p>Di Ladi, kami membantu merapikan katalog WhatsApp Bisnis Anda agar tampak profesional dan meyakinkan di mata pembeli.</p>',
-  'WhatsApp Bisnis, Penjualan, Panduan',
+  'Tutorial praktis menyiapkan katalog digital, pesan salam instan, dan template balasan cepat agar calon pembeli langsung transfer tanpa ragu.',
+  '<p>WhatsApp adalah sarana konversi penjualan nomor satu di Indonesia. Dengan memanfaatkan katalog produk, pesan salam otomatis, dan quick replies, Anda bisa melayani pelanggan 24 jam nonstop tanpa kewalahan.</p><p>Semua website yang kami bangun di Ladi terintegrasi langsung dengan WhatsApp yang otomatis mengisi teks pesanan pembeli. Pelajari lebih lanjut di <a href=\"/services/paket-run\">Paket RUN Ladi</a> atau ikuti pelatihan kami di <a href=\"/events\">Agenda Acara Ladi</a>.</p>',
+  'WhatsApp Bisnis, Penjualan Otomatis, Tutorial UMKM, Customer Service',
   'published'
 )
 ON DUPLICATE KEY UPDATE `title`=VALUES(`title`);
@@ -253,3 +286,35 @@ VALUES
   'active'
 )
 ON DUPLICATE KEY UPDATE `name`=VALUES(`name`);
+
+-- -----------------------------------------------------
+-- Table: service_packages
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `service_packages` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL,
+  `slug` VARCHAR(255) NOT NULL UNIQUE,
+  `tag` VARCHAR(100) DEFAULT 'PAKET LADI',
+  `subtitle` TEXT,
+  `target_audience` TEXT,
+  `price` VARCHAR(100) NOT NULL,
+  `original_price` VARCHAR(100) DEFAULT '',
+  `period` VARCHAR(100) DEFAULT 'Sekali Bayar',
+  `timeline` VARCHAR(100) DEFAULT '5–7 Hari',
+  `deliverables` LONGTEXT,
+  `example_websites` LONGTEXT,
+  `audit_report_sample` LONGTEXT,
+  `description` LONGTEXT,
+  `faqs` LONGTEXT,
+  `cta_text` VARCHAR(100) DEFAULT 'Pesan via WhatsApp',
+  `cta_whatsapp_text` TEXT,
+  `badge_popular` TINYINT(1) DEFAULT 0,
+  `status` ENUM('active', 'inactive') DEFAULT 'active',
+  `order_num` INT DEFAULT 0,
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_slug (`slug`),
+  INDEX idx_status (`status`),
+  INDEX idx_order (`order_num`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+

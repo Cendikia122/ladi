@@ -3,13 +3,18 @@ import TopBar from "../components/TopBar";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import WhatsAppButton from "../components/WhatsAppButton";
+import { getServicePackages } from "@/app/lib/storage";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Layanan & Spesifikasi — Ladi (Layanan Digital)",
   description: "Digital Presence System terpadu: Paket EXIST, RISE, RUN, GUARD, dan Audit Digital 10 Poin Gratis.",
 };
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const packages = await getServicePackages();
+
   const auditPoints = [
     { no: "01", name: "Profil Google Business", note: "Kelengkapan jam buka, foto, dan kategori resmi" },
     { no: "02", name: "Peta Digital", note: "Kemudahan ditemukan calon pelanggan di wilayah target" },
@@ -93,7 +98,7 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        {/* 4 Packages Detailed Grid */}
+        {/* Dynamic Packages Detailed Grid */}
         <section className="py-20 md:py-28">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-16">
@@ -102,105 +107,100 @@ export default function ServicesPage() {
                 4 Skema Implementasi Ladi
               </h2>
               <div className="decorative-line-center" />
+              <p className="text-slate-600 text-sm mt-2">
+                Pilih paket yang paling tepat untuk skala bisnis Anda, atau klik detail untuk melihat contoh website dan laporan hasil nyata.
+              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* EXIST */}
-              <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm corporate-card space-y-5">
-                <span className="text-xs font-bold text-[#fa824b] uppercase tracking-wider">LANGKAH PERDANA</span>
-                <h3 className="text-2xl font-extrabold text-slate-900">Paket EXIST</h3>
-                <p className="text-sm text-slate-600">Cocok untuk bisnis yang sama sekali belum ada di internet.</p>
-                <div className="h-px bg-slate-100" />
-                <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
-                  <li className="flex items-center gap-2">✓ Website Resmi 1 Halaman Responsif</li>
-                  <li className="flex items-center gap-2">✓ Pendaftaran & Optimasi Profil Google Resmi</li>
-                  <li className="flex items-center gap-2">✓ Tombol WhatsApp Langsung ke Pemilik</li>
-                  <li className="flex items-center gap-2">✓ Pendaftaran Mesin Pencari Dasar</li>
-                  <li className="flex items-center gap-2">✓ 1x Revisi & Pendampingan Launching</li>
-                </ul>
-                <div className="pt-2">
-                  <a
-                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+Paket+EXIST"
-                    className="block w-full text-center py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider"
-                  >
-                    Tanya Paket EXIST
-                  </a>
-                </div>
-              </div>
+              {packages.map((pkg) => {
+                let deliverablesList: string[] = [];
+                try {
+                  deliverablesList = JSON.parse(pkg.deliverables);
+                } catch {
+                  deliverablesList = pkg.deliverables ? pkg.deliverables.split("\n").filter(Boolean) : [];
+                }
 
-              {/* RISE */}
-              <div className="p-8 rounded-3xl bg-white border-2 border-[#1853a7] shadow-lg corporate-card space-y-5 relative">
-                <span className="absolute -top-3 right-6 bg-[#fa824b] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">
-                  PALING DIMINATI
-                </span>
-                <span className="text-xs font-bold text-[#fa824b] uppercase tracking-wider">BISNIS SERIUS</span>
-                <h3 className="text-2xl font-extrabold text-slate-900">Paket RISE</h3>
-                <p className="text-sm text-slate-600">Website lengkap 5–7 halaman untuk membangun reputasi dan dipercaya pelanggan.</p>
-                <div className="h-px bg-slate-100" />
-                <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
-                  <li className="flex items-center gap-2">✓ Semua Fitur Paket EXIST</li>
-                  <li className="flex items-center gap-2">✓ Website Lengkap 5–7 Halaman (Profil, Galeri, Layanan)</li>
-                  <li className="flex items-center gap-2">✓ Optimasi Penuh Pencarian Google</li>
-                  <li className="flex items-center gap-2">✓ Setup Google Analytics & Penjelasan Cara Baca</li>
-                  <li className="flex items-center gap-2">✓ Laporan Dampak Perdana (Setelah 30 Hari)</li>
-                  <li className="flex items-center gap-2">✓ Bantuan Revisi Bulanan Selama 3 Bulan</li>
-                </ul>
-                <div className="pt-2">
-                  <a
-                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+Paket+RISE"
-                    className="block w-full text-center py-3 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md"
-                  >
-                    Tanya Paket RISE
-                  </a>
-                </div>
-              </div>
+                const waMessage = encodeURIComponent(
+                  pkg.cta_whatsapp_text ||
+                    `Halo Ladi, saya tertarik dengan ${pkg.name}. Bisakah saya konsultasikan kebutuhan usaha saya?`
+                );
+                const waUrl = `https://wa.me/6282112477119?text=${waMessage}`;
 
-              {/* RUN */}
-              <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm corporate-card space-y-5">
-                <span className="text-xs font-bold text-[#fa824b] uppercase tracking-wider">EKOSISTEM PENUH</span>
-                <h3 className="text-2xl font-extrabold text-slate-900">Paket RUN</h3>
-                <p className="text-sm text-slate-600">Untuk bisnis yang siap menerima order, booking online, dan pembayaran QRIS.</p>
-                <div className="h-px bg-slate-100" />
-                <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
-                  <li className="flex items-center gap-2">✓ Semua Fitur Paket RISE</li>
-                  <li className="flex items-center gap-2">✓ Toko Online / Sistem Reservasi Mandiri</li>
-                  <li className="flex items-center gap-2">✓ Integrasi Pembayaran QRIS Otomatis</li>
-                  <li className="flex items-center gap-2">✓ Template Balas Otomatis WhatsApp Bisnis</li>
-                  <li className="flex items-center gap-2">✓ Laporan Dampak Lengkap Selama 3 Bulan</li>
-                  <li className="flex items-center gap-2">✓ Sesi Konsultasi Strategi Digital 60 Menit</li>
-                </ul>
-                <div className="pt-2">
-                  <a
-                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+Paket+RUN"
-                    className="block w-full text-center py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider"
+                return (
+                  <div
+                    key={pkg.id}
+                    className={`p-8 rounded-3xl bg-white corporate-card space-y-5 flex flex-col justify-between relative ${
+                      pkg.badge_popular
+                        ? "border-2 border-[#1853a7] shadow-lg"
+                        : "border border-slate-200 shadow-sm"
+                    }`}
                   >
-                    Tanya Paket RUN
-                  </a>
-                </div>
-              </div>
+                    {pkg.badge_popular && (
+                      <span className="absolute -top-3 right-6 bg-[#fa824b] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
+                        ⭐ PALING DIMINATI
+                      </span>
+                    )}
 
-              {/* GUARD */}
-              <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm corporate-card space-y-5">
-                <span className="text-xs font-bold text-[#fa824b] uppercase tracking-wider">PENDAMPINGAN RUTIN</span>
-                <h3 className="text-2xl font-extrabold text-slate-900">Paket GUARD</h3>
-                <p className="text-sm text-slate-600">Pemeliharaan rutin bulanan: website selalu aman, konten diperbarui, dan laporan dikirim via WA.</p>
-                <div className="h-px bg-slate-100" />
-                <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
-                  <li className="flex items-center gap-2">✓ Pemeliharaan & Keamanan Rutin Website</li>
-                  <li className="flex items-center gap-2">✓ Update Konten & Harga (1–2x per bulan)</li>
-                  <li className="flex items-center gap-2">✓ Laporan Dampak Digital Bulanan via WhatsApp</li>
-                  <li className="flex items-center gap-2">✓ Bantuan Perubahan Desain Kecil</li>
-                  <li className="flex items-center gap-2">✓ Jalur Respons Cepat Prioritas</li>
-                </ul>
-                <div className="pt-2">
-                  <a
-                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+Paket+GUARD"
-                    className="block w-full text-center py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider"
-                  >
-                    Tanya Paket GUARD
-                  </a>
-                </div>
-              </div>
+                    <div className="space-y-4">
+                      <div className="space-y-1">
+                        <span className="text-xs font-bold text-[#fa824b] uppercase tracking-wider">
+                          {pkg.tag}
+                        </span>
+                        <h3 className="text-2xl font-extrabold text-slate-900">{pkg.name}</h3>
+                        <p className="text-sm text-slate-600">{pkg.subtitle}</p>
+                      </div>
+
+                      <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-baseline justify-between">
+                        <div>
+                          <div className="text-2xl font-black text-[#1853a7]">{pkg.price}</div>
+                          <div className="text-[11px] text-slate-500 font-medium">
+                            {pkg.period || "Sekali Bayar"} · {pkg.timeline}
+                          </div>
+                        </div>
+                        {pkg.original_price && (
+                          <div className="text-xs text-slate-400 line-through font-semibold">
+                            {pkg.original_price}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="h-px bg-slate-100" />
+
+                      <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
+                        {deliverablesList.slice(0, 6).map((item, idx) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <span className="text-emerald-600 font-bold shrink-0">✓</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="pt-4 space-y-2.5">
+                      <Link
+                        href={`/services/${pkg.slug}`}
+                        className={`block w-full text-center py-3.5 rounded-full font-bold text-xs uppercase tracking-wider shadow-sm transition-all ${
+                          pkg.badge_popular
+                            ? "bg-[#fa824b] hover:bg-[#e5723b] text-white shadow-md hover:shadow-lg"
+                            : "bg-[#1853a7] hover:bg-[#0f3d7d] text-white"
+                        }`}
+                      >
+                        Lihat Contoh Website & Fitur Lengkap →
+                      </Link>
+
+                      <a
+                        href={waUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block w-full text-center py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition-all"
+                      >
+                        Konsultasi via WhatsApp 💬
+                      </a>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>

@@ -139,6 +139,34 @@ async function ensureTables(db: mysql.Pool) {
       )
     `);
 
+    // 7. Pastikan tabel service_packages ada untuk produk / paket Ladi
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS service_packages (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(500) NOT NULL,
+        slug VARCHAR(500) NOT NULL UNIQUE,
+        tag VARCHAR(255) DEFAULT 'PAKET LADI',
+        subtitle TEXT,
+        target_audience TEXT,
+        price VARCHAR(100) DEFAULT '',
+        original_price VARCHAR(100) DEFAULT '',
+        period VARCHAR(100) DEFAULT 'Sekali Bayar',
+        timeline VARCHAR(100) DEFAULT '5–7 Hari',
+        deliverables LONGTEXT,
+        example_websites LONGTEXT,
+        audit_report_sample LONGTEXT,
+        description LONGTEXT,
+        faqs LONGTEXT,
+        cta_text VARCHAR(255) DEFAULT 'Pesan Paket Ini via WhatsApp',
+        cta_whatsapp_text TEXT,
+        badge_popular TINYINT(1) DEFAULT 0,
+        status VARCHAR(50) DEFAULT 'active',
+        order_num INT DEFAULT 0,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP
+      )
+    `);
+
     // Periksa apakah database sudah pernah di-inisialisasi
     const [metaRows]: any = await db.query("SELECT `value` FROM system_settings WHERE `key` = 'initialized'");
     if (!metaRows || metaRows.length === 0) {
@@ -195,6 +223,19 @@ async function ensureTables(db: mysql.Pool) {
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                ON DUPLICATE KEY UPDATE id=id`,
               [m.id, m.name, m.role, m.badge || "Tim Ladi", m.image || "/images/team/team1.jpg", m.desc || "", m.focus || "", m.order_num || 0, m.status || "active"]
+            );
+          }
+        }
+
+        const servicesFile = path.join(dataDir, "services.json");
+        if (fs.existsSync(servicesFile)) {
+          const services = JSON.parse(fs.readFileSync(servicesFile, "utf-8"));
+          for (const s of services) {
+            await db.query(
+              `INSERT INTO service_packages (id, name, slug, tag, subtitle, target_audience, price, original_price, period, timeline, deliverables, example_websites, audit_report_sample, description, faqs, cta_text, cta_whatsapp_text, badge_popular, status, order_num)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+               ON DUPLICATE KEY UPDATE id=id`,
+              [s.id, s.name, s.slug, s.tag || "PAKET LADI", s.subtitle || "", s.target_audience || "", s.price || "", s.original_price || "", s.period || "Sekali Bayar", s.timeline || "5–7 Hari", s.deliverables || "[]", s.example_websites || "[]", s.audit_report_sample || "{}", s.description || "", s.faqs || "[]", s.cta_text || "Pesan via WhatsApp", s.cta_whatsapp_text || "", s.badge_popular ? 1 : 0, s.status || "active", s.order_num || 0]
             );
           }
         }

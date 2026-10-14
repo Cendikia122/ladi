@@ -64,6 +64,10 @@ export default async function BlogDetailPage({
   const related = allBlogs.filter((b) => b.slug !== slug).slice(0, 2);
   const blogImg = blog.thumb || blog.thumb_full;
 
+  const plainText = (blog.content || "").replace(/<[^>]+>/g, " ");
+  const wordCount = plainText.trim().split(/\s+/).filter(Boolean).length;
+  const readTimeMinutes = Math.max(2, Math.ceil(wordCount / 200));
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -72,6 +76,10 @@ export default async function BlogDetailPage({
     image: blogImg ? (blogImg.startsWith("http") ? blogImg : `${baseUrl}${blogImg}`) : `${baseUrl}/logo.png`,
     datePublished: blog.created_at,
     dateModified: blog.updated_at || blog.created_at,
+    inLanguage: "id-ID",
+    keywords: blog.tags || "Digitalisasi UMKM, SEO Lokal, Website Bisnis",
+    articleSection: blog.category,
+    wordCount: wordCount,
     author: {
       "@type": "Organization",
       name: blog.author || "Tim Ladi",
@@ -117,9 +125,13 @@ export default async function BlogDetailPage({
               ← Kembali ke Arsip Wawasan
             </Link>
 
-            <span className="font-mono text-xs text-slate-400 block mb-2">
-              {blog.category} · {blog.date}
-            </span>
+            <div className="flex items-center gap-2 flex-wrap font-mono text-xs text-slate-400 mb-2">
+              <span className="px-2 py-0.5 rounded bg-slate-800 text-[#fa824b] font-bold">{blog.category}</span>
+              <span>·</span>
+              <span>{blog.date}</span>
+              <span>·</span>
+              <span className="text-slate-300">⏱️ {readTimeMinutes} menit baca</span>
+            </div>
 
             <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
               {blog.title}

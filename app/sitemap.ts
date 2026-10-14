@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { getBlogs, getEvents } from "@/app/lib/storage";
+import { getBlogs, getEvents, getServicePackages } from "@/app/lib/storage";
 import { Config } from "@/app/lib/config";
 
 export const dynamic = "force-dynamic";
@@ -20,10 +20,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   try {
-    const [blogs, events] = await Promise.all([
+    const [blogs, events, services] = await Promise.all([
       getBlogs(50),
       getEvents(50),
+      getServicePackages(),
     ]);
+
+    const serviceRoutes: MetadataRoute.Sitemap = services.map((s) => ({
+      url: `${baseUrl}/services/${s.slug}`,
+      lastModified: new Date(s.updated_at || s.created_at || Date.now()),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    }));
 
     const blogRoutes: MetadataRoute.Sitemap = blogs.map((b) => ({
       url: `${baseUrl}/blog/${b.slug}`,
@@ -39,7 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }));
 
-    return [...staticRoutes, ...blogRoutes, ...eventRoutes];
+    return [...staticRoutes, ...serviceRoutes, ...blogRoutes, ...eventRoutes];
   } catch {
     return staticRoutes;
   }
