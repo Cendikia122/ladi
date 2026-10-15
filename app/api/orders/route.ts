@@ -45,12 +45,29 @@ export async function POST(req: NextRequest) {
       addons,
     } = body;
 
+    // 0. Validasi anti-tampering (tolak nilai negatif atau manipulasi angka)
+    for (const [key, val] of Object.entries(body)) {
+      if (typeof val === "number" && (val < 0 || !isFinite(val))) {
+        return NextResponse.json({ success: false, error: `Nilai parameter ${key} tidak valid.` }, { status: 400 });
+      }
+      if (typeof val === "string" && !isNaN(Number(val)) && val.trim().startsWith("-")) {
+        return NextResponse.json({ success: false, error: `Nilai parameter ${key} tidak valid.` }, { status: 400 });
+      }
+    }
+
+    if (customPackagePrice !== undefined && customPackagePrice !== null) {
+      const numPrice = Number(customPackagePrice);
+      if (isNaN(numPrice) || numPrice <= 0 || !isFinite(numPrice)) {
+        return NextResponse.json({ success: false, error: "Nominal harga paket tidak valid." }, { status: 400 });
+      }
+    }
+
     // 1. Validasi input wajib
-    if (!customer_name || !customer_name.trim()) {
+    if (!customer_name || typeof customer_name !== "string" || !customer_name.trim()) {
       return NextResponse.json({ success: false, error: "Nama lengkap wajib diisi." }, { status: 400 });
     }
 
-    if (!customer_phone || !customer_phone.trim()) {
+    if (!customer_phone || typeof customer_phone !== "string" || !customer_phone.trim()) {
       return NextResponse.json({ success: false, error: "Nomor WhatsApp wajib diisi." }, { status: 400 });
     }
 
@@ -69,7 +86,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!business_name || !business_name.trim()) {
+    if (!business_name || typeof business_name !== "string" || !business_name.trim()) {
       return NextResponse.json({ success: false, error: "Nama usaha / bisnis wajib diisi." }, { status: 400 });
     }
 
@@ -95,6 +112,11 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Pastikan harga akhir tidak pernah <= 0
+    if (packagePrice <= 0) {
+      return NextResponse.json({ success: false, error: "Nominal harga paket tidak valid." }, { status: 400 });
+    }
+
     // 3. Generate Order Number
     const orderNumber = generateOrderNumber();
 
@@ -106,11 +128,11 @@ export async function POST(req: NextRequest) {
       package_price: packagePrice,
       customer_name: customer_name.trim(),
       customer_phone: cleanPhone,
-      customer_email: customer_email ? customer_email.trim() : "",
+      customer_email: customer_email && typeof customer_email === "string" ? customer_email.trim() : "",
       business_name: business_name.trim(),
-      business_category: business_category ? business_category.trim() : "Lainnya",
-      domain_requested: domain_requested ? domain_requested.trim() : (domain_choice || ""),
-      notes: notes ? notes.trim() : "",
+      business_category: business_category && typeof business_category === "string" ? business_category.trim() : "Lainnya",
+      domain_requested: domain_requested && typeof domain_requested === "string" ? domain_requested.trim() : (typeof domain_choice === "string" ? domain_choice : ""),
+      notes: notes && typeof notes === "string" ? notes.trim() : "",
       payment_method: payment_method || "GOPAY",
       payment_status: "unpaid",
       order_status: "new",
@@ -132,7 +154,7 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     console.error("API Orders POST error:", error);
     return NextResponse.json(
-      { success: false, error: error?.message || "Terjadi kendala saat memproses pesanan." },
+      { success: false, error: "Terjadi kendala saat memproses pesanan. Silakan coba kembali." },
       { status: 500 }
     );
   }
@@ -157,7 +179,7 @@ export async function GET(req: NextRequest) {
   } catch (error: any) {
     console.error("API Orders GET error:", error);
     return NextResponse.json(
-      { success: false, error: error?.message || "Gagal mengambil daftar pesanan." },
+      { success: false, error: "Gagal mengambil daftar pesanan. Silakan coba kembali." },
       { status: 500 }
     );
   }

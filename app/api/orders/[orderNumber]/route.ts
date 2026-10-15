@@ -23,7 +23,7 @@ export async function GET(
   } catch (error: any) {
     console.error("API Order GET error:", error);
     return NextResponse.json(
-      { success: false, error: error?.message || "Gagal memuat detail pesanan." },
+      { success: false, error: "Gagal memuat detail pesanan." },
       { status: 500 }
     );
   }
@@ -82,7 +82,7 @@ export async function PATCH(
   } catch (error: any) {
     console.error("API Order PATCH error:", error);
     return NextResponse.json(
-      { success: false, error: error?.message || "Gagal memperbarui pesanan." },
+      { success: false, error: "Gagal memperbarui pesanan." },
       { status: 500 }
     );
   }
@@ -111,7 +111,7 @@ export async function DELETE(
   } catch (error: any) {
     console.error("API Order DELETE error:", error);
     return NextResponse.json(
-      { success: false, error: error?.message || "Gagal menghapus pesanan." },
+      { success: false, error: "Gagal menghapus pesanan." },
       { status: 500 }
     );
   }

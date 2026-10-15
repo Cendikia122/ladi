@@ -4,15 +4,29 @@ import { checkLockout, recordFailedAttempt, clearLockout } from "@/app/lib/locko
 
 export async function POST(request: NextRequest) {
   try {
-    const { username, password } = await request.json();
-    if (!username || !password) {
+    const body = await request.json().catch(() => null);
+    if (!body || typeof body !== "object") {
       return NextResponse.json(
-        { success: false, message: "Username dan password wajib diisi" },
+        { success: false, message: "Format request tidak valid" },
         { status: 400 }
       );
     }
 
-    const cleanUser = String(username).trim().toLowerCase();
+    const { username, password } = body;
+    if (
+      !username ||
+      !password ||
+      typeof username !== "string" ||
+      typeof password !== "string" ||
+      !username.trim()
+    ) {
+      return NextResponse.json(
+        { success: false, message: "Username dan password wajib diisi berupa teks yang valid" },
+        { status: 400 }
+      );
+    }
+
+    const cleanUser = username.trim().toLowerCase();
     const clientIp =
       request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
       request.headers.get("x-real-ip") ||
@@ -34,7 +48,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 2. Validasi kredensial login
-    const user = await validateCredentials(username, password);
+    const user = await validateCredentials(cleanUser, password);
     if (!user) {
       const failStatus = await recordFailedAttempt(cleanUser, clientIp);
       if (failStatus.isLocked) {
@@ -82,7 +96,7 @@ export async function POST(request: NextRequest) {
     const isLocalhost = host.includes("localhost") || host.includes("127.0.0.1");
 
     response.cookies.set("ladi_admin_token", token, {
-      httpOnly: false,
+      httpOnly: true,
       secure: !isLocalhost && process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
@@ -91,6 +105,10 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (error: any) {
-    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+    console.error("API Auth Login error:", error);
+    return NextResponse.json(
+      { success: false, message: "Terjadi kesalahan internal pada server. Silakan coba beberapa saat lagi." },
+      { status: 500 }
+    );
   }
 }
