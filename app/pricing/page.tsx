@@ -140,7 +140,7 @@ export default async function PricingPage() {
                   pkg.cta_whatsapp_text ||
                   `Halo Ladi, saya tertarik dengan ${pkg.name || "Paket"} (${priceStr}). ${pkg.subtitle || ""}`;
                 const ctaBtnText =
-                  pkg.slug === "paket-guard" ? "🧩 Rakit Satpam Web →" : "⚡ Pesan & Bayar di Web →";
+                  pkg.slug === "paket-guard" ? "🧩 Rakit Maintenance Bisnis →" : "⚡ Pesan & Bayar di Web →";
                 const ctaBtnHref =
                   pkg.slug === "paket-guard" ? `/services/paket-guard#rakit-guard` : `/checkout/${pkg.slug}`;
 

@@ -123,15 +123,15 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 
         {/* Banner Khusus Paket GUARD Modular */}
         {isGuard && (
-          <div className="mb-8 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-blue-900 via-[#1853a7] to-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-4 border border-blue-800 shadow-md">
+          <div className="mb-8 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-blue-950 via-[#1853a7] to-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-4 border border-blue-800 shadow-md">
             <div className="flex items-center gap-3">
-              <span className="text-3xl">🧩</span>
+              <span className="text-3xl">🛡️</span>
               <div>
                 <div className="text-xs font-bold uppercase tracking-wider text-amber-300">
-                  Paket GUARD Modular (Sistem Pecahan LEGO)
+                  Jasa Maintenance Bisnis di Internet (Bukan Penjualan Web Baru)
                 </div>
                 <p className="text-xs sm:text-sm text-slate-200 mt-0.5">
-                  Anda bisa bebas mencentang atau menyesuaikan modul satpam, SEO 90+, Google Maps, dll. sesuai kebutuhan.
+                  Layanan pemeliharaan rutin seluruh aset digital bisnis Anda (Website, Google Maps, Medsos &amp; WhatsApp Bisnis). Bayar hanya modul yang dibutuhkan!
                 </p>
               </div>
             </div>
@@ -139,7 +139,7 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
               href="/services/paket-guard#rakit-guard"
               className="px-5 py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider whitespace-nowrap transition-all shadow-md shrink-0"
             >
-              Rakit di Kalkulator →
+              Ubah Modul di Kalkulator →
             </Link>
           </div>
         )}

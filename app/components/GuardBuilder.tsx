@@ -6,7 +6,7 @@ import Link from "next/link";
 export interface GuardAddon {
   id: string;
   name: string;
-  category: "server" | "seo" | "maps" | "content";
+  category: "website" | "maps" | "social" | "seo" | "operations";
   price: number;
   badge?: string;
   icon: string;
@@ -15,155 +15,203 @@ export interface GuardAddon {
 }
 
 export const GUARD_ADDONS: GuardAddon[] = [
-  // 1. Server & Satpam 24 Jam
+  // 1. Pemeliharaan & Satpam Website 24 Jam
   {
     id: "uptime_247",
     name: "Pemantauan Uptime 24/7 & Auto-Restart Server",
-    category: "server",
-    price: 65000,
+    category: "website",
+    price: 55000,
     badge: "Pondasi Wajib",
     icon: "🛡️",
-    desc: "Robot monitoring memantau web setiap 60 detik. Jika server down, otomatis di-restart & tim kami langsung sigap memulihkan.",
+    desc: "Robot pemantau memonitor website setiap 60 detik. Jika down, otomatis di-restart & tim teknis langsung sigap memulihkan.",
     recommended: true,
   },
   {
     id: "ssl_firewall",
     name: "Pemeliharaan SSL (HTTPS) & Firewall Anti-Hack",
-    category: "server",
+    category: "website",
     price: 45000,
     badge: "Keamanan",
     icon: "🔒",
-    desc: "Sertifikat SSL gembok hijau selalu aktif, perlindungan anti bot spam, brute-force login, dan injeksi script berbahaya.",
+    desc: "Sertifikat gembok hijau selalu aktif, pencegahan bot spam, blokir brute-force login, dan proteksi dari injeksi script berbahaya.",
     recommended: true,
   },
   {
     id: "backup_cloud",
-    name: "Backup Otomatis Mingguan ke Cloud Terpisah",
-    category: "server",
-    price: 55000,
+    name: "Backup Otomatis Mingguan File & Database ke Cloud",
+    category: "website",
+    price: 45000,
     badge: "Penyelamat",
     icon: "💾",
-    desc: "Cadangan database dan seluruh file web disimpan terisolasi di server cloud terpisah. Jika ada kendala, web pulih dalam hitungan menit.",
+    desc: "Database dan seluruh file website dicadangkan di server cloud terpisah. Jika ada kendala teknis atau eror, pulih dalam hitungan menit.",
+  },
+  {
+    id: "web_speed_bug",
+    name: "Perbaikan Bug Rutin & Optimasi Stabilitas Website",
+    category: "website",
+    price: 65000,
+    badge: "Bebas Eror",
+    icon: "🛠️",
+    desc: "Pemeriksaan berkala broken link, form/tombol chat macet, update plugin/framework, dan perbaikan tampilan agar pelanggan tidak kabur.",
   },
 
-  // 2. SEO & Mesin Pencari Google
+  // 2. Google Business Profile & Google Maps
+  {
+    id: "gmaps_sync",
+    name: "Kelola Titik Google Maps & Update Jam Operasional",
+    category: "maps",
+    price: 75000,
+    badge: "Bisnis Lokal",
+    icon: "📍",
+    desc: "Titik peta di Google Maps selalu akurat, pencegahan klaim sepihak kompetitor, dan update rutin status buka/tutup hari libur & hari raya.",
+    recommended: true,
+  },
+  {
+    id: "gmaps_geotag",
+    name: "Geotagging Foto Usaha & Etalase Produk Sekitar",
+    category: "maps",
+    price: 60000,
+    badge: "Lokal SEO",
+    icon: "📸",
+    desc: "Injeksi metadata koordinat GPS pada foto tempat usaha & katalog produk sebelum di-upload agar mendominasi pencarian 'terdekat'.",
+  },
+  {
+    id: "gmaps_reviews",
+    name: "Monitoring Review & Template Balasan Ulasan Bintang",
+    category: "maps",
+    price: 45000,
+    badge: "Reputasi",
+    icon: "⭐",
+    desc: "Notifikasi seketika saat ada ulasan pelanggan baru di Google Maps, disertai saran balasan ramah & persuasif agar rating bisnis 4.8+.",
+  },
+
+  // 3. Profil Media Sosial (Instagram, TikTok & FB)
+  {
+    id: "social_bio",
+    name: "Pemeliharaan Link-in-Bio & Profil Medsos Terpadu",
+    category: "social",
+    price: 45000,
+    badge: "Koneksi Usaha",
+    icon: "🔗",
+    desc: "Merawat tautan di bio Instagram & TikTok (Linktree/web resmi), memastikan tombol WhatsApp, daftar cabang, dan info promo selalu aktif.",
+    recommended: true,
+  },
+  {
+    id: "social_story",
+    name: "Desain Banner Story & Pengumuman Promo (2x / bulan)",
+    category: "social",
+    price: 85000,
+    badge: "Visual Keren",
+    icon: "🎨",
+    desc: "Dibuatkan visual banner story profesional (IG Story / WA Story) untuk pengumuman diskon bulan ini, menu baru, atau info libur.",
+  },
+  {
+    id: "social_catalog",
+    name: "Perapian Sorotan (Highlight) & Etalase Medsos",
+    category: "social",
+    price: 55000,
+    badge: "Etalase Rapi",
+    icon: "📱",
+    desc: "Menata cover & isi Sorotan Instagram: Pricelist, Menu, Testimoni, Cara Order, dan Lokasi Usaha agar calon pembeli langsung percaya.",
+  },
+
+  // 4. SEO & Mesin Pencari Google
   {
     id: "seo_90",
     name: "SEO Performance Booster Up to 90+ (PageSpeed Google)",
     category: "seo",
-    price: 115000,
-    badge: "⭐ Sangat Diminati",
+    price: 95000,
+    badge: "⭐ Sangat Dicari",
     icon: "🚀",
-    desc: "Optimasi Core Web Vitals, kompresi gambar otomatis, caching dinamis, dan penataan kode agar skor mobile tembus 90+ di Google.",
+    desc: "Optimasi Core Web Vitals, kompresi gambar otomatis, caching dinamis, dan penataan script agar skor mobile tembus 90+ di Google.",
     recommended: true,
   },
   {
     id: "keyword_tracking",
     name: "Pemeliharaan Kata Kunci & Audit Posisi Google Bulanan",
     category: "seo",
-    price: 75000,
+    price: 60000,
     badge: "Riset Pasar",
     icon: "🔍",
-    desc: "Audit rutin posisi bisnis Anda di mesin pencari Google saat calon pembeli mengetikkan kata kunci produk di kota Anda.",
+    desc: "Audit rutin peringkat pencarian bisnis Anda di Google saat calon pembeli mengetik kata kunci produk/layanan di kota domisili Anda.",
   },
   {
     id: "schema_local",
     name: "Schema.org Markup Bisnis Lokal & Rich Snippet Google",
     category: "seo",
-    price: 50000,
+    price: 45000,
     badge: "Tampilan Google",
     icon: "🏷️",
-    desc: "Menyisipkan data terstruktur microdata agar alamat, jam buka, rating bintang, dan rincian usaha muncul kaya di hasil pencarian Google.",
+    desc: "Data terstruktur microdata JSON-LD agar jam buka, rating bintang, dan range harga usaha Anda langsung terpampang di hasil Google.",
   },
 
-  // 3. Google Maps & Google Business Profile
-  {
-    id: "gmaps_sync",
-    name: "Kelola Titik Google Maps & Update Jam Operasional",
-    category: "maps",
-    price: 80000,
-    badge: "Bisnis Lokal",
-    icon: "📍",
-    desc: "Titik peta bisnis di Google Maps selalu akurat, pencegahan duplikasi/klaim pihak luar, dan update berkala jam buka hari libur.",
-    recommended: true,
-  },
-  {
-    id: "gmaps_geotag",
-    name: "Geotagging Foto Usaha & Optimasi Pencarian Sekitar",
-    category: "maps",
-    price: 65000,
-    badge: "Lokal SEO",
-    icon: "📸",
-    desc: "Injeksi metadata koordinat GPS pada foto tempat usaha atau menu baru sebelum di-upload agar pencarian 'terdekat' makin kuat.",
-  },
-  {
-    id: "gmaps_reviews",
-    name: "Notifikasi & Template Balasan Ulasan Bintang Pelanggan",
-    category: "maps",
-    price: 50000,
-    badge: "Reputasi",
-    icon: "⭐",
-    desc: "Notifikasi seketika saat ada ulasan pelanggan baru di Google Maps, disertai saran balasan sopan dan persuasif untuk menaikkan reputasi.",
-  },
-
-  // 4. Konten, Laporan & Jalur Cepat WhatsApp
+  // 5. WhatsApp Bisnis, Konten & Operasional Harian
   {
     id: "content_update",
-    name: "Layanan Update Konten & Banner Promo via WhatsApp",
-    category: "content",
-    price: 90000,
+    name: "Layanan Update Konten & Banner Promo Cukup via WA",
+    category: "operations",
+    price: 75000,
     badge: "Bebas Pusing",
     icon: "✍️",
-    desc: "Mau ganti harga menu, upload foto produk baru, atau pasang pengumuman promo? Cukup kirim ke WA, tim Ladi yang langsung menggantikan.",
+    desc: "Mau ganti daftar harga, upload foto baru, atau pasang promo? Cukup kirim foto & teks via WhatsApp, tim Ladi yang langsung pasangkan.",
+  },
+  {
+    id: "wa_catalog",
+    name: "Sinkronisasi Katalog Produk & Auto-Reply WhatsApp Bisnis",
+    category: "operations",
+    price: 50000,
+    badge: "Siap Jualan",
+    icon: "💬",
+    desc: "Pembaruan berkala daftar barang/layanan di katalog WhatsApp Bisnis, format salam pembuka otomatis, dan jadwal jam kerja chat.",
   },
   {
     id: "wa_report",
-    name: "Laporan Statistik Bulanan Dikirim ke WhatsApp",
-    category: "content",
+    name: "Laporan Performa Bulanan Terpadu Dikirim ke WhatsApp",
+    category: "operations",
     price: 45000,
     badge: "Transparan",
     icon: "📊",
-    desc: "Grafis ringkas pengunjung nyata, jam paling ramai, dan jumlah klik tombol WhatsApp dikirimkan langsung ke nomor WA Anda tiap akhir bulan.",
+    desc: "Grafik angka nyata: pengunjung web, orang cari rute di Google Maps, dan jumlah chat WhatsApp langsung dikirim ke nomor WA pemilik.",
     recommended: true,
   },
   {
     id: "hotline_vip",
     name: "Hotline Darurat WhatsApp Prioritas (Respon < 30 Menit)",
-    category: "content",
-    price: 60000,
-    badge: "Jalur Cepat",
+    category: "operations",
+    price: 50000,
+    badge: "Jalur VIP",
     icon: "⚡",
-    desc: "Akses jalur darurat langsung ke kepala teknisi Ladi untuk kendala website kritis, 7 hari seminggu tanpa antre tiket support.",
+    desc: "Akses jalur chat khusus darurat langsung ke kepala teknisi Ladi untuk kendala digital kritis, 7 hari seminggu tanpa antre tiket.",
   },
 ];
 
 const PRESETS = [
   {
-    id: "essential",
-    name: "🛡️ Satpam Esensial",
-    priceLabel: "Rp 155.000 / bln",
-    desc: "Proteksi dasar uptime 24/7, SSL anti-hack, dan laporan bulanan ke WhatsApp.",
-    addons: ["uptime_247", "ssl_firewall", "wa_report"],
-  },
-  {
-    id: "seo_booster",
-    name: "🚀 Satpam + SEO 90+",
-    priceLabel: "Rp 325.000 / bln",
-    desc: "Proteksi server plus booster skor PageSpeed 90+, audit kata kunci Google, dan backup rutin.",
-    addons: ["uptime_247", "ssl_firewall", "backup_cloud", "seo_90", "keyword_tracking"],
-  },
-  {
     id: "maps_local",
-    name: "📍 Satpam + Maps Juara",
-    priceLabel: "Rp 325.000 / bln",
-    desc: "Proteksi web lengkap dengan pengawalan Google Maps, geotagging foto usaha, dan update konten rutin via WA.",
-    addons: ["uptime_247", "ssl_firewall", "gmaps_sync", "gmaps_geotag", "content_update"],
+    name: "📍 Satpam Google Maps & Toko Fisik",
+    priceLabel: "Rp 270.000 / bln",
+    desc: "Rawat titik Google Maps, jam buka hari raya, geotagging foto, monitoring review, link medsos & laporan WA.",
+    addons: ["gmaps_sync", "gmaps_geotag", "gmaps_reviews", "social_bio", "wa_report"],
   },
   {
-    id: "full_guard",
-    name: "👑 Full Guard Sultan 500rb",
-    priceLabel: "Rp 500.000 / bln",
-    desc: "Semua 12 modul satpam aktif komplit! Proteksi, SEO 90+, Google Maps, & Hotline VIP (Diskon Bundle Spesial).",
+    id: "web_essential",
+    name: "🛡️ Satpam Website & Keamanan",
+    priceLabel: "Rp 210.000 / bln",
+    desc: "Website dipantau 24 jam nonstop, SSL anti-hack, backup mingguan cloud, perbaikan bug rutin & laporan WA.",
+    addons: ["uptime_247", "ssl_firewall", "backup_cloud", "web_speed_bug", "wa_report"],
+  },
+  {
+    id: "seo_social_booster",
+    name: "🚀 Satpam Web + SEO 90+ & Medsos",
+    priceLabel: "Rp 395.000 / bln",
+    desc: "Proteksi website + SEO Google PageSpeed 90+, audit kata kunci, link bio, dan desain 2 banner story promo tiap bulan.",
+    addons: ["uptime_247", "ssl_firewall", "seo_90", "keyword_tracking", "social_bio", "social_story", "wa_report"],
+  },
+  {
+    id: "sultan_all_in_one",
+    name: "👑 Sultan All-in-One Digital Presence",
+    priceLabel: "Rp 500.000 / bln (Capped)",
+    desc: "SEMUA 17 MODUL KOMPLIT! Seluruh aset internet dirawat: Website, Google Maps, Medsos, WhatsApp & Jalur VIP. Hemat 50%!",
     addons: GUARD_ADDONS.map((a) => a.id),
   },
 ];
@@ -179,8 +227,9 @@ export default function GuardBuilder() {
   const [selectedAddonIds, setSelectedAddonIds] = useState<string[]>([
     "uptime_247",
     "ssl_firewall",
-    "seo_90",
     "gmaps_sync",
+    "social_bio",
+    "seo_90",
     "wa_report",
   ]);
   const [selectedDuration, setSelectedDuration] = useState<number>(3); // Default 3 Bulan
@@ -203,19 +252,18 @@ export default function GuardBuilder() {
   };
 
   const resetAll = () => {
-    setSelectedAddonIds(["uptime_247", "ssl_firewall"]);
+    setSelectedAddonIds(["gmaps_sync", "social_bio", "wa_report"]);
   };
 
   // Calculation
   const calculation = useMemo(() => {
-    const isAllSelected = selectedAddonIds.length === GUARD_ADDONS.length;
     let rawMonthly = selectedAddonIds.reduce((sum, id) => {
       const item = GUARD_ADDONS.find((a) => a.id === id);
       return sum + (item ? item.price : 0);
     }, 0);
 
-    // Special bundle cap: if all items are selected, cap at Rp 500.000 / month!
-    const isBundleCap = isAllSelected && rawMonthly > 500000;
+    // Bundle cap: jika total modular > 500.000, cap maksimal Rp 500.000 / bulan!
+    const isBundleCap = rawMonthly > 500000;
     const monthlyBeforeDurationDiscount = isBundleCap ? 500000 : rawMonthly;
 
     const durationObj = DURATION_OPTIONS.find((d) => d.months === selectedDuration) || DURATION_OPTIONS[0];
@@ -247,16 +295,16 @@ export default function GuardBuilder() {
       .filter(Boolean)
       .join("\n");
 
-    const message = `Halo Tim Ladi, saya ingin berlangganan *Paket GUARD (Satpam Digital Rakitan Sendiri)* untuk website usaha saya:
+    const message = `Halo Tim Ladi, saya ingin berlangganan *Jasa Maintenance Bisnis di Internet (Paket GUARD)* untuk merawat aset usaha saya:
 
-🧩 *Fitur Pecahan yang Saya Pilih (${calculation.count} Fitur):*
+🧩 *Modul Maintenance Terpilih (${calculation.count} Modul):*
 ${selectedNames}
 
 ⏱️ *Durasi Langganan:* ${calculation.durationObj.label} ${calculation.durationObj.discount > 0 ? `(Diskon ${calculation.durationObj.discount}%)` : ""}
 💰 *Investasi Bulanan:* Rp ${new Intl.NumberFormat("id-ID").format(calculation.finalMonthly)} / bulan
 💵 *Total Pembayaran:* Rp ${new Intl.NumberFormat("id-ID").format(calculation.grandTotal)} (${calculation.durationObj.months} Bulan)
 
-Mohon informasi nomor rekening atau instruksi pembayaran resminya. Terima kasih!`;
+Mohon informasi langkah verifikasi aset digital & instruksi pembayarannya. Terima kasih!`;
 
     return `https://wa.me/6282112477119?text=${encodeURIComponent(message)}`;
   }, [selectedAddonIds, calculation]);
@@ -273,16 +321,39 @@ Mohon informasi nomor rekening atau instruksi pembayaran resminya. Terima kasih!
 
   return (
     <div id="rakit-guard" className="space-y-10">
+      {/* Notice Banner: Bukan Penjualan Web, tapi Maintenance Bisnis Lengkap */}
+      <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-blue-950 via-[#1853a7] to-slate-900 text-white shadow-xl border border-blue-800 space-y-3 relative overflow-hidden">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <span className="text-3xl sm:text-4xl shrink-0">🛡️</span>
+            <div>
+              <span className="px-3 py-1 rounded-full bg-amber-400 text-slate-950 text-[10px] font-black uppercase tracking-wider">
+                Bukan Penjualan Website Baru
+              </span>
+              <h3 className="text-lg sm:text-xl font-extrabold text-white mt-1">
+                Jasa Maintenance &amp; Operasional Seluruh Aset Bisnis di Internet
+              </h3>
+            </div>
+          </div>
+          <span className="px-3.5 py-1.5 rounded-full bg-white/10 text-slate-200 text-xs font-mono font-bold tracking-wider whitespace-nowrap">
+            Tanpa Gaji Tim IT Sendiri
+          </span>
+        </div>
+        <p className="text-xs sm:text-sm text-slate-200 leading-relaxed max-w-4xl">
+          Paket GUARD adalah <strong>layanan pemeliharaan operasional digital</strong>. Kami tidak menjual website baru, melainkan merawat, mengamankan, dan mengoptimasi aset yang sudah Anda miliki: <strong>Website, Titik Google Maps &amp; Profil Bisnis, Akun Media Sosial (Instagram/TikTok), hingga WhatsApp Bisnis</strong>. Bayar hanya pecahan modul yang benar-benar usaha Anda butuhkan!
+        </p>
+      </div>
+
       {/* Header Banner */}
-      <div className="text-center max-w-3xl mx-auto space-y-3">
+      <div className="text-center max-w-3xl mx-auto space-y-2">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#fa824b]/15 text-[#c2410c] font-bold text-xs font-mono uppercase tracking-wider">
           <span>🧩 SISTEM PECAHAN LEGO · RAKIT SESUAI KEBUTUHAN</span>
         </div>
         <h2 className="text-2xl sm:text-4xl font-extrabold text-[#0f172a] tracking-tight">
-          Kalkulator &amp; Rakit Satpam Digital <span className="text-[#1853a7]">(Paket GUARD)</span>
+          Kalkulator Rakit Satpam &amp; Maintenance <span className="text-[#1853a7]">(Paket GUARD)</span>
         </h2>
         <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-          Jangan buang uang untuk fitur yang tidak Anda pakai. Centang pecahan perlindungan, optimasi SEO 90+, atau pengawalan Google Maps sesuai prioritas bisnis Anda.
+          Pilih pecahan modul pemeliharaan di bawah. Mau fokus rawat Google Maps saja? Mau amankan website? Atau rawat semua channel digital sekaligus hingga Rp 500.000 / bulan? Anda yang memegang kendali.
         </p>
       </div>
 
@@ -298,7 +369,7 @@ Mohon informasi nomor rekening atau instruksi pembayaran resminya. Terima kasih!
               onClick={selectAll}
               className="text-[#1853a7] hover:underline font-semibold cursor-pointer"
             >
-              Pilih Semua (12 Modul)
+              Pilih Semua (17 Modul)
             </button>
             <span className="text-slate-300">|</span>
             <button
@@ -352,22 +423,22 @@ Mohon informasi nomor rekening atau instruksi pembayaran resminya. Terima kasih!
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Modular Checklists (8 cols) */}
         <div className="lg:col-span-8 space-y-8">
-          {/* Section 1: Server & Uptime */}
+          {/* Kategori 1: Pemeliharaan & Satpam Website 24 Jam */}
           <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
             <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-              <span className="text-xl">🛡️</span>
+              <span className="text-xl">💻</span>
               <div>
                 <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
-                  1. Pondasi Server, Uptime &amp; Satpam 24 Jam
+                  1. Pemeliharaan &amp; Satpam Website 24 Jam
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Perlindungan dasar agar website tidak pernah mati dan aman dari gangguan hacker.
+                  Perlindungan dasar agar website tidak pernah mati, bebas error teknis, dan aman dari peretas.
                 </p>
               </div>
             </div>
 
             <div className="space-y-3">
-              {GUARD_ADDONS.filter((a) => a.category === "server").map((item) => {
+              {GUARD_ADDONS.filter((a) => a.category === "website").map((item) => {
                 const checked = selectedAddonIds.includes(item.id);
                 return (
                   <div
@@ -383,7 +454,7 @@ Mohon informasi nomor rekening atau instruksi pembayaran resminya. Terima kasih!
                       <input
                         type="checkbox"
                         checked={checked}
-                        onChange={() => {}} // handled by parent onClick
+                        onChange={() => {}}
                         className="w-5 h-5 rounded border-slate-300 text-[#1853a7] focus:ring-[#1853a7] mt-0.5 cursor-pointer"
                       />
                       <div className="space-y-1">
@@ -413,77 +484,16 @@ Mohon informasi nomor rekening atau instruksi pembayaran resminya. Terima kasih!
             </div>
           </div>
 
-          {/* Section 2: SEO & Google PageSpeed 90+ */}
-          <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
-            <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-              <span className="text-xl">🚀</span>
-              <div>
-                <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
-                  2. Optimasi Mesin Pencari &amp; SEO (Skor 90+ di Google)
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Meningkatkan kecepatan buka di smartphone dan mendongkrak peringkat bisnis di Google.
-                </p>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              {GUARD_ADDONS.filter((a) => a.category === "seo").map((item) => {
-                const checked = selectedAddonIds.includes(item.id);
-                return (
-                  <div
-                    key={item.id}
-                    onClick={() => toggleAddon(item.id)}
-                    className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-start justify-between gap-4 ${
-                      checked
-                        ? "bg-emerald-50/50 border-emerald-500/60 shadow-xs"
-                        : "bg-[#f8fafc] border-slate-200 hover:border-slate-300 opacity-90"
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={() => {}}
-                        className="w-5 h-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 mt-0.5 cursor-pointer"
-                      />
-                      <div className="space-y-1">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span className="font-bold text-slate-900 text-xs sm:text-sm">
-                            {item.name}
-                          </span>
-                          {item.badge && (
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
-                              {item.badge}
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
-                      </div>
-                    </div>
-
-                    <div className="text-right shrink-0">
-                      <span className="text-xs sm:text-sm font-black text-emerald-700 block">
-                        Rp {new Intl.NumberFormat("id-ID").format(item.price)}
-                      </span>
-                      <span className="text-[10px] text-slate-400">/ bulan</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Section 3: Google Maps & Local Business */}
+          {/* Kategori 2: Google Maps & Google Business Profile */}
           <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
             <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
               <span className="text-xl">📍</span>
               <div>
                 <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
-                  3. Pengawalan Google Maps &amp; Google Business Profile
+                  2. Pemeliharaan Google Business Profile &amp; Google Maps
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Memastikan titik peta bisnis Anda selalu muncul resmi dan mudah ditemukan calon pembeli lokal.
+                  Memastikan toko atau lokasi fisik Anda selalu muncul resmi, jam buka akurat, dan ulasan terkelola baik.
                 </p>
               </div>
             </div>
@@ -535,22 +545,144 @@ Mohon informasi nomor rekening atau instruksi pembayaran resminya. Terima kasih!
             </div>
           </div>
 
-          {/* Section 4: Content Update & WhatsApp Reporting */}
+          {/* Kategori 3: Profil Media Sosial (Instagram, TikTok & FB) */}
           <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
             <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-              <span className="text-xl">⚡</span>
+              <span className="text-xl">📱</span>
               <div>
                 <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
-                  4. Pembaruan Konten, Laporan &amp; Jalur Cepat WhatsApp
+                  3. Pemeliharaan Profil Media Sosial (Instagram, TikTok &amp; FB)
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Layanan santai tanpa pusing coding. Anda fokus jualan, biar tim Ladi yang merawat website Anda.
+                  Merawat etalase media sosial agar profil tampak aktif, link bio berfungsi, dan ada postingan berkala.
                 </p>
               </div>
             </div>
 
             <div className="space-y-3">
-              {GUARD_ADDONS.filter((a) => a.category === "content").map((item) => {
+              {GUARD_ADDONS.filter((a) => a.category === "social").map((item) => {
+                const checked = selectedAddonIds.includes(item.id);
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => toggleAddon(item.id)}
+                    className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-start justify-between gap-4 ${
+                      checked
+                        ? "bg-pink-50/50 border-pink-500/60 shadow-xs"
+                        : "bg-[#f8fafc] border-slate-200 hover:border-slate-300 opacity-90"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => {}}
+                        className="w-5 h-5 rounded border-slate-300 text-pink-600 focus:ring-pink-500 mt-0.5 cursor-pointer"
+                      />
+                      <div className="space-y-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-bold text-slate-900 text-xs sm:text-sm">
+                            {item.name}
+                          </span>
+                          {item.badge && (
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-pink-100 text-pink-800">
+                              {item.badge}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
+                      </div>
+                    </div>
+
+                    <div className="text-right shrink-0">
+                      <span className="text-xs sm:text-sm font-black text-pink-700 block">
+                        Rp {new Intl.NumberFormat("id-ID").format(item.price)}
+                      </span>
+                      <span className="text-[10px] text-slate-400">/ bulan</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Kategori 4: SEO & Optimasi Visibilitas Google Search */}
+          <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
+            <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+              <span className="text-xl">🚀</span>
+              <div>
+                <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
+                  4. SEO &amp; Optimasi Visibilitas Google Search
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Meningkatkan kecepatan buka smartphone dan mendongkrak peringkat bisnis di pencarian Google lokal.
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {GUARD_ADDONS.filter((a) => a.category === "seo").map((item) => {
+                const checked = selectedAddonIds.includes(item.id);
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => toggleAddon(item.id)}
+                    className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-start justify-between gap-4 ${
+                      checked
+                        ? "bg-emerald-50/50 border-emerald-500/60 shadow-xs"
+                        : "bg-[#f8fafc] border-slate-200 hover:border-slate-300 opacity-90"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => {}}
+                        className="w-5 h-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 mt-0.5 cursor-pointer"
+                      />
+                      <div className="space-y-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-bold text-slate-900 text-xs sm:text-sm">
+                            {item.name}
+                          </span>
+                          {item.badge && (
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                              {item.badge}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
+                      </div>
+                    </div>
+
+                    <div className="text-right shrink-0">
+                      <span className="text-xs sm:text-sm font-black text-emerald-700 block">
+                        Rp {new Intl.NumberFormat("id-ID").format(item.price)}
+                      </span>
+                      <span className="text-[10px] text-slate-400">/ bulan</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Kategori 5: WhatsApp Bisnis, Konten & Operasional Harian */}
+          <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
+            <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+              <span className="text-xl">⚡</span>
+              <div>
+                <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
+                  5. WhatsApp Bisnis, Konten &amp; Operasional Harian
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Layanan santai tanpa pusing coding. Anda fokus melayani pembeli, urusan teknis dan laporan Ladi yang selesaikan.
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {GUARD_ADDONS.filter((a) => a.category === "operations").map((item) => {
                 const checked = selectedAddonIds.includes(item.id);
                 return (
                   <div
@@ -603,7 +735,7 @@ Mohon informasi nomor rekening atau instruksi pembayaran resminya. Terima kasih!
             {/* Box Header */}
             <div className="border-b border-slate-100 pb-5 space-y-2">
               <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest block">
-                RINGKASAN SATPAM DIGITAL
+                RINGKASAN MAINTENANCE DIGITAL
               </span>
               <div className="flex items-baseline justify-between gap-2">
                 <div>
@@ -611,7 +743,7 @@ Mohon informasi nomor rekening atau instruksi pembayaran resminya. Terima kasih!
                     Rp {new Intl.NumberFormat("id-ID").format(calculation.finalMonthly)}
                   </span>
                   <span className="text-xs text-slate-500 font-medium">
-                    / bulan ({calculation.count} Fitur Terpilih)
+                    / bulan ({calculation.count} Modul Terpilih)
                   </span>
                 </div>
 
@@ -661,13 +793,13 @@ Mohon informasi nomor rekening atau instruksi pembayaran resminya. Terima kasih!
             {/* Rincian Item Terpilih Ringkas */}
             <div className="space-y-2">
               <div className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center justify-between">
-                <span>Daftar Perlindungan:</span>
-                <span className="text-[11px] text-slate-400 font-normal">{calculation.count} item</span>
+                <span>Daftar Pemeliharaan Terpilih:</span>
+                <span className="text-[11px] text-slate-400 font-normal">{calculation.count} modul</span>
               </div>
 
               <div className="max-h-48 overflow-y-auto pr-1 space-y-1.5 text-xs text-slate-600">
                 {selectedAddonIds.length === 0 ? (
-                  <p className="text-slate-400 italic text-xs py-2">Belum ada fitur satpam yang dicentang.</p>
+                  <p className="text-slate-400 italic text-xs py-2">Belum ada modul pemeliharaan yang dicentang.</p>
                 ) : (
                   selectedAddonIds.map((id) => {
                     const item = GUARD_ADDONS.find((a) => a.id === id);
@@ -688,13 +820,13 @@ Mohon informasi nomor rekening atau instruksi pembayaran resminya. Terima kasih!
             {/* Total Billing */}
             <div className="pt-3 border-t border-slate-100 space-y-1">
               <div className="flex justify-between items-center text-xs text-slate-500">
-                <span>Total Billing ({calculation.durationObj.months} Bulan):</span>
+                <span>Total Tagihan ({calculation.durationObj.months} Bulan):</span>
                 <span className="text-sm font-extrabold text-slate-900">
                   Rp {new Intl.NumberFormat("id-ID").format(calculation.grandTotal)}
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 italic">
-                *Tagihan dibayarkan di awal periode. Bebas batalkan atau ganti pecahan fitur kapan saja.
+                *Tagihan dibayarkan di awal periode. Bebas batalkan atau ubah pecahan modul kapan saja.
               </p>
             </div>
 
@@ -719,7 +851,7 @@ Mohon informasi nomor rekening atau instruksi pembayaran resminya. Terima kasih!
 
               <div className="text-[11px] text-slate-500 text-center flex items-center justify-center gap-1.5 pt-1">
                 <span>🛡️</span>
-                <span>Jaminan website aman &amp; dipantau tim Ladi</span>
+                <span>Aset bisnis aman &amp; dipantau tim profesional Ladi</span>
               </div>
             </div>
           </div>

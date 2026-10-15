@@ -288,9 +288,9 @@ export default async function ServiceDetailPage({
                         <div className="flex items-start gap-2.5">
                           <span className="text-emerald-600 font-bold text-sm">✓</span>
                           <div>
-                            <strong>Sistem Pecahan Modular:</strong>
+                            <strong>Bukan Penjualan Web Baru:</strong>
                             <span className="text-slate-500 block">
-                              Bayar hanya modul satpam digital yang bisnis Anda butuhkan, hemat & terarah.
+                              Murni jasa pemeliharaan &amp; satpam operasional: merawat Website, Google Maps, Profil Medsos &amp; WhatsApp Bisnis.
                             </span>
                           </div>
                         </div>
@@ -298,9 +298,9 @@ export default async function ServiceDetailPage({
                         <div className="flex items-start gap-2.5">
                           <span className="text-emerald-600 font-bold text-sm">✓</span>
                           <div>
-                            <strong>Bebas Upgrade / Downgrade:</strong>
+                            <strong>Sistem Pecahan Modular (LEGO):</strong>
                             <span className="text-slate-500 block">
-                              Tambah SEO 90+, Google Maps, atau proteksi kapan saja tanpa denda.
+                              Bebas pilih modul yang dibutuhkan, atau ambil paket lengkap Sultan dengan cap maksimal Rp 500.000 / bulan.
                             </span>
                           </div>
                         </div>
@@ -308,9 +308,9 @@ export default async function ServiceDetailPage({
                         <div className="flex items-start gap-2.5">
                           <span className="text-emerald-600 font-bold text-sm">✓</span>
                           <div>
-                            <strong>Pantauan & Respon Cepat:</strong>
+                            <strong>Tanpa Gaji Tim IT Sendiri:</strong>
                             <span className="text-slate-500 block">
-                              Tim teknis bersiaga mengawal performa website dan reputasi online Anda.
+                              Tim teknis profesional Ladi mengawal dan mengamankan seluruh aset digital usaha Anda setiap hari.
                             </span>
                           </div>
                         </div>

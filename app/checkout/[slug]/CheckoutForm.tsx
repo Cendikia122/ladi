@@ -141,7 +141,7 @@ export default function CheckoutForm({
       return "ℹ️ Ketentuan Paket RUN: Sistem website mandiri modern (Next.js/React/Laravel) dengan integrasi katalog/booking dan QRIS otomatis.";
     }
     if (packageSlug === "paket-guard") {
-      return "ℹ️ Ketentuan Paket GUARD: Sistem Satpam Digital pecahan modular (LEGO). Centang modul proteksi, SEO skor 90+, atau Google Maps yang Anda butuhkan.";
+      return "ℹ️ Ketentuan Paket GUARD: Murni Jasa Pemeliharaan (Maintenance) & Satpam Bisnis di Internet (Bukan Penjualan Website Baru). Kami merawat Website, Google Maps, Profil Medsos, dan WhatsApp Bisnis yang sudah Anda miliki.";
     }
     return null;
   }, [packageSlug]);
@@ -157,11 +157,9 @@ export default function CheckoutForm({
     return acc + (found ? found.price : 0);
   }, 0);
 
-  // Jika paket-guard: harga dasar Rp 0 dan jika semua 12 modul dipilih (atau > 500rb), cap bundle 500rb!
-  const isAllGuard = isGuard && selectedAddons.length === GUARD_ADDONS.length;
-  const addonsTotal = (isGuard && isAllGuard && rawAddonsTotal > 500000)
-    ? 500000
-    : rawAddonsTotal;
+  // Jika paket-guard: harga dasar Rp 0 dan jika total > 500rb, cap bundle tepat 500rb!
+  const isCappedGuard = isGuard && rawAddonsTotal > 500000;
+  const addonsTotal = isCappedGuard ? 500000 : rawAddonsTotal;
 
   const effectiveBasePrice = isGuard ? 0 : packagePrice;
   const grandTotal = effectiveBasePrice + researchFee + addonsTotal;
@@ -200,19 +198,19 @@ export default function CheckoutForm({
     }
 
     if (isGuard && !formData.domain_requested.trim()) {
-      setErrorMessage("Silakan masukkan alamat / URL website usaha yang ingin dijaga & dioptimasi.");
+      setErrorMessage("Silakan masukkan link website, titik Google Maps, atau akun media sosial usaha yang ingin dirawat.");
       return;
     }
 
     if (isGuard && selectedAddons.length === 0) {
-      setErrorMessage("Pilih minimal 1 fitur pecahan satpam / SEO untuk Paket GUARD.");
+      setErrorMessage("Pilih minimal 1 pecahan modul pemeliharaan untuk Paket GUARD.");
       return;
     }
 
     setIsLoading(true);
 
     const templateSummary = isGuard
-      ? `Paket GUARD Modular (${selectedAddons.length} Fitur Terpilih)`
+      ? `Jasa Maintenance Digital (${selectedAddons.length} Modul Terpilih)`
       : templateMode === "research"
       ? "Rekomendasi Template Khusus oleh Tim Ladi (+Rp 100.000 Riset)"
       : (activeTemplate ? `${activeTemplate.name} (${activeTemplate.tech})` : "Default Paket");
@@ -371,24 +369,26 @@ export default function CheckoutForm({
           </div>
         </div>
 
-        <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1.5">
-            Nama Domain yang Diinginkan (Opsional)
-          </label>
-          <input
-            type="text"
-            placeholder="cth. kopisenjabogor.com / bengkelmaju.id"
-            value={formData.domain_requested}
-            onChange={(e) => setFormData({ ...formData, domain_requested: e.target.value })}
-            className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-[#fa824b] focus:ring-1 focus:ring-[#fa824b] transition-all bg-slate-50/50"
-          />
-          <span className="text-[10px] text-slate-400 mt-1 block">
-            Belum tahu nama domain yang pas? Kosongkan saja, nanti tim Ladi carikan rekomendasi terbaik.
-          </span>
-        </div>
+        {!isGuard && (
+          <div>
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              Nama Domain yang Diinginkan (Opsional)
+            </label>
+            <input
+              type="text"
+              placeholder="cth. kopisenjabogor.com / bengkelmaju.id"
+              value={formData.domain_requested}
+              onChange={(e) => setFormData({ ...formData, domain_requested: e.target.value })}
+              className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-[#fa824b] focus:ring-1 focus:ring-[#fa824b] transition-all bg-slate-50/50"
+            />
+            <span className="text-[10px] text-slate-400 mt-1 block">
+              Belum tahu nama domain yang pas? Kosongkan saja, nanti tim Ladi carikan rekomendasi terbaik.
+            </span>
+          </div>
+        )}
       </div>
 
-      {/* Bagian 3: Pilihan Template Desain untuk Paket Web / Input Website untuk Paket GUARD */}
+      {/* Bagian 3: Input Aset untuk Paket GUARD / Pilihan Template untuk Paket Web */}
       {isGuard ? (
         <div className="space-y-4 pt-2">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
@@ -396,24 +396,24 @@ export default function CheckoutForm({
               3
             </span>
             <h2 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider">
-              Alamat Website yang Akan Dijaga &amp; Dioptimasi
+              Aset Digital Bisnis yang Ingin Dimaintenance
             </h2>
           </div>
 
           <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 space-y-2">
             <label className="block text-xs font-bold text-slate-800">
-              URL / Link Website Usaha Anda <span className="text-red-500">*</span>
+              Link Website / Titik Google Maps / Akun Medsos Usaha <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               required
-              placeholder="cth. https://usahasaya.com atau www.namausaha.id"
+              placeholder="cth. https://usahasaya.com / link Google Maps / @namausaha di Instagram"
               value={formData.domain_requested}
               onChange={(e) => setFormData({ ...formData, domain_requested: e.target.value })}
               className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-[#fa824b] focus:ring-1 focus:ring-[#fa824b]"
             />
-            <p className="text-[11px] text-slate-500 leading-relaxed">
-              Tim Ladi akan mengaktifkan monitoring satpam server, verifikasi Google Maps, dan optimasi SEO 90+ langsung pada alamat website ini.
+            <p className="text-[11px] text-slate-600 leading-relaxed">
+              💡 <strong>Bukan Bikin Web Baru:</strong> Masukkan tautan aset digital usaha yang sudah berjalan milik Anda (website, Google Maps, Instagram, TikTok, dll). Tim teknisi Ladi langsung mengawal, mengamankan, dan merawatnya secara rutin.
             </p>
           </div>
         </div>
@@ -539,15 +539,22 @@ export default function CheckoutForm({
             4
           </span>
           <h2 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider">
-            {isGuard ? "Pecahan Fitur Satpam & SEO Terpilih (Pecahan LEGO)" : "Add-Ons Pelengkap (Opsional)"}
+            {isGuard ? "Pecahan Modul Maintenance Digital (Pecahan LEGO)" : "Add-Ons Pelengkap (Opsional)"}
           </h2>
         </div>
 
         <p className="text-xs text-slate-500">
           {isGuard
-            ? "Centang pecahan fitur satpam, SEO 90+, Google Maps, atau update konten sesuai kebutuhan Anda. Total tagihan terhitung otomatis."
+            ? "Centang modul pemeliharaan Website, Google Maps, Medsos, atau WhatsApp yang Anda butuhkan. Jika total melebihi Rp 500.000, otomatis mendapatkan diskon Sultan cap tepat Rp 500.000 / bulan!"
             : "Tambahkan fitur ekstra yang Anda butuhkan tanpa membuat biaya membengkak."}
         </p>
+
+        {isCappedGuard && (
+          <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2">
+            <span className="text-base">🎉</span>
+            <span>Diskon Spesial Sultan Aktif: Tagihan bulanan Anda dibatasi (cap) maksimal Rp 500.000 / bulan!</span>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {packageAddons.map((addon) => {
