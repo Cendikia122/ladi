@@ -164,6 +164,14 @@ export async function ensureAdminUsersTable(db: any) {
       )
     `);
 
+    // Pastikan kolom role, status, password_hash ada jika database sudah memiliki tabel versi lama
+    try {
+      await db.query("ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS role VARCHAR(50) DEFAULT 'admin'");
+      await db.query("ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'active'");
+      await db.query("ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255) NULL");
+      await db.query("ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+    } catch {}
+
     // Periksa apakah tabel kosong; jika kosong, masukkan user awal dari data lokal
     const [rows]: any = await db.query("SELECT COUNT(*) as count FROM admin_users");
     if (rows && rows[0]?.count === 0) {
