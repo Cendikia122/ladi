@@ -141,7 +141,7 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
   const [customerEmail, setCustomerEmail] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [businessCategory, setBusinessCategory] = useState("Kuliner / F&B (Resto, Kafe, Katering)");
-  const [paymentMethod, setPaymentMethod] = useState("QRIS");
+  const [paymentMethod, setPaymentMethod] = useState("GOPAY");
   const [notes, setNotes] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
@@ -792,63 +792,29 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
               {/* Pilihan Metode Bayar */}
               <div className="pt-2">
                 <label className="block text-xs font-bold text-slate-700 mb-2">
-                  Metode Pembayaran
+                  Metode Pembayaran Resmi
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <label
-                    className={`p-3 rounded-xl border-2 flex items-center gap-2 cursor-pointer transition-all ${
-                      paymentMethod === "QRIS"
-                        ? "border-[#fa824b] bg-orange-50/30"
-                        : "border-slate-200 bg-white"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="payment_method"
-                      value="QRIS"
-                      checked={paymentMethod === "QRIS"}
-                      onChange={() => setPaymentMethod("QRIS")}
-                      className="text-[#fa824b] focus:ring-[#fa824b]"
-                    />
-                    <span className="text-xs font-bold text-slate-800">📱 QRIS Instan</span>
-                  </label>
-
-                  <label
-                    className={`p-3 rounded-xl border-2 flex items-center gap-2 cursor-pointer transition-all ${
-                      paymentMethod === "BCA"
-                        ? "border-[#fa824b] bg-orange-50/30"
-                        : "border-slate-200 bg-white"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="payment_method"
-                      value="BCA"
-                      checked={paymentMethod === "BCA"}
-                      onChange={() => setPaymentMethod("BCA")}
-                      className="text-[#fa824b] focus:ring-[#fa824b]"
-                    />
-                    <span className="text-xs font-bold text-slate-800">🏦 Transfer BCA</span>
-                  </label>
-
-                  <label
-                    className={`p-3 rounded-xl border-2 flex items-center gap-2 cursor-pointer transition-all ${
-                      paymentMethod === "MANDIRI"
-                        ? "border-[#fa824b] bg-orange-50/30"
-                        : "border-slate-200 bg-white"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="payment_method"
-                      value="MANDIRI"
-                      checked={paymentMethod === "MANDIRI"}
-                      onChange={() => setPaymentMethod("MANDIRI")}
-                      className="text-[#fa824b] focus:ring-[#fa824b]"
-                    />
-                    <span className="text-xs font-bold text-slate-800">🏦 Transfer Mandiri</span>
-                  </label>
+                <div className="p-3.5 rounded-xl border-2 border-[#00a5cf] bg-cyan-50/20 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <span className="px-2 py-0.5 rounded-md bg-[#00a5cf] text-white text-[11px] font-black">
+                      GoPay
+                    </span>
+                    <div>
+                      <span className="text-xs font-bold text-slate-800 block">
+                        Transfer E-Wallet GoPay
+                      </span>
+                      <span className="text-xs font-mono font-bold text-[#00a5cf]">
+                        0821-1247-7119
+                      </span>
+                    </div>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">
+                    ✓ Aktif
+                  </span>
                 </div>
+                <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
+                  a/n <strong>Ladi Layanan Digital</strong>. Pembayaran diverifikasi cepat via unggah bukti di invoice.
+                </p>
               </div>
 
               <div className="pt-4 border-t border-slate-100">

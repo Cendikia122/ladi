@@ -46,7 +46,7 @@ export default function CheckoutForm({
     business_category: "Kuliner / F&B (Resto, Kafe, Katering)",
     domain_requested: "",
     notes: "",
-    payment_method: "QRIS",
+    payment_method: "GOPAY",
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -527,91 +527,50 @@ export default function CheckoutForm({
         </div>
 
         <div className="space-y-2.5">
-          {/* Opsi QRIS */}
+          {/* Opsi GoPay */}
           <label
-            className={`p-3.5 rounded-2xl border-2 flex items-start gap-3 cursor-pointer transition-all ${
-              formData.payment_method === "QRIS"
-                ? "border-[#fa824b] bg-orange-50/30"
-                : "border-slate-200 bg-white hover:border-slate-300"
-            }`}
+            className="p-4 rounded-2xl border-2 border-[#00a5cf] bg-cyan-50/25 flex items-start gap-3 cursor-pointer shadow-sm"
           >
             <input
               type="radio"
               name="payment_method"
-              value="QRIS"
-              checked={formData.payment_method === "QRIS"}
-              onChange={() => setFormData({ ...formData, payment_method: "QRIS" })}
-              className="mt-1 text-[#fa824b] focus:ring-[#fa824b]"
+              value="GOPAY"
+              checked={formData.payment_method === "GOPAY"}
+              onChange={() => setFormData({ ...formData, payment_method: "GOPAY" })}
+              className="mt-1 text-[#00a5cf] focus:ring-[#00a5cf]"
             />
             <div className="flex-1">
-              <div className="flex items-center justify-between">
-                <span className="text-xs sm:text-sm font-extrabold text-slate-900">
-                  📱 QRIS Instan (Semua Bank &amp; E-Wallet)
+              <div className="flex items-center justify-between flex-wrap gap-1">
+                <span className="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded-md bg-[#00a5cf] text-white text-[11px] font-black">
+                    GoPay
+                  </span>
+                  Transfer E-Wallet GoPay
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">
-                  ⭐ Paling Praktis
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">
+                  ⭐ Jalur Resmi Aktif
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
-                Scan langsung dari BCA Mobile, Livin’ Mandiri, BRImo, BNI, GoPay, OVO, ShopeePay, atau Dana.
-              </p>
-            </div>
-          </label>
-
-          {/* Opsi Transfer BCA */}
-          <label
-            className={`p-3.5 rounded-2xl border-2 flex items-start gap-3 cursor-pointer transition-all ${
-              formData.payment_method === "BCA"
-                ? "border-[#fa824b] bg-orange-50/30"
-                : "border-slate-200 bg-white hover:border-slate-300"
-            }`}
-          >
-            <input
-              type="radio"
-              name="payment_method"
-              value="BCA"
-              checked={formData.payment_method === "BCA"}
-              onChange={() => setFormData({ ...formData, payment_method: "BCA" })}
-              className="mt-1 text-[#fa824b] focus:ring-[#fa824b]"
-            />
-            <div className="flex-1">
-              <div className="flex items-center justify-between">
-                <span className="text-xs sm:text-sm font-extrabold text-slate-900">
-                  🏦 Transfer Bank BCA
-                </span>
-                <span className="text-[11px] font-mono font-bold text-slate-600">8730918291</span>
+              <div className="mt-2.5 p-3 rounded-xl bg-white border border-cyan-200 flex items-center justify-between gap-3">
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+                    Nomor GoPay Ladi
+                  </span>
+                  <span className="text-base sm:text-lg font-mono font-black text-[#00a5cf]">
+                    0821-1247-7119
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+                    Penerima
+                  </span>
+                  <span className="text-xs font-bold text-slate-700">
+                    Ladi Layanan Digital
+                  </span>
+                </div>
               </div>
-              <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
-                Nomor rekening resmi a/n <strong>Ladi Layanan Digital</strong>.
-              </p>
-            </div>
-          </label>
-
-          {/* Opsi Transfer Mandiri */}
-          <label
-            className={`p-3.5 rounded-2xl border-2 flex items-start gap-3 cursor-pointer transition-all ${
-              formData.payment_method === "MANDIRI"
-                ? "border-[#fa824b] bg-orange-50/30"
-                : "border-slate-200 bg-white hover:border-slate-300"
-            }`}
-          >
-            <input
-              type="radio"
-              name="payment_method"
-              value="MANDIRI"
-              checked={formData.payment_method === "MANDIRI"}
-              onChange={() => setFormData({ ...formData, payment_method: "MANDIRI" })}
-              className="mt-1 text-[#fa824b] focus:ring-[#fa824b]"
-            />
-            <div className="flex-1">
-              <div className="flex items-center justify-between">
-                <span className="text-xs sm:text-sm font-extrabold text-slate-900">
-                  🏦 Transfer Bank Mandiri
-                </span>
-                <span className="text-[11px] font-mono font-bold text-slate-600">1330029182910</span>
-              </div>
-              <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
-                Nomor rekening resmi a/n <strong>Ladi Layanan Digital</strong>.
+              <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">
+                Kirim nominal pembayaran via aplikasi Gojek / GoPay ke nomor di atas. Setelah transfer, unggah foto bukti transfer di halaman invoice berikutnya untuk verifikasi otomatis.
               </p>
             </div>
           </label>

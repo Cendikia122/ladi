@@ -392,11 +392,13 @@ export default function OrderViewClient({ initialOrder }: OrderViewClientProps) 
               Metode Pembayaran Dipilih
             </span>
             <div className="font-bold text-slate-800">
-              {order.payment_method === "QRIS"
-                ? "📱 QRIS Instan (Semua Bank & E-Wallet)"
+              {order.payment_method === "GOPAY" || order.payment_method === "QRIS"
+                ? "🟢 Transfer E-Wallet GoPay"
                 : order.payment_method === "BCA"
                 ? "🏦 Transfer Bank BCA"
-                : "🏦 Transfer Bank Mandiri"}
+                : order.payment_method === "MANDIRI"
+                ? "🏦 Transfer Bank Mandiri"
+                : "🟢 Transfer E-Wallet GoPay"}
             </div>
             <div>Status: <span className="font-semibold">{order.payment_status}</span></div>
           </div>
@@ -414,97 +416,77 @@ export default function OrderViewClient({ initialOrder }: OrderViewClientProps) 
             <span className="text-xs text-slate-400 font-mono">Batas: 24 Jam</span>
           </div>
 
-          {/* Jika QRIS */}
-          {order.payment_method === "QRIS" && (
-            <div className="flex flex-col md:flex-row items-center gap-8 bg-slate-50 rounded-2xl p-6 border border-slate-200">
-              {/* Tampilan Visual Kartu QRIS */}
-              <div className="bg-white p-5 rounded-2xl border-2 border-slate-800 shadow-md flex flex-col items-center max-w-[280px] w-full shrink-0">
-                <div className="w-full flex items-center justify-between pb-3 border-b border-slate-100">
-                  <span className="text-xs font-black tracking-widest text-red-600">QRIS</span>
-                  <span className="text-[9px] font-mono text-slate-400 font-bold">GPN</span>
+          {/* Instruksi Transfer GoPay (Metode Utama Resmi) */}
+          {(order.payment_method === "GOPAY" || order.payment_method === "QRIS" || !order.payment_method) && (
+            <div className="flex flex-col md:flex-row items-stretch gap-6 bg-cyan-50/30 rounded-2xl p-6 border-2 border-[#00a5cf]/40 shadow-sm">
+              {/* Kartu GoPay Visual */}
+              <div className="bg-white p-6 rounded-2xl border border-cyan-100 shadow-md flex flex-col justify-between max-w-[320px] w-full shrink-0">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-1 rounded-lg bg-[#00a5cf] text-white text-xs font-black tracking-wider">
+                        GoPay
+                      </span>
+                      <span className="text-xs font-extrabold text-slate-900">E-Wallet Resmi</span>
+                    </div>
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+                      Aktif
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider block mb-1">
+                      Nomor Tujuan GoPay
+                    </span>
+                    <div className="text-2xl font-mono font-black text-slate-900 tracking-tight">
+                      0821-1247-7119
+                    </div>
+                    <span className="text-xs text-slate-500 font-medium block mt-0.5">
+                      a/n <strong>Ladi Layanan Digital</strong>
+                    </span>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                    <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
+                      Nominal Transfer
+                    </span>
+                    <div className="text-lg font-black text-[#fa824b]">
+                      {formattedPrice}
+                    </div>
+                  </div>
                 </div>
 
-                <div className="py-4 flex flex-col items-center text-center">
-                  <div className="text-[11px] font-bold text-slate-800 uppercase tracking-wide">
-                    {Config.payment.qrisMerchant}
-                  </div>
-                  <div className="text-[9px] font-mono text-slate-400 mt-0.5">
-                    NMID: {Config.payment.nmid}
-                  </div>
-
-                  {/* QR Graphic Modern */}
-                  <div className="my-3 p-3 bg-white border border-slate-300 rounded-xl shadow-inner">
-                    <svg
-                      className="w-44 h-44"
-                      viewBox="0 0 200 200"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect width="200" height="200" fill="white" />
-                      {/* Posisi pojok kiri atas */}
-                      <rect x="15" y="15" width="50" height="50" fill="#0f172a" rx="4" />
-                      <rect x="23" y="23" width="34" height="34" fill="white" rx="2" />
-                      <rect x="29" y="29" width="22" height="22" fill="#0f172a" rx="2" />
-                      {/* Posisi pojok kanan atas */}
-                      <rect x="135" y="15" width="50" height="50" fill="#0f172a" rx="4" />
-                      <rect x="143" y="23" width="34" height="34" fill="white" rx="2" />
-                      <rect x="149" y="29" width="22" height="22" fill="#0f172a" rx="2" />
-                      {/* Posisi pojok kiri bawah */}
-                      <rect x="15" y="135" width="50" height="50" fill="#0f172a" rx="4" />
-                      <rect x="23" y="143" width="34" height="34" fill="white" rx="2" />
-                      <rect x="29" y="149" width="22" height="22" fill="#0f172a" rx="2" />
-                      {/* Pattern titik QR */}
-                      <rect x="75" y="20" width="10" height="10" fill="#0f172a" />
-                      <rect x="95" y="20" width="10" height="20" fill="#0f172a" />
-                      <rect x="115" y="20" width="10" height="10" fill="#0f172a" />
-                      <rect x="75" y="40" width="20" height="10" fill="#0f172a" />
-                      <rect x="105" y="40" width="10" height="10" fill="#0f172a" />
-                      <rect x="20" y="75" width="10" height="20" fill="#0f172a" />
-                      <rect x="40" y="75" width="20" height="10" fill="#0f172a" />
-                      <rect x="75" y="75" width="20" height="20" fill="#fa824b" rx="2" />
-                      <rect x="105" y="75" width="20" height="10" fill="#0f172a" />
-                      <rect x="135" y="75" width="10" height="20" fill="#0f172a" />
-                      <rect x="155" y="75" width="25" height="10" fill="#0f172a" />
-                      <rect x="20" y="105" width="30" height="10" fill="#0f172a" />
-                      <rect x="60" y="105" width="10" height="10" fill="#0f172a" />
-                      <rect x="80" y="105" width="20" height="20" fill="#0f172a" />
-                      <rect x="110" y="105" width="10" height="20" fill="#fa824b" rx="2" />
-                      <rect x="130" y="105" width="30" height="10" fill="#0f172a" />
-                      <rect x="170" y="105" width="10" height="20" fill="#0f172a" />
-                      <rect x="75" y="135" width="20" height="10" fill="#0f172a" />
-                      <rect x="105" y="135" width="10" height="20" fill="#0f172a" />
-                      <rect x="125" y="135" width="20" height="10" fill="#0f172a" />
-                      <rect x="155" y="135" width="25" height="20" fill="#0f172a" />
-                      <rect x="75" y="155" width="10" height="25" fill="#0f172a" />
-                      <rect x="95" y="165" width="20" height="15" fill="#0f172a" />
-                      <rect x="125" y="160" width="10" height="20" fill="#0f172a" />
-                    </svg>
-                  </div>
-
-                  <span className="text-[10px] text-slate-500 font-medium">
-                    Nominal: <strong className="text-slate-900">{formattedPrice}</strong>
-                  </span>
-                </div>
-
-                <div className="w-full pt-2 border-t border-slate-100 text-center">
-                  <span className="text-[9px] text-slate-400">
-                    BCA · Mandiri · BRI · BNI · GoPay · OVO · ShopeePay
-                  </span>
+                <div className="pt-4 mt-4 border-t border-slate-100">
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard("082112477119", "gopay")}
+                    className="w-full py-2.5 px-4 rounded-xl bg-[#00a5cf] hover:bg-[#008cb0] text-white font-extrabold text-xs uppercase tracking-wider transition-colors shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <span>📋</span>
+                    <span>{copiedBank === "gopay" ? "Nomor Tersalin! ✓" : "Salin No. GoPay"}</span>
+                  </button>
                 </div>
               </div>
 
-              {/* Langkah Cara Scan */}
-              <div className="space-y-3 text-xs text-slate-600 flex-1">
-                <h3 className="text-sm font-bold text-slate-900">
-                  Cara Bayar Menggunakan QRIS:
-                </h3>
-                <ol className="space-y-2 list-decimal list-inside leading-relaxed">
-                  <li>Buka aplikasi m-Banking Anda (BCA, Mandiri, BRI, BNI) atau e-Wallet (GoPay, OVO, ShopeePay, Dana).</li>
-                  <li>Pilih menu <strong>Scan / Bayar QRIS</strong>.</li>
-                  <li>Arahkan kamera ke kode QR di samping atau tangkap layar (screenshot).</li>
-                  <li>Pastikan nama merchant tertera <strong>{Config.payment.qrisMerchant}</strong>.</li>
-                  <li>Masukkan nominal tepat <strong>{formattedPrice}</strong> lalu selesaikan pembayaran.</li>
-                  <li>Unggah foto bukti transfer di formulir bawah ini untuk mempercepat verifikasi.</li>
+              {/* Langkah Cara Transfer GoPay */}
+              <div className="space-y-3.5 text-xs text-slate-600 flex-1 flex flex-col justify-center">
+                <div>
+                  <h3 className="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
+                    <span>📱</span>
+                    <span>Cara Bayar Menggunakan GoPay:</span>
+                  </h3>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    Metode pembayaran resmi Ladi sementara waktu (menunggu aktivasi QRIS otomatis).
+                  </p>
+                </div>
+
+                <ol className="space-y-2 list-decimal list-inside leading-relaxed bg-white/70 p-4 rounded-xl border border-slate-200">
+                  <li>Buka aplikasi <strong>Gojek</strong> atau aplikasi <strong>GoPay</strong> di ponsel Anda.</li>
+                  <li>Pilih menu <strong>Bayar / Transfer</strong> lalu pilih opsi <strong>Ke Nomor HP / Teman</strong>.</li>
+                  <li>Ketik atau tempelkan nomor: <strong className="text-[#00a5cf] font-mono text-sm">082112477119</strong> (a/n Ladi Layanan Digital).</li>
+                  <li>Masukkan nominal transfer tepat sejumlah <strong>{formattedPrice}</strong>.</li>
+                  <li>Konfirmasi detail dan selesaikan transfer dengan PIN GoPay Anda.</li>
+                  <li>Simpan bukti transfer / tangkapan layar (screenshot), lalu unggah pada formulir di bawah ini.</li>
                 </ol>
               </div>
             </div>

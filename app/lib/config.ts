@@ -13,6 +13,12 @@ export const Config = {
   contactEmail: "contact@layanandigital.id",
   contactLocation: "Bogor, Indonesia",
   payment: {
+    gopay: {
+      name: "GoPay",
+      number: "082112477119",
+      display: "0821-1247-7119",
+      accountHolder: "Ladi Layanan Digital",
+    },
     qrisMerchant: "LADI LAYANAN DIGITAL",
     nmid: "ID1024391829012",
     bca: {

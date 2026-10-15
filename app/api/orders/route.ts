@@ -111,7 +111,7 @@ export async function POST(req: NextRequest) {
       business_category: business_category ? business_category.trim() : "Lainnya",
       domain_requested: domain_requested ? domain_requested.trim() : (domain_choice || ""),
       notes: notes ? notes.trim() : "",
-      payment_method: payment_method || "QRIS",
+      payment_method: payment_method || "GOPAY",
       payment_status: "unpaid",
       order_status: "new",
       order_type: order_type || (cleanSlug === "custom-builder" ? "pecahan" : "paketan"),
