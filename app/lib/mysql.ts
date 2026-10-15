@@ -167,6 +167,48 @@ async function ensureTables(db: mysql.Pool) {
       )
     `);
 
+    // 8. Pastikan tabel admin_users ada untuk kontrol akun & gonta-ganti password
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS admin_users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(100) NOT NULL UNIQUE,
+        password_hash VARCHAR(255) NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        role VARCHAR(50) DEFAULT 'admin',
+        status VARCHAR(50) DEFAULT 'active',
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      )
+    `);
+
+    // 9. Pastikan tabel orders ada untuk sistem pemesanan otomatis / Instant Checkout
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS orders (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        order_number VARCHAR(50) NOT NULL UNIQUE,
+        package_slug VARCHAR(100) NOT NULL,
+        package_name VARCHAR(255) NOT NULL,
+        package_price INT NOT NULL,
+        customer_name VARCHAR(255) NOT NULL,
+        customer_phone VARCHAR(50) NOT NULL,
+        customer_email VARCHAR(255) DEFAULT '',
+        business_name VARCHAR(255) NOT NULL,
+        business_category VARCHAR(100) DEFAULT '',
+        domain_requested VARCHAR(255) DEFAULT '',
+        notes TEXT,
+        payment_method VARCHAR(50) DEFAULT 'QRIS',
+        payment_proof MEDIUMTEXT,
+        payment_status VARCHAR(50) DEFAULT 'unpaid',
+        order_status VARCHAR(50) DEFAULT 'new',
+        paid_at DATETIME NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        INDEX idx_order_number (order_number),
+        INDEX idx_customer_phone (customer_phone),
+        INDEX idx_payment_status (payment_status)
+      )
+    `);
+
     // Selalu sinkronkan service_packages dari services.json ke MySQL Hostinger
     try {
       const fs = await import("fs");
@@ -294,6 +336,19 @@ async function ensureTables(db: mysql.Pool) {
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                ON DUPLICATE KEY UPDATE id=id`,
               [s.id, s.name, s.slug, s.tag || "PAKET LADI", s.subtitle || "", s.target_audience || "", s.price || "", s.original_price || "", s.period || "Sekali Bayar", s.timeline || "5–7 Hari", s.deliverables || "[]", s.example_websites || "[]", s.audit_report_sample || "{}", s.description || "", s.faqs || "[]", s.cta_text || "Pesan via WhatsApp", s.cta_whatsapp_text || "", s.badge_popular ? 1 : 0, s.status || "active", s.order_num || 0]
+            );
+          }
+        }
+
+        const usersFile = path.join(dataDir, "users.json");
+        if (fs.existsSync(usersFile)) {
+          const users = JSON.parse(fs.readFileSync(usersFile, "utf-8"));
+          for (const u of users) {
+            await db.query(
+              `INSERT INTO admin_users (id, username, password_hash, name, role, status)
+               VALUES (?, ?, ?, ?, ?, ?)
+               ON DUPLICATE KEY UPDATE id=id`,
+              [u.id, u.username, u.password_hash, u.name, u.role || "admin", u.status || "active"]
             );
           }
         }

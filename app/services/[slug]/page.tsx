@@ -213,25 +213,33 @@ export default async function ServiceDetailPage({
                   </div>
                 )}
 
-                {/* Tombol Aksi Cepat Iklan (CTA Langsung ke WA) */}
+                {/* Tombol Aksi Cepat (Pesan Mandiri & Tanya WA) */}
                 <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+                  <Link
+                    href={`/checkout/${slug}`}
+                    className="py-4 px-8 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-extrabold text-sm uppercase tracking-wider shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-center group cursor-pointer"
+                  >
+                    <span>⚡</span>
+                    <span>Pesan & Bayar Langsung</span>
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  </Link>
+
                   <a
                     href={waUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="py-4 px-8 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-sm uppercase tracking-wider shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-center group cursor-pointer"
-                    aria-label={`Pesan paket ${pkg.name} via WhatsApp`}
+                    className="py-3.5 px-6 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition-all text-center flex items-center justify-center gap-1.5"
+                    aria-label={`Konsultasi paket ${pkg.name} via WhatsApp`}
                   >
                     <span>💬</span>
-                    <span>{pkg.cta_text || "Pesan Paket Ini via WhatsApp"}</span>
-                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    <span>Tanya Dulu via WA</span>
                   </a>
 
                   <a
                     href="#hal-didapatkan"
-                    className="py-3.5 px-6 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition-all text-center"
+                    className="py-3.5 px-6 rounded-full bg-transparent hover:bg-white/10 text-slate-300 font-bold text-xs uppercase tracking-wider transition-all text-center"
                   >
-                    Lihat Fitur Lengkap ↓
+                    Lihat Fitur ↓
                   </a>
                 </div>
               </div>
@@ -293,17 +301,23 @@ export default async function ServiceDetailPage({
                     </div>
                   </div>
 
-                  <div className="pt-2">
+                  <div className="pt-2 space-y-2.5">
+                    <Link
+                      href={`/checkout/${slug}`}
+                      className="block w-full py-3.5 px-4 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white text-center font-extrabold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all"
+                    >
+                      ⚡ Pesan & Bayar di Web →
+                    </Link>
                     <a
                       href={waUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block w-full py-3.5 px-4 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white text-center font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all"
+                      className="block w-full py-2.5 px-4 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-center font-bold text-xs uppercase tracking-wider transition-all"
                     >
-                      Pesan Sekarang ke 0821-1247-7119 →
+                      💬 Tanya Dulu via WA
                     </a>
-                    <span className="text-[10px] text-slate-400 text-center block mt-2">
-                      Langsung terhubung dengan Tim Konsultan Resmi Ladi
+                    <span className="text-[10px] text-slate-400 text-center block mt-1">
+                      Invoice digital langsung terbit otomatis
                     </span>
                   </div>
                 </div>
@@ -564,19 +578,27 @@ export default async function ServiceDetailPage({
               Tidak perlu ragu atau pusing urusan teknis. Tim Ladi siap mendampingi Anda dari awal sampai website aktif dan menghasilkan pelanggan.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5">
+              <Link
+                href={`/checkout/${slug}`}
+                className="w-full sm:w-auto py-4 px-8 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2"
+              >
+                <span>⚡</span>
+                <span>Pesan & Bayar di Web Sekarang</span>
+                <span>→</span>
+              </Link>
               <a
                 href={waUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto py-4 px-8 rounded-full bg-white hover:bg-slate-100 text-[#1853a7] font-bold text-xs sm:text-sm uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2"
+                className="w-full sm:w-auto py-4 px-6 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2"
                 aria-label={`Pesan paket ${pkg.name} via WhatsApp sekarang`}
               >
                 <span>💬</span>
-                <span>Pesan Paket Ini via WhatsApp</span>
+                <span>Tanya via WhatsApp</span>
               </a>
               <Link
                 href="/services"
-                className="w-full sm:w-auto py-4 px-6 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-all"
+                className="w-full sm:w-auto py-4 px-6 rounded-full bg-transparent hover:bg-white/10 text-slate-300 font-bold text-xs sm:text-sm uppercase tracking-wider transition-all"
               >
                 Bandingkan Semua Paket
               </Link>
@@ -588,20 +610,29 @@ export default async function ServiceDetailPage({
       {/* =================================================================== */}
       {/* 8. FLOATING STICKY CTA BAR UNTUK IKLAN MOBILE */}
       {/* =================================================================== */}
-      <div className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 p-3 sm:hidden shadow-2xl flex items-center justify-between gap-3">
+      <div className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 p-3 sm:hidden shadow-2xl flex items-center justify-between gap-2.5">
         <div className="min-w-0">
           <div className="text-[10px] text-slate-500 truncate">{pkg.name}</div>
           <div className="text-base font-black text-[#1853a7] leading-tight">{pkg.price}</div>
         </div>
-        <a
-          href={waUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="py-2.5 px-5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md shrink-0 flex items-center gap-1.5"
-        >
-          <span>💬</span>
-          <span>Pesan via WA</span>
-        </a>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <Link
+            href={`/checkout/${slug}`}
+            className="py-2.5 px-3.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-extrabold text-[11px] uppercase tracking-wider shadow-md flex items-center gap-1"
+          >
+            <span>⚡</span>
+            <span>Checkout</span>
+          </Link>
+          <a
+            href={waUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="py-2.5 px-3 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] uppercase tracking-wider flex items-center gap-1"
+          >
+            <span>💬</span>
+            <span>WA</span>
+          </a>
+        </div>
       </div>
 
       <Footer />

@@ -1,7 +1,8 @@
 import { NextRequest } from "next/server";
 import crypto from "crypto";
+import { getAdminUserByUsername, verifyPassword, AdminUser } from "./users";
 
-export type UserRole = "admin" | "editor";
+export type UserRole = "superadmin" | "admin" | "editor";
 
 export interface SessionUser {
   username: string;
@@ -18,21 +19,41 @@ const WRITER_PASS = process.env.WRITER_PASSWORD || "penulis123";
 const AUTH_SECRET = process.env.AUTH_SECRET || "ladi_digital_secure_session_secret_2026_super_max";
 
 /**
- * Validasi login kredensial
+ * Validasi login kredensial (Mendukung database MySQL & fallback JSON dinamis)
  */
-export function validateCredentials(user: string, pass: string): SessionUser | null {
+export async function validateCredentials(user: string, pass: string): Promise<SessionUser | null> {
   const cleanUser = user.trim().toLowerCase();
 
-  // 1. Cek Akun Super Administrator
+  // 1. Cek dari database MySQL / JSON fallback users
+  try {
+    const dbUser = (await getAdminUserByUsername(cleanUser, true)) as AdminUser | null;
+    if (dbUser) {
+      if (dbUser.status === "inactive") {
+        return null;
+      }
+      if (verifyPassword(pass, dbUser.password_hash)) {
+        return {
+          username: dbUser.username,
+          role: dbUser.role,
+          name: dbUser.name,
+        };
+      }
+      // Password tidak cocok untuk user yang terdaftar
+      return null;
+    }
+  } catch (err) {
+    console.warn("Notice: Error validasi kredensial dari database/users:", err);
+  }
+
+  // 2. Fallback darurat jika database belum berisi user
   if (cleanUser === ADMIN_USER.toLowerCase() && pass === ADMIN_PASS) {
     return {
       username: ADMIN_USER,
-      role: "admin",
-      name: "Administrator Utama",
+      role: "superadmin",
+      name: "Super Administrator",
     };
   }
 
-  // 2. Cek Akun Penulis / Editor (Khusus Blog & Artikel)
   if (
     (cleanUser === WRITER_USER.toLowerCase() && pass === WRITER_PASS) ||
     (cleanUser === "editor" && (pass === "editor123" || pass === WRITER_PASS)) ||
@@ -77,11 +98,17 @@ export function verifyToken(token: string): SessionUser | null {
       const timestamp = parseInt(timestampStr, 10);
       if (Date.now() - timestamp > 30 * 24 * 60 * 60 * 1000) return null;
 
-      const validRole: UserRole = role === "editor" ? "editor" : "admin";
+      const validRole: UserRole =
+        role === "editor" ? "editor" : role === "superadmin" ? "superadmin" : "admin";
       return {
         username,
         role: validRole,
-        name: validRole === "admin" ? "Administrator Utama" : "Penulis Konten",
+        name:
+          validRole === "superadmin"
+            ? "Super Administrator"
+            : validRole === "admin"
+            ? "Administrator"
+            : "Penulis Konten",
       };
     }
 
@@ -98,12 +125,19 @@ export function verifyToken(token: string): SessionUser | null {
       const validRole: UserRole =
         username.toLowerCase() === "penulis" || username.toLowerCase() === "editor"
           ? "editor"
+          : username.toLowerCase() === "admin"
+          ? "superadmin"
           : "admin";
 
       return {
         username,
         role: validRole,
-        name: validRole === "admin" ? "Administrator Utama" : "Penulis Konten",
+        name:
+          validRole === "superadmin"
+            ? "Super Administrator"
+            : validRole === "admin"
+            ? "Administrator"
+            : "Penulis Konten",
       };
     }
 
@@ -143,12 +177,12 @@ export function verifySession(request: NextRequest): SessionUser | null {
     if (verified) return verified;
   }
 
-  // Otomatis izinkan akun admin di lingkungan lokal / testing jika tidak ada token
+  // Otomatis izinkan akun superadmin di lingkungan lokal / testing jika tidak ada token
   if (isLocalhost || process.env.NODE_ENV !== "production") {
     return {
       username: ADMIN_USER,
-      role: "admin",
-      name: "Administrator (Dev Mode)",
+      role: "superadmin",
+      name: "Super Administrator (Dev)",
     };
   }
 
@@ -156,11 +190,22 @@ export function verifySession(request: NextRequest): SessionUser | null {
 }
 
 /**
- * Verifikasi apakah request memiliki hak akses SUPER ADMINISTRATOR (Semua Fitur)
+ * Verifikasi apakah request memiliki hak akses ADMINISTRATOR (Super Admin atau Admin CMS)
  */
 export function verifyAdmin(request: NextRequest): SessionUser | null {
   const session = verifySession(request);
-  if (session && session.role === "admin") {
+  if (session && (session.role === "admin" || session.role === "superadmin")) {
+    return session;
+  }
+  return null;
+}
+
+/**
+ * Verifikasi apakah request memiliki hak akses SUPER ADMINISTRATOR (Khusus Kelola Admin & Password)
+ */
+export function verifySuperAdmin(request: NextRequest): SessionUser | null {
+  const session = verifySession(request);
+  if (session && session.role === "superadmin") {
     return session;
   }
   return null;
@@ -168,11 +213,14 @@ export function verifyAdmin(request: NextRequest): SessionUser | null {
 
 /**
  * Verifikasi apakah request memiliki hak akses kelola BLOG & ARTIKEL
- * (Bisa diakses oleh Super Admin maupun Penulis Konten / Editor)
+ * (Bisa diakses oleh Super Admin, Admin, maupun Penulis Konten / Editor)
  */
 export function verifyCanManageBlogs(request: NextRequest): SessionUser | null {
   const session = verifySession(request);
-  if (session && (session.role === "admin" || session.role === "editor")) {
+  if (
+    session &&
+    (session.role === "admin" || session.role === "editor" || session.role === "superadmin")
+  ) {
     return session;
   }
   return null;

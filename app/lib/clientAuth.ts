@@ -65,7 +65,7 @@ export async function authFetch(url: string, options: RequestInit = {}): Promise
 /**
  * Cek sesi dan role pengguna saat ini di sisi client
  */
-export async function getClientSession(): Promise<{ username: string; role: "admin" | "editor"; name: string } | null> {
+export async function getClientSession(): Promise<{ username: string; role: "superadmin" | "admin" | "editor"; name: string } | null> {
   try {
     const res = await authFetch("/api/auth/me");
     if (!res.ok) return null;

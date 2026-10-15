@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 2. Validasi kredensial login
-    const user = validateCredentials(username, password);
+    const user = await validateCredentials(username, password);
     if (!user) {
       const failStatus = await recordFailedAttempt(cleanUser, clientIp);
       if (failStatus.isLocked) {

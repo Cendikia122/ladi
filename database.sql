@@ -427,4 +427,33 @@ ON DUPLICATE KEY UPDATE
   `status`=VALUES(`status`),
   `order_num`=VALUES(`order_num`);
 
+-- -----------------------------------------------------
+-- Table: orders (Sistem Pemesanan Otomatis & Instant Checkout)
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `orders` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `order_number` VARCHAR(50) NOT NULL UNIQUE,
+  `package_slug` VARCHAR(100) NOT NULL,
+  `package_name` VARCHAR(255) NOT NULL,
+  `package_price` INT NOT NULL,
+  `customer_name` VARCHAR(255) NOT NULL,
+  `customer_phone` VARCHAR(50) NOT NULL,
+  `customer_email` VARCHAR(255) DEFAULT '',
+  `business_name` VARCHAR(255) NOT NULL,
+  `business_category` VARCHAR(100) DEFAULT '',
+  `domain_requested` VARCHAR(255) DEFAULT '',
+  `notes` TEXT,
+  `payment_method` VARCHAR(50) DEFAULT 'QRIS',
+  `payment_proof` MEDIUMTEXT,
+  `payment_status` VARCHAR(50) DEFAULT 'unpaid',
+  `order_status` VARCHAR(50) DEFAULT 'new',
+  `paid_at` DATETIME NULL,
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX `idx_order_number` (`order_number`),
+  INDEX `idx_customer_phone` (`customer_phone`),
+  INDEX `idx_payment_status` (`payment_status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 

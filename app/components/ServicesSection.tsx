@@ -243,13 +243,21 @@ export default function ServicesSection() {
                   ✅ DP 50% di awal · Pelunasan setelah website siap tayang
                 </div>
 
-                <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+                  <Link
+                    href={`/checkout/${current.slug}`}
+                    aria-label={`Pesan dan bayar langsung di web untuk ${current.name}`}
+                    className="flex-1 sm:flex-none px-5 py-3 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider text-center transition-all shadow-md"
+                  >
+                    ⚡ Pesan & Bayar di Web
+                  </Link>
+
                   <Link
                     href={`/services/${current.slug}`}
                     aria-label={`Lihat landing page dan contoh untuk ${current.name}`}
-                    className="flex-1 sm:flex-none px-6 py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider text-center transition-all shadow-sm"
+                    className="flex-1 sm:flex-none px-5 py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider text-center transition-all shadow-sm"
                   >
-                    Lihat Landing Page & Contoh →
+                    Lihat Contoh →
                   </Link>
 
                   <a
@@ -257,7 +265,7 @@ export default function ServicesSection() {
                     aria-label={`Chat WhatsApp untuk pemesanan ${current.name}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 sm:flex-none px-5 py-3 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider text-center transition-all shadow-sm"
+                    className="flex-1 sm:flex-none px-4 py-3 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider text-center transition-all"
                   >
                     Chat WA 💬
                   </a>

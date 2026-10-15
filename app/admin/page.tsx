@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getBlogs, getEvents, getProjects, getTeamMembers, getServicePackages } from "@/app/lib/storage";
+import { getBlogs, getEvents, getProjects, getTeamMembers, getServicePackages, getOrders } from "@/app/lib/storage";
 import { checkDbConnection } from "@/app/lib/mysql";
 import { verifyToken } from "@/app/lib/auth";
 import LadiLogo from "../components/LadiLogo";
@@ -29,13 +29,15 @@ export default async function AdminDashboardPage() {
   }
 
   const isEditor = user.role === "editor";
+  const isSuperAdmin = user.role === "superadmin";
 
-  const [allBlogs, allEvents, allProjects, allTeam, allPackages, dbStatus] = await Promise.all([
+  const [allBlogs, allEvents, allProjects, allTeam, allPackages, allOrders, dbStatus] = await Promise.all([
     getBlogs(10, true),
     getEvents(5, true),
     getProjects(5, true),
     getTeamMembers(true),
     getServicePackages(true),
+    getOrders(),
     checkDbConnection(),
   ]);
 
@@ -45,6 +47,8 @@ export default async function AdminDashboardPage() {
   const publishedProjectsCount = allProjects.filter((p) => p.status === "published").length;
   const activeTeamCount = allTeam.filter((m) => m.status === "active").length;
   const activePackagesCount = allPackages.filter((p) => p.status === "active").length;
+  const waitingOrdersCount = allOrders.filter((o) => o.payment_status === "waiting_verification").length;
+  const paidOrdersCount = allOrders.filter((o) => o.payment_status === "paid").length;
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-[#0f172a]">
@@ -56,17 +60,25 @@ export default async function AdminDashboardPage() {
             <span className={`hidden sm:inline-block font-mono text-xs px-2.5 py-1 rounded-full border ${
               isEditor
                 ? "bg-orange-500/10 text-orange-300 border-orange-500/30"
+                : isSuperAdmin
+                ? "bg-purple-500/10 text-purple-300 border-purple-500/30"
                 : "bg-blue-500/10 text-blue-300 border-blue-500/30"
             }`}>
-              {isEditor ? "✍️ PORTAL PENULIS KONTEN BLOG" : "🛡️ CMS & DATABASE DASHBOARD"}
+              {isEditor
+                ? "✍️ PORTAL PENULIS KONTEN BLOG"
+                : isSuperAdmin
+                ? "👑 SUPER ADMIN & DATABASE DASHBOARD"
+                : "🛡️ CMS CONTENT DASHBOARD"}
             </span>
           </div>
 
           <div className="flex items-center gap-4 text-xs">
             <div className="hidden md:flex items-center gap-1.5 text-slate-300 bg-white/5 px-3 py-1.5 rounded-full border border-white/10 font-mono text-[11px]">
-              <span>{isEditor ? "✍️" : "👤"}</span>
+              <span>{isEditor ? "✍️" : isSuperAdmin ? "👑" : "👤"}</span>
               <span>{user.username}</span>
-              <span className="text-slate-500">({isEditor ? "Penulis" : "Super Admin"})</span>
+              <span className="text-slate-500">
+                ({isSuperAdmin ? "Super Admin" : isEditor ? "Penulis" : "Admin CMS"})
+              </span>
             </div>
 
             <Link
@@ -167,6 +179,19 @@ export default async function AdminDashboardPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            {!isEditor && (
+              <Link
+                href="/admin/orders"
+                className="px-5 py-3 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-2 relative"
+              >
+                <span>🛍️</span>
+                <span>Pesanan ({allOrders.length})</span>
+                {waitingOrdersCount > 0 && (
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400 absolute -top-1 -right-1 animate-ping"></span>
+                )}
+              </Link>
+            )}
+
             <Link
               href="/admin/blogs/new"
               className="px-5 py-3 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-1.5"
@@ -176,6 +201,14 @@ export default async function AdminDashboardPage() {
 
             {!isEditor && (
               <>
+                {isSuperAdmin && (
+                  <Link
+                    href="/admin/users"
+                    className="px-4 py-3 rounded-full bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-1.5"
+                  >
+                    <span>🛡️</span> Kelola Admin
+                  </Link>
+                )}
                 <Link
                   href="/admin/services"
                   className="px-5 py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-1.5"
@@ -323,8 +356,25 @@ export default async function AdminDashboardPage() {
           /* TAMPILAN DASHBOARD: JIKA SUPERADMIN (LENGKAP TERMASUK OUR TEAM) */
           /* =================================================================== */
           <div className="space-y-8">
-            {/* 5 Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+            {/* 6 Stats Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+              <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-1.5 relative overflow-hidden">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-mono text-emerald-700 font-bold uppercase">
+                    PESANAN MASUK
+                  </span>
+                  {waitingOrdersCount > 0 && (
+                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+                  )}
+                </div>
+                <div className="text-3xl font-extrabold text-emerald-800">{allOrders.length}</div>
+                <div className="text-[11px] text-slate-500">
+                  <Link href="/admin/orders" className="text-emerald-700 font-bold hover:underline">
+                    {waitingOrdersCount > 0 ? `${waitingOrdersCount} butuh cek →` : "Buka order →"}
+                  </Link>
+                </div>
+              </div>
+
               <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-1.5">
                 <span className="text-[11px] font-mono text-purple-600 font-bold uppercase">
                   PAKET PRODUK
@@ -362,10 +412,10 @@ export default async function AdminDashboardPage() {
               </div>
 
               <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-1.5">
-                <span className="text-[11px] font-mono text-emerald-600 font-bold uppercase">
+                <span className="text-[11px] font-mono text-slate-700 font-bold uppercase">
                   OUR TEAM (TIM)
                 </span>
-                <div className="text-3xl font-extrabold text-emerald-600">{activeTeamCount}</div>
+                <div className="text-3xl font-extrabold text-slate-800">{activeTeamCount}</div>
                 <div className="text-[11px] text-slate-500">
                   <Link href="/admin/team" className="text-[#1853a7] font-bold hover:underline">
                     Kelola tim ({allTeam.length}) →
@@ -377,9 +427,28 @@ export default async function AdminDashboardPage() {
             {/* Quick Access Bar */}
             <div className="p-5 rounded-2xl bg-white border border-slate-200 flex flex-wrap items-center justify-between gap-4 text-xs">
               <div className="flex items-center gap-2 font-bold text-slate-700">
-                <span>⚡ Akses Cepat Super Admin:</span>
+                <span>⚡ Akses Cepat:</span>
               </div>
               <div className="flex flex-wrap gap-2">
+                <Link
+                  href="/admin/orders"
+                  className="px-3.5 py-1.5 rounded-xl bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold flex items-center gap-1.5"
+                >
+                  <span>🛍️ Pesanan Masuk ({allOrders.length})</span>
+                  {waitingOrdersCount > 0 && (
+                    <span className="px-1.5 py-0.2 rounded-full bg-amber-500 text-white text-[10px]">
+                      {waitingOrdersCount}
+                    </span>
+                  )}
+                </Link>
+                {isSuperAdmin && (
+                  <Link
+                    href="/admin/users"
+                    className="px-3.5 py-1.5 rounded-xl bg-purple-100 hover:bg-purple-200 text-purple-800 font-bold"
+                  >
+                    🛡️ Kelola Admin & Password
+                  </Link>
+                )}
                 <Link
                   href="/admin/services"
                   className="px-3.5 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold"
@@ -418,6 +487,31 @@ export default async function AdminDashboardPage() {
                 </Link>
               </div>
             </div>
+
+            {/* Banner Khusus Super Admin: Kontrol Akun Admin Bawahan */}
+            {isSuperAdmin && (
+              <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-purple-950 to-slate-900 text-white border border-purple-800/40 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[11px] font-mono font-bold uppercase tracking-wider">
+                      👑 FITUR SUPER ADMINISTRATOR
+                    </span>
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-white">
+                    Kontrol Akun Admin & Gonta-Ganti Password Bawahan
+                  </h3>
+                  <p className="text-xs sm:text-sm text-purple-200/80 max-w-2xl leading-relaxed">
+                    Kelola seluruh kredensial admin di bawah Anda: ganti username (&quot;usn&quot;), buat akun admin baru, langsung ganti password bawahan tanpa perlu tahu password lama, serta buka blokir keamanan.
+                  </p>
+                </div>
+                <Link
+                  href="/admin/users"
+                  className="px-6 py-3.5 rounded-2xl bg-white hover:bg-purple-50 text-purple-950 font-bold text-xs uppercase tracking-wider shrink-0 shadow-lg hover:shadow-xl transition-all flex items-center gap-2 text-center justify-center"
+                >
+                  <span>🛡️ Buka Kontrol Admin →</span>
+                </Link>
+              </div>
+            )}
 
             {/* Grid 3 Kolom: Our Team, Blogs & Events */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

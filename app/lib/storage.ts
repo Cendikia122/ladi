@@ -93,12 +93,35 @@ export interface ServicePackage {
   updated_at?: string;
 }
 
+export interface OrderItem {
+  id: number;
+  order_number: string;
+  package_slug: string;
+  package_name: string;
+  package_price: number;
+  customer_name: string;
+  customer_phone: string;
+  customer_email?: string;
+  business_name: string;
+  business_category?: string;
+  domain_requested?: string;
+  notes?: string;
+  payment_method: string;
+  payment_proof?: string | null;
+  payment_status: "unpaid" | "waiting_verification" | "paid" | "cancelled" | "refunded";
+  order_status: "new" | "in_progress" | "review" | "completed";
+  paid_at?: string | null;
+  created_at: string;
+  updated_at?: string;
+}
+
 const DATA_DIR = path.join(process.cwd(), "data");
 const BLOGS_FILE = path.join(DATA_DIR, "blogs.json");
 const EVENTS_FILE = path.join(DATA_DIR, "events.json");
 const PROJECTS_FILE = path.join(DATA_DIR, "projects.json");
 const TEAM_FILE = path.join(DATA_DIR, "team.json");
 const SERVICES_FILE = path.join(DATA_DIR, "services.json");
+const ORDERS_FILE = path.join(DATA_DIR, "orders.json");
 
 // In-memory fallback
 let inMemoryBlogs: BlogItem[] = [];
@@ -106,6 +129,7 @@ let inMemoryEvents: EventItem[] = [];
 let inMemoryProjects: ProjectItem[] = [];
 let inMemoryTeam: TeamMember[] = [];
 let inMemoryServices: ServicePackage[] = [];
+let inMemoryOrders: OrderItem[] = [];
 
 function ensureData() {
   try {
@@ -131,6 +155,10 @@ function ensureData() {
     if (fs.existsSync(SERVICES_FILE)) {
       const raw = fs.readFileSync(SERVICES_FILE, "utf-8");
       inMemoryServices = JSON.parse(raw);
+    }
+    if (fs.existsSync(ORDERS_FILE)) {
+      const raw = fs.readFileSync(ORDERS_FILE, "utf-8");
+      inMemoryOrders = JSON.parse(raw);
     }
   } catch (err) {
     console.warn("Storage read notice:", err);
@@ -187,6 +215,17 @@ function persistServices() {
       fs.mkdirSync(DATA_DIR, { recursive: true });
     }
     fs.writeFileSync(SERVICES_FILE, JSON.stringify(inMemoryServices, null, 2), "utf-8");
+  } catch (err) {
+    console.warn("File write skipped (serverless environment):", err);
+  }
+}
+
+function persistOrders() {
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    fs.writeFileSync(ORDERS_FILE, JSON.stringify(inMemoryOrders, null, 2), "utf-8");
   } catch (err) {
     console.warn("File write skipped (serverless environment):", err);
   }
@@ -1366,6 +1405,209 @@ export async function deleteServicePackage(id: number | string): Promise<boolean
   if (index !== -1) {
     inMemoryServices.splice(index, 1);
     persistServices();
+    deletedFromJson = true;
+  }
+
+  return deletedFromMysql || deletedFromJson;
+}
+
+// ----------------------------------------------------
+// ORDERS (Sistem Pemesanan Otomatis & Instant Checkout)
+// ----------------------------------------------------
+
+export async function getOrders(limit?: number, statusFilter?: string): Promise<OrderItem[]> {
+  try {
+    let sql = "SELECT * FROM orders";
+    const params: any[] = [];
+    if (statusFilter && statusFilter !== "all") {
+      sql += " WHERE payment_status = ? OR order_status = ?";
+      params.push(statusFilter, statusFilter);
+    }
+    sql += " ORDER BY id DESC";
+    if (limit) {
+      sql += " LIMIT ?";
+      params.push(limit);
+    }
+    const rows = await query<any[]>(sql, params);
+    if (rows && rows.length >= 0) {
+      return rows.map((r) => ({
+        ...r,
+        package_price: Number(r.package_price),
+        created_at: r.created_at ? new Date(r.created_at).toISOString() : new Date().toISOString(),
+        updated_at: r.updated_at ? new Date(r.updated_at).toISOString() : undefined,
+        paid_at: r.paid_at ? new Date(r.paid_at).toISOString() : null,
+      }));
+    }
+  } catch (err) {
+    console.warn("MySQL getOrders failed, using fallback:", err);
+  }
+
+  ensureData();
+  let list = [...inMemoryOrders];
+  if (statusFilter && statusFilter !== "all") {
+    list = list.filter((o) => o.payment_status === statusFilter || o.order_status === statusFilter);
+  }
+  list.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  if (limit) {
+    list = list.slice(0, limit);
+  }
+  return list;
+}
+
+export async function getOrderByNumber(orderNumber: string): Promise<OrderItem | null> {
+  try {
+    const rows = await query<any[]>("SELECT * FROM orders WHERE order_number = ? LIMIT 1", [orderNumber]);
+    if (rows && rows.length > 0) {
+      const r = rows[0];
+      return {
+        ...r,
+        package_price: Number(r.package_price),
+        created_at: r.created_at ? new Date(r.created_at).toISOString() : new Date().toISOString(),
+        updated_at: r.updated_at ? new Date(r.updated_at).toISOString() : undefined,
+        paid_at: r.paid_at ? new Date(r.paid_at).toISOString() : null,
+      };
+    }
+  } catch (err) {
+    console.warn("MySQL getOrderByNumber failed, using fallback:", err);
+  }
+
+  ensureData();
+  const found = inMemoryOrders.find((o) => o.order_number.toLowerCase() === orderNumber.toLowerCase());
+  return found || null;
+}
+
+export async function createOrder(
+  data: Omit<OrderItem, "id" | "created_at" | "updated_at">
+): Promise<OrderItem> {
+  const now = new Date().toISOString();
+  let insertedId = 0;
+
+  try {
+    const res = await query<any>(
+      `INSERT INTO orders (
+        order_number, package_slug, package_name, package_price,
+        customer_name, customer_phone, customer_email, business_name,
+        business_category, domain_requested, notes, payment_method,
+        payment_proof, payment_status, order_status, paid_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        data.order_number,
+        data.package_slug,
+        data.package_name,
+        data.package_price,
+        data.customer_name,
+        data.customer_phone,
+        data.customer_email || "",
+        data.business_name,
+        data.business_category || "",
+        data.domain_requested || "",
+        data.notes || "",
+        data.payment_method || "QRIS",
+        data.payment_proof || null,
+        data.payment_status || "unpaid",
+        data.order_status || "new",
+        data.paid_at || null,
+      ]
+    );
+    if (res && res.insertId) {
+      insertedId = res.insertId;
+    }
+  } catch (err) {
+    console.warn("MySQL createOrder error:", err);
+  }
+
+  ensureData();
+  if (!insertedId) {
+    insertedId = inMemoryOrders.length > 0 ? Math.max(...inMemoryOrders.map((o) => o.id)) + 1 : 1;
+  }
+
+  const newOrder: OrderItem = {
+    ...data,
+    id: insertedId,
+    created_at: now,
+    updated_at: now,
+  };
+
+  inMemoryOrders.unshift(newOrder);
+  persistOrders();
+  return newOrder;
+}
+
+export async function updateOrder(
+  orderNumber: string,
+  updates: Partial<OrderItem>
+): Promise<OrderItem | null> {
+  const now = new Date().toISOString();
+
+  try {
+    const fields: string[] = [];
+    const values: any[] = [];
+
+    if (updates.payment_status !== undefined) {
+      fields.push("payment_status = ?");
+      values.push(updates.payment_status);
+      if (updates.payment_status === "paid" && !updates.paid_at) {
+        fields.push("paid_at = NOW()");
+      }
+    }
+    if (updates.order_status !== undefined) {
+      fields.push("order_status = ?");
+      values.push(updates.order_status);
+    }
+    if (updates.payment_proof !== undefined) {
+      fields.push("payment_proof = ?");
+      values.push(updates.payment_proof);
+    }
+    if (updates.notes !== undefined) {
+      fields.push("notes = ?");
+      values.push(updates.notes);
+    }
+    if (updates.domain_requested !== undefined) {
+      fields.push("domain_requested = ?");
+      values.push(updates.domain_requested);
+    }
+
+    if (fields.length > 0) {
+      values.push(orderNumber);
+      await query<any>(`UPDATE orders SET ${fields.join(", ")} WHERE order_number = ?`, values);
+    }
+  } catch (err) {
+    console.warn("MySQL updateOrder error:", err);
+  }
+
+  ensureData();
+  const idx = inMemoryOrders.findIndex((o) => o.order_number === orderNumber);
+  if (idx !== -1) {
+    const existing = inMemoryOrders[idx];
+    const updated = {
+      ...existing,
+      ...updates,
+      updated_at: now,
+      paid_at: updates.payment_status === "paid" ? (updates.paid_at || now) : existing.paid_at,
+    };
+    inMemoryOrders[idx] = updated;
+    persistOrders();
+    return updated;
+  }
+
+  return await getOrderByNumber(orderNumber);
+}
+
+export async function deleteOrder(orderNumber: string): Promise<boolean> {
+  let deletedFromMysql = false;
+  try {
+    const res = await query<any>("DELETE FROM orders WHERE order_number = ?", [orderNumber]);
+    if (res && res.affectedRows > 0) {
+      deletedFromMysql = true;
+    }
+  } catch (e) {}
+
+  ensureData();
+  const idx = inMemoryOrders.findIndex((o) => o.order_number === orderNumber);
+  let deletedFromJson = false;
+  if (idx !== -1) {
+    inMemoryOrders.splice(idx, 1);
+    persistOrders();
     deletedFromJson = true;
   }
 

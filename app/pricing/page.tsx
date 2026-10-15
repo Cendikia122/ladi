@@ -65,11 +65,11 @@ export default function PricingPage() {
 
                 <div className="pt-6 space-y-2">
                   <Link
-                    href="/services/paket-exist"
-                    className="block w-full text-center py-2.5 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider transition-all"
-                    aria-label="Pilih Paket EXIST untuk website bisnis Anda"
+                    href="/checkout/paket-exist"
+                    className="block w-full text-center py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
+                    aria-label="Pesan Paket EXIST langsung di web"
                   >
-                    Mulai dari sini. →
+                    ⚡ Pesan & Bayar di Web →
                   </Link>
                   <a
                     href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+dengan+Paket+EXIST+(Mulai+Rp+299.000).+Biar+bisnismu+muncul+resmi+di+internet."
@@ -80,17 +80,23 @@ export default function PricingPage() {
                   >
                     Tanya via WA 💬
                   </a>
+                  <Link
+                    href="/services/paket-exist"
+                    className="block text-center text-[10px] font-bold text-slate-400 hover:text-slate-600 transition-colors"
+                  >
+                    Lihat Rincian Lengkap →
+                  </Link>
                 </div>
               </div>
 
               {/* RISE */}
               <div className="p-7 rounded-3xl bg-white border-2 border-[#1853a7] shadow-xl corporate-card flex flex-col justify-between relative">
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#c2410c] text-white text-[10px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full whitespace-nowrap shadow-sm">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#fa824b] text-white text-[10px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full whitespace-nowrap shadow-sm">
                   ⭐ PALING POPULER
                 </span>
                 <div className="space-y-4">
                   <div>
-                    <span className="text-[10px] font-bold text-[#c2410c] uppercase tracking-wider block">
+                    <span className="text-[10px] font-bold text-[#fa824b] uppercase tracking-wider block">
                       BISNIS BERKEMBANG
                     </span>
                     <h3 className="text-xl font-extrabold text-slate-900 mt-1">Paket RISE</h3>
@@ -117,11 +123,11 @@ export default function PricingPage() {
 
                 <div className="pt-6 space-y-2">
                   <Link
-                    href="/services/paket-rise"
-                    className="block w-full text-center py-2.5 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
-                    aria-label="Pilih Paket RISE untuk naik level sekarang"
+                    href="/checkout/paket-rise"
+                    className="block w-full text-center py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
+                    aria-label="Pesan Paket RISE langsung di web"
                   >
-                    Naik Level Sekarang →
+                    ⚡ Pesan & Bayar di Web →
                   </Link>
                   <a
                     href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+dengan+Paket+RISE+(Mulai+Rp+999.000).+Saya+ingin+profil+lengkap+%26+profesional+untuk+bisnis+saya."
@@ -132,6 +138,12 @@ export default function PricingPage() {
                   >
                     Tanya via WA 💬
                   </a>
+                  <Link
+                    href="/services/paket-rise"
+                    className="block text-center text-[10px] font-bold text-slate-400 hover:text-slate-600 transition-colors"
+                  >
+                    Lihat Rincian Lengkap →
+                  </Link>
                 </div>
               </div>
 
@@ -165,11 +177,11 @@ export default function PricingPage() {
 
                 <div className="pt-6 space-y-2">
                   <Link
-                    href="/services/paket-run"
-                    className="block w-full text-center py-2.5 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider transition-all"
-                    aria-label="Pilih Paket RUN untuk jualan mandiri dan booking online"
+                    href="/checkout/paket-run"
+                    className="block w-full text-center py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
+                    aria-label="Pesan Paket RUN langsung di web"
                   >
-                    Siap Jualan Mandiri →
+                    ⚡ Pesan & Bayar di Web →
                   </Link>
                   <a
                     href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+dengan+Paket+RUN+(Mulai+Rp+2.499.000).+Saya+ingin+website+toko+online+%26+booking+mandiri+dengan+QRIS."
@@ -180,6 +192,12 @@ export default function PricingPage() {
                   >
                     Tanya via WA 💬
                   </a>
+                  <Link
+                    href="/services/paket-run"
+                    className="block text-center text-[10px] font-bold text-slate-400 hover:text-slate-600 transition-colors"
+                  >
+                    Lihat Rincian Lengkap →
+                  </Link>
                 </div>
               </div>
 
@@ -187,7 +205,7 @@ export default function PricingPage() {
               <div className="p-7 rounded-3xl bg-white border border-slate-200 shadow-sm corporate-card flex flex-col justify-between">
                 <div className="space-y-4">
                   <div>
-                    <span className="text-[10px] font-bold text-[#c2410c] uppercase tracking-wider block">
+                    <span className="text-[10px] font-bold text-[#fa824b] uppercase tracking-wider block">
                       PAKET SPESIAL
                     </span>
                     <h3 className="text-xl font-extrabold text-slate-900 mt-1">Paket GUARD</h3>
@@ -213,11 +231,11 @@ export default function PricingPage() {
 
                 <div className="pt-6 space-y-2">
                   <Link
-                    href="/services/paket-guard"
-                    className="block w-full text-center py-2.5 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider transition-all"
-                    aria-label="Pilih Paket GUARD untuk perawatan dan keamanan website"
+                    href="/checkout/paket-guard"
+                    className="block w-full text-center py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
+                    aria-label="Langganan Paket GUARD langsung di web"
                   >
-                    Pasang Penjaganya →
+                    ⚡ Pasang Penjaga di Web →
                   </Link>
                   <a
                     href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+berlangganan+Paket+GUARD+(Mulai+Rp+300.000+%E2%80%93+500.000+/+bulan).+Saya+ingin+website+tetap+aman+dan+terawat."
@@ -228,6 +246,12 @@ export default function PricingPage() {
                   >
                     Tanya via WA 💬
                   </a>
+                  <Link
+                    href="/services/paket-guard"
+                    className="block text-center text-[10px] font-bold text-slate-400 hover:text-slate-600 transition-colors"
+                  >
+                    Lihat Rincian Lengkap →
+                  </Link>
                 </div>
               </div>
             </div>
