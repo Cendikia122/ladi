@@ -57,11 +57,18 @@ export default function Navbar() {
             </div>
 
             {/* Right: CTA Pill Button */}
-            <div className="hidden sm:flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-2">
+              <Link
+                href="/cek-pesanan"
+                aria-label="Cek Status Pesanan"
+                className="px-3.5 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition-all"
+              >
+                🔍 Cek Pesanan
+              </Link>
               <Link
                 href="/contact-us"
                 aria-label="Audit Usaha Gratis - Konsultasi Sekarang"
-                className="px-5 py-2.5 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-[#c2410c]/20 hover:shadow-lg transition-all hover:-translate-y-0.5 active:translate-y-0"
+                className="px-4 py-2.5 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-[#c2410c]/20 hover:shadow-lg transition-all hover:-translate-y-0.5 active:translate-y-0"
               >
                 Audit Usaha Gratis
               </Link>
@@ -98,7 +105,14 @@ export default function Navbar() {
                 {item.label}
               </Link>
             ))}
-            <div className="pt-2">
+            <div className="pt-2 space-y-2">
+              <Link
+                href="/cek-pesanan"
+                className="block w-full text-center py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition-all"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                🔍 Cek Status Pesanan
+              </Link>
               <Link
                 href="/contact-us"
                 aria-label="Audit Usaha Gratis - Menu Navigasi"

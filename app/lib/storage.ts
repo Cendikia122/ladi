@@ -1501,6 +1501,72 @@ export async function getOrderByNumber(orderNumber: string): Promise<OrderItem |
   return found || null;
 }
 
+export async function getOrdersByPhone(phone: string): Promise<OrderItem[]> {
+  const clean = phone.replace(/[^0-9]/g, "");
+  if (!clean || clean.length < 5) return [];
+
+  let phone1 = clean;
+  let phone2 = clean;
+  if (clean.startsWith("0")) {
+    phone1 = "62" + clean.slice(1);
+    phone2 = clean;
+  } else if (clean.startsWith("62")) {
+    phone1 = clean;
+    phone2 = "0" + clean.slice(2);
+  }
+
+  try {
+    const rows = await query<any[]>(
+      "SELECT * FROM orders WHERE customer_phone = ? OR customer_phone = ? ORDER BY id DESC",
+      [phone1, phone2]
+    );
+    if (rows && rows.length > 0) {
+      return rows.map((r) => ({
+        ...r,
+        package_price: Number(r.package_price),
+        created_at: r.created_at ? new Date(r.created_at).toISOString() : new Date().toISOString(),
+        updated_at: r.updated_at ? new Date(r.updated_at).toISOString() : undefined,
+        paid_at: r.paid_at ? new Date(r.paid_at).toISOString() : null,
+      }));
+    }
+  } catch (err) {
+    console.warn("MySQL getOrdersByPhone failed, using fallback:", err);
+  }
+
+  ensureData();
+  return inMemoryOrders
+    .filter((o) => {
+      const c = (o.customer_phone || "").replace(/[^0-9]/g, "");
+      return c === phone1 || c === phone2 || c.includes(clean);
+    })
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+}
+
+export async function searchOrdersByKeyword(keyword: string): Promise<OrderItem[]> {
+  const clean = keyword.trim().toLowerCase();
+  if (!clean) return [];
+
+  // Jika keyword adalah nomor order (cth LADI-...)
+  if (clean.startsWith("ladi-") || clean.length >= 8) {
+    const byOrder = await getOrderByNumber(clean);
+    if (byOrder) return [byOrder];
+  }
+
+  // Jika keyword adalah angka (kemungkinan nomor telepon)
+  const digits = clean.replace(/[^0-9]/g, "");
+  if (digits.length >= 6) {
+    return await getOrdersByPhone(digits);
+  }
+
+  // Fallback pencarian di inMemory
+  ensureData();
+  return inMemoryOrders.filter((o) =>
+    o.order_number.toLowerCase().includes(clean) ||
+    o.customer_name.toLowerCase().includes(clean) ||
+    (o.customer_phone && o.customer_phone.includes(digits))
+  );
+}
+
 export async function createOrder(
   data: Omit<OrderItem, "id" | "created_at" | "updated_at">
 ): Promise<OrderItem> {

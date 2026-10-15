@@ -277,6 +277,14 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
         throw new Error(data.error || "Gagal membuat pesanan.");
       }
 
+      if (typeof window !== "undefined" && data.order_number) {
+        try {
+          const stored = JSON.parse(localStorage.getItem("ladi_recent_orders") || "[]");
+          const updated = [data.order_number, ...stored.filter((x: string) => x !== data.order_number)].slice(0, 5);
+          localStorage.setItem("ladi_recent_orders", JSON.stringify(updated));
+        } catch {}
+      }
+
       router.push(data.redirect_url);
     } catch (err: any) {
       setErrorMessage(err.message || "Terjadi kesalahan koneksi.");

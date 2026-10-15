@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function TopBar() {
   return (
     <div className="bg-[#0f172a] text-slate-300 text-xs py-2 px-4 sm:px-6 border-b border-slate-800">
@@ -35,6 +37,13 @@ export default function TopBar() {
 
         {/* Right Side: Operational Status & Social Icons */}
         <div className="flex items-center gap-4 text-[12px]">
+          <Link
+            href="/cek-pesanan"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-[#fa824b] text-[11px] font-bold border border-slate-700 transition-colors shadow-sm"
+          >
+            <span>🔍 Cek Pesanan</span>
+          </Link>
+
           <div className="hidden lg:flex items-center gap-1.5 text-slate-300 font-mono text-[11px]">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
             <span>Senin - Jumat · 08.00 - 18.00 WIB</span>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { OrderItem } from "@/app/lib/storage";
 import { Config } from "@/app/lib/config";
@@ -142,6 +142,17 @@ export default function OrderViewClient({ initialOrder }: OrderViewClientProps) 
   const isPaid = order.payment_status === "paid";
   const isWaiting = order.payment_status === "waiting_verification";
 
+  // Simpan riwayat invoice ke localStorage browser agar tidak hilang
+  useEffect(() => {
+    if (typeof window !== "undefined" && order.order_number) {
+      try {
+        const stored = JSON.parse(localStorage.getItem("ladi_recent_orders") || "[]");
+        const updated = [order.order_number, ...stored.filter((x: string) => x !== order.order_number)].slice(0, 5);
+        localStorage.setItem("ladi_recent_orders", JSON.stringify(updated));
+      } catch {}
+    }
+  }, [order.order_number]);
+
   return (
     <div className="space-y-8">
       {/* Kartu Status Utama */}
@@ -162,6 +173,15 @@ export default function OrderViewClient({ initialOrder }: OrderViewClientProps) 
               >
                 {copiedBank === "order_number" ? "Tersalin! ✓" : "Salin"}
               </button>
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(`Halo, ini link tagihan website saya di Ladi:\nhttps://www.layanandigital.id/order/${order.order_number}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-[11px] font-semibold transition-colors flex items-center gap-1"
+                title="Kirim link invoice ke WhatsApp agar tersimpan di chat"
+              >
+                <span>📲 Simpan ke WA</span>
+              </a>
             </div>
             <span className="text-xs text-slate-500 mt-1 block">
               Dibuat pada {new Date(order.created_at).toLocaleDateString("id-ID", {
@@ -171,7 +191,7 @@ export default function OrderViewClient({ initialOrder }: OrderViewClientProps) 
                 year: "numeric",
                 hour: "2-digit",
                 minute: "2-digit",
-              })} WIB
+              })} WIB · <Link href="/cek-pesanan" className="text-blue-600 hover:underline">Halaman Cek Pesanan</Link>
             </span>
           </div>
 

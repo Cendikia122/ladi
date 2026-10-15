@@ -40,16 +40,22 @@ export default function Footer() {
                 <Link href="/project" className="hover:text-white transition-colors">Portofolio Karya Ladi</Link>
               </li>
               <li>
-                <Link href="/pricing" className="hover:text-white transition-colors">Biaya & Paket Harga</Link>
+                <Link href="/pricing" className="hover:text-white transition-colors">Biaya &amp; Paket Harga</Link>
               </li>
               <li>
-                <Link href="/events" className="hover:text-white transition-colors">Agenda Workshop & Event</Link>
+                <Link href="/builder" className="hover:text-white transition-colors">🧩 Rakit Web (Pecahan LEGO)</Link>
+              </li>
+              <li>
+                <Link href="/cek-pesanan" className="text-[#fa824b] hover:underline font-bold transition-colors">🔍 Cek Status Pesanan</Link>
+              </li>
+              <li>
+                <Link href="/events" className="hover:text-white transition-colors">Agenda Workshop &amp; Event</Link>
               </li>
               <li>
                 <Link href="/faq" className="hover:text-white transition-colors">Tanya Jawab (FAQ)</Link>
               </li>
               <li>
-                <Link href="/blog" className="hover:text-white transition-colors">Wawasan & Tips Bisnis</Link>
+                <Link href="/blog" className="hover:text-white transition-colors">Wawasan &amp; Tips Bisnis</Link>
               </li>
               <li>
                 <Link href="/contact-us" className="hover:text-white transition-colors">Hubungi Kami</Link>
