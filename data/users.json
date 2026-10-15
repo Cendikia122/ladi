@@ -2,21 +2,31 @@
   {
     "id": 1,
     "username": "admin",
-    "password_hash": "07dacd7f5225556e748b1efd54df7ee4:c80a71f469ccd2bd845ab3754de8d799122caef3a5cd3ba233316c99a2c7cc671ea0f371fa3c08884156edfae0c72f796cc3d5e43678eebc6d4d3583755e5a86",
-    "name": "Super Administrator",
+    "password_hash": "b1db3e46654cac8fd36348c076bb522e:29ee0b9effcd23d7b3e05a00eda505c6f26f18698e60a439739857023dd79c084ab4613c4ea6cbb73908fab46fed60472afacf85072c7e4139042f99e5b65237",
+    "name": "Administrator Ladi",
     "role": "superadmin",
     "status": "active",
-    "created_at": "2026-10-15T00:00:00.000Z",
-    "updated_at": "2026-10-15T00:00:00.000Z"
+    "created_at": "2026-10-13T18:22:56.000Z",
+    "updated_at": "2026-10-15T02:38:08.000Z"
   },
   {
     "id": 2,
     "username": "penulis",
-    "password_hash": "cd6bcabaa02e070859cd4c43abb41e36:daae2a2a6fd93f080a0dc4591731432228293ae17d87668386347658a8b760ca78b09553c15afdba8ea9d0557fb8d6db1c72d470636d161e74928c5477e30815",
+    "password_hash": "12399b549439c5a2471fb2011d96aec5:3e0ed727c9770135a096dff7684e726d26ef3cff9c100efd20e165a12362e4626411407d561a8e93384219671720c6c9f97e8a3a837d9eaeb1c7a05e08506d8b",
     "name": "Penulis Konten (Blog)",
     "role": "editor",
     "status": "active",
-    "created_at": "2026-10-15T00:00:00.000Z",
-    "updated_at": "2026-10-15T00:00:00.000Z"
+    "created_at": "2026-10-14T23:59:39.000Z",
+    "updated_at": "2026-10-14T23:59:39.000Z"
+  },
+  {
+    "id": 3,
+    "username": "hilmi",
+    "password_hash": "e711f0462d84b88c7aad5eee6331b36c:ecaffb14614050080698d40f0251100d1e05da0e3f6f6748df2774aa277da20dcf2a61715fa385de478cf0c280ad6269ddaa18f531cf5b3c33283b2c42c2300e",
+    "name": "Hilmi",
+    "role": "editor",
+    "status": "active",
+    "created_at": "2026-10-15T00:41:02.000Z",
+    "updated_at": "2026-10-15T00:41:02.000Z"
   }
 ]
