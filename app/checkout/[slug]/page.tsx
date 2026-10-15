@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getServicePackageBySlug, getServicePackages } from "@/app/lib/storage";
+import { getServicePackageBySlug, getServicePackages, getTemplatesByPackage } from "@/app/lib/storage";
 import CheckoutForm from "./CheckoutForm";
 import LadiLogo from "@/app/components/LadiLogo";
 import { Config } from "@/app/lib/config";
@@ -27,6 +27,8 @@ export default async function CheckoutPage({ params }: Props) {
   if (!pkg) {
     notFound();
   }
+
+  const templates = await getTemplatesByPackage(slug);
 
   let deliverablesList: string[] = [];
   try {
@@ -104,6 +106,7 @@ export default async function CheckoutPage({ params }: Props) {
               packageName={pkg.name}
               packagePrice={cleanPriceNum}
               formattedPrice={formattedPrice}
+              availableTemplates={templates}
             />
           </div>
 

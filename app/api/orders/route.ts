@@ -26,6 +26,8 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const {
       package_slug,
+      package_name: customPackageName,
+      package_price: customPackagePrice,
       customer_name,
       customer_phone,
       customer_email,
@@ -34,6 +36,13 @@ export async function POST(req: NextRequest) {
       domain_requested,
       notes,
       payment_method,
+      order_type,
+      template_name,
+      template_url,
+      template_tech,
+      domain_choice,
+      hosting_duration,
+      addons,
     } = body;
 
     // 1. Validasi input wajib
@@ -66,19 +75,24 @@ export async function POST(req: NextRequest) {
 
     // 2. Ambil informasi paket & harga
     const cleanSlug = String(package_slug || "").toLowerCase().trim();
-    let packageName = "Paket Kustom Ladi";
+    let packageName = customPackageName || "Paket Kustom Ladi";
     let packagePrice = 299000;
 
-    const pkgData = await getServicePackageBySlug(cleanSlug);
-    if (pkgData) {
-      packageName = pkgData.name;
-      const numMatch = pkgData.price.replace(/[^0-9]/g, "");
-      if (numMatch) {
-        packagePrice = parseInt(numMatch, 10);
+    if (customPackagePrice && Number(customPackagePrice) > 0) {
+      packagePrice = Math.round(Number(customPackagePrice));
+      if (customPackageName) packageName = customPackageName;
+    } else {
+      const pkgData = await getServicePackageBySlug(cleanSlug);
+      if (pkgData) {
+        packageName = pkgData.name;
+        const numMatch = pkgData.price.replace(/[^0-9]/g, "");
+        if (numMatch) {
+          packagePrice = parseInt(numMatch, 10);
+        }
+      } else if (PRICE_MAP[cleanSlug]) {
+        packageName = PRICE_MAP[cleanSlug].name;
+        packagePrice = PRICE_MAP[cleanSlug].price;
       }
-    } else if (PRICE_MAP[cleanSlug]) {
-      packageName = PRICE_MAP[cleanSlug].name;
-      packagePrice = PRICE_MAP[cleanSlug].price;
     }
 
     // 3. Generate Order Number
@@ -95,11 +109,18 @@ export async function POST(req: NextRequest) {
       customer_email: customer_email ? customer_email.trim() : "",
       business_name: business_name.trim(),
       business_category: business_category ? business_category.trim() : "Lainnya",
-      domain_requested: domain_requested ? domain_requested.trim() : "",
+      domain_requested: domain_requested ? domain_requested.trim() : (domain_choice || ""),
       notes: notes ? notes.trim() : "",
       payment_method: payment_method || "QRIS",
       payment_status: "unpaid",
       order_status: "new",
+      order_type: order_type || (cleanSlug === "custom-builder" ? "pecahan" : "paketan"),
+      template_name: template_name || "",
+      template_url: template_url || "",
+      template_tech: template_tech || "",
+      domain_choice: domain_choice || "",
+      hosting_duration: hosting_duration || "",
+      addons: typeof addons === "object" ? JSON.stringify(addons) : (addons || ""),
     });
 
     return NextResponse.json({

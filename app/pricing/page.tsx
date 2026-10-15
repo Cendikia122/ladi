@@ -32,8 +32,32 @@ export default function PricingPage() {
         </section>
 
         {/* Pricing Cards */}
-        <section className="py-20 md:py-28">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-12 md:py-20">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            {/* Banner Custom Builder / Pecahan */}
+            <div className="rounded-3xl bg-gradient-to-r from-[#0f172a] via-[#1e293b] to-[#0f172a] text-white p-6 sm:p-8 border border-slate-700/80 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+              <div className="space-y-2 text-center md:text-left z-10">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fa824b]/20 text-[#fa824b] text-xs font-bold font-mono uppercase tracking-wider">
+                  <span>🧩 Ingin Sistem Pecahan (LEGO)?</span>
+                </div>
+                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                  Rakit Website Impianmu Sendiri Tanpa Terikat Paket
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
+                  Bebas pilih framework teknologi (HTML, PHP, Laravel, Next.js), 23 template Envato terverifikasi, domain, durasi hosting, dan add-ons pelengkap.
+                </p>
+              </div>
+              <div className="shrink-0 z-10">
+                <Link
+                  href="/builder"
+                  className="px-6 py-3.5 rounded-2xl bg-[#fa824b] hover:bg-[#e5723b] text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-lg hover:shadow-xl transition-all inline-flex items-center gap-2"
+                >
+                  <span>Coba Kalkulator &amp; Rakit Web</span>
+                  <span>→</span>
+                </Link>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
               {/* EXIST */}
               <div className="p-7 rounded-3xl bg-white border border-slate-200 shadow-sm corporate-card flex flex-col justify-between">

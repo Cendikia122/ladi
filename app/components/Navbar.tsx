@@ -21,6 +21,7 @@ export default function Navbar() {
     { href: "/services", label: "Layanan" },
     { href: "/project", label: "Portofolio" },
     { href: "/pricing", label: "Paket Harga" },
+    { href: "/builder", label: "Rakit Web 🧩" },
     { href: "/events", label: "Event" },
     { href: "/blog", label: "Wawasan" },
     { href: "/contact-us", label: "Kontak" },

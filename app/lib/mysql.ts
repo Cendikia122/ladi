@@ -200,6 +200,13 @@ async function ensureTables(db: mysql.Pool) {
         payment_proof MEDIUMTEXT,
         payment_status VARCHAR(50) DEFAULT 'unpaid',
         order_status VARCHAR(50) DEFAULT 'new',
+        order_type VARCHAR(50) DEFAULT 'paketan',
+        template_name VARCHAR(255) DEFAULT '',
+        template_url TEXT,
+        template_tech VARCHAR(50) DEFAULT '',
+        domain_choice VARCHAR(100) DEFAULT '',
+        hosting_duration VARCHAR(100) DEFAULT '',
+        addons LONGTEXT,
         paid_at DATETIME NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -208,6 +215,15 @@ async function ensureTables(db: mysql.Pool) {
         INDEX idx_payment_status (payment_status)
       )
     `);
+
+    // Tambahkan kolom kustom jika tabel orders sudah dibuat sebelumnya
+    try { await db.query(`ALTER TABLE orders ADD COLUMN order_type VARCHAR(50) DEFAULT 'paketan'`); } catch {}
+    try { await db.query(`ALTER TABLE orders ADD COLUMN template_name VARCHAR(255) DEFAULT ''`); } catch {}
+    try { await db.query(`ALTER TABLE orders ADD COLUMN template_url TEXT`); } catch {}
+    try { await db.query(`ALTER TABLE orders ADD COLUMN template_tech VARCHAR(50) DEFAULT ''`); } catch {}
+    try { await db.query(`ALTER TABLE orders ADD COLUMN domain_choice VARCHAR(100) DEFAULT ''`); } catch {}
+    try { await db.query(`ALTER TABLE orders ADD COLUMN hosting_duration VARCHAR(100) DEFAULT ''`); } catch {}
+    try { await db.query(`ALTER TABLE orders ADD COLUMN addons LONGTEXT`); } catch {}
 
     // Selalu sinkronkan service_packages dari services.json ke MySQL Hostinger
     try {

@@ -305,9 +305,57 @@ export default function AdminOrdersClient({ initialOrders }: AdminOrdersClientPr
                       </td>
 
                       {/* Paket & Biaya */}
-                      <td className="px-5 py-4 align-top space-y-1">
-                        <div className="font-bold text-slate-800">{order.package_name}</div>
+                      <td className="px-5 py-4 align-top space-y-1.5 max-w-xs">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
+                            order.order_type === "pecahan"
+                              ? "bg-purple-100 text-purple-800"
+                              : "bg-blue-100 text-blue-800"
+                          }`}>
+                            {order.order_type === "pecahan" ? "🧩 Pecahan LEGO" : "📦 Paketan"}
+                          </span>
+                          <span className="font-bold text-slate-900 text-xs">{order.package_name}</span>
+                        </div>
                         <div className="text-sm font-black text-[#1853a7]">{formattedPrice}</div>
+
+                        {/* Rincian Template & Addons */}
+                        {(order.template_name || order.domain_choice || order.hosting_duration || order.addons) && (
+                          <div className="pt-1.5 border-t border-slate-100 space-y-1 text-[11px] text-slate-500">
+                            {order.template_name && (
+                              <div className="flex items-center gap-1 flex-wrap">
+                                <span>🎨 {order.template_name}</span>
+                                {order.template_url && (
+                                  <a
+                                    href={order.template_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-600 hover:underline font-bold text-[10px]"
+                                  >
+                                    Demo ↗
+                                  </a>
+                                )}
+                              </div>
+                            )}
+                            {order.domain_choice && (
+                              <div>🌐 {order.domain_choice}</div>
+                            )}
+                            {order.hosting_duration && (
+                              <div>☁️ {order.hosting_duration}</div>
+                            )}
+                            {order.addons && (
+                              <div className="text-emerald-700 font-medium">
+                                ➕ Addons: {(() => {
+                                  try {
+                                    const p = JSON.parse(order.addons);
+                                    return Array.isArray(p) ? p.join(", ") : String(p);
+                                  } catch {
+                                    return order.addons;
+                                  }
+                                })()}
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </td>
 
                       {/* Status Pembayaran */}

@@ -110,9 +110,28 @@ export interface OrderItem {
   payment_proof?: string | null;
   payment_status: "unpaid" | "waiting_verification" | "paid" | "cancelled" | "refunded";
   order_status: "new" | "in_progress" | "review" | "completed";
+  order_type?: "paketan" | "pecahan";
+  template_name?: string;
+  template_url?: string;
+  template_tech?: string;
+  domain_choice?: string;
+  hosting_duration?: string;
+  addons?: string;
   paid_at?: string | null;
   created_at: string;
   updated_at?: string;
+}
+
+export interface TemplateItem {
+  id: string;
+  name: string;
+  tech: "HTML5" | "PHP" | "Laravel" | "React" | "Next.JS";
+  type: string;
+  industry: string;
+  envato_url: string;
+  allowed_packages: string[];
+  description: string;
+  badge?: string;
 }
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -122,6 +141,7 @@ const PROJECTS_FILE = path.join(DATA_DIR, "projects.json");
 const TEAM_FILE = path.join(DATA_DIR, "team.json");
 const SERVICES_FILE = path.join(DATA_DIR, "services.json");
 const ORDERS_FILE = path.join(DATA_DIR, "orders.json");
+const TEMPLATES_FILE = path.join(DATA_DIR, "templates.json");
 
 // In-memory fallback
 let inMemoryBlogs: BlogItem[] = [];
@@ -130,6 +150,7 @@ let inMemoryProjects: ProjectItem[] = [];
 let inMemoryTeam: TeamMember[] = [];
 let inMemoryServices: ServicePackage[] = [];
 let inMemoryOrders: OrderItem[] = [];
+let inMemoryTemplates: TemplateItem[] = [];
 
 function ensureData() {
   try {
@@ -159,6 +180,10 @@ function ensureData() {
     if (fs.existsSync(ORDERS_FILE)) {
       const raw = fs.readFileSync(ORDERS_FILE, "utf-8");
       inMemoryOrders = JSON.parse(raw);
+    }
+    if (fs.existsSync(TEMPLATES_FILE)) {
+      const raw = fs.readFileSync(TEMPLATES_FILE, "utf-8");
+      inMemoryTemplates = JSON.parse(raw);
     }
   } catch (err) {
     console.warn("Storage read notice:", err);
@@ -1488,8 +1513,10 @@ export async function createOrder(
         order_number, package_slug, package_name, package_price,
         customer_name, customer_phone, customer_email, business_name,
         business_category, domain_requested, notes, payment_method,
-        payment_proof, payment_status, order_status, paid_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        payment_proof, payment_status, order_status, paid_at,
+        order_type, template_name, template_url, template_tech,
+        domain_choice, hosting_duration, addons
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         data.order_number,
         data.package_slug,
@@ -1507,6 +1534,13 @@ export async function createOrder(
         data.payment_status || "unpaid",
         data.order_status || "new",
         data.paid_at || null,
+        data.order_type || "paketan",
+        data.template_name || "",
+        data.template_url || "",
+        data.template_tech || "",
+        data.domain_choice || "",
+        data.hosting_duration || "",
+        data.addons || "",
       ]
     );
     if (res && res.insertId) {
@@ -1566,6 +1600,34 @@ export async function updateOrder(
       fields.push("domain_requested = ?");
       values.push(updates.domain_requested);
     }
+    if (updates.order_type !== undefined) {
+      fields.push("order_type = ?");
+      values.push(updates.order_type);
+    }
+    if (updates.template_name !== undefined) {
+      fields.push("template_name = ?");
+      values.push(updates.template_name);
+    }
+    if (updates.template_url !== undefined) {
+      fields.push("template_url = ?");
+      values.push(updates.template_url);
+    }
+    if (updates.template_tech !== undefined) {
+      fields.push("template_tech = ?");
+      values.push(updates.template_tech);
+    }
+    if (updates.domain_choice !== undefined) {
+      fields.push("domain_choice = ?");
+      values.push(updates.domain_choice);
+    }
+    if (updates.hosting_duration !== undefined) {
+      fields.push("hosting_duration = ?");
+      values.push(updates.hosting_duration);
+    }
+    if (updates.addons !== undefined) {
+      fields.push("addons = ?");
+      values.push(updates.addons);
+    }
 
     if (fields.length > 0) {
       values.push(orderNumber);
@@ -1613,4 +1675,15 @@ export async function deleteOrder(orderNumber: string): Promise<boolean> {
 
   return deletedFromMysql || deletedFromJson;
 }
+
+export async function getTemplates(): Promise<TemplateItem[]> {
+  ensureData();
+  return inMemoryTemplates;
+}
+
+export async function getTemplatesByPackage(slug: string): Promise<TemplateItem[]> {
+  ensureData();
+  return inMemoryTemplates.filter((t) => t.allowed_packages.includes(slug) || t.allowed_packages.includes("custom"));
+}
+
 

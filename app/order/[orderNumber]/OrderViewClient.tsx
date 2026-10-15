@@ -236,18 +236,23 @@ export default function OrderViewClient({ initialOrder }: OrderViewClientProps) 
             Rincian Tagihan
           </h2>
 
-          <div className="bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200/80 space-y-3">
+          <div className="bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200/80 space-y-4">
             <div className="flex items-start justify-between gap-4">
-              <div>
-                <div className="text-sm sm:text-base font-extrabold text-slate-900">
-                  {order.package_name}
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm sm:text-base font-extrabold text-slate-900">
+                    {order.package_name}
+                  </span>
+                  <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#1853a7] text-white uppercase">
+                    {order.order_type === "pecahan" ? "🧩 Kustom LEGO (Pecahan)" : "📦 Paketan"}
+                  </span>
                 </div>
-                <div className="text-xs text-slate-500 mt-0.5">
+                <div className="text-xs text-slate-500">
                   Untuk Usaha: <strong>{order.business_name}</strong> ({order.business_category})
                 </div>
                 {order.domain_requested && (
-                  <div className="text-xs text-blue-600 mt-0.5 font-mono">
-                    Domain: {order.domain_requested}
+                  <div className="text-xs text-blue-600 font-mono">
+                    🌐 Domain: {order.domain_requested}
                   </div>
                 )}
               </div>
@@ -255,6 +260,90 @@ export default function OrderViewClient({ initialOrder }: OrderViewClientProps) 
                 {formattedPrice}
               </div>
             </div>
+
+            {/* Spesifikasi Kustom (Jika Ada Template, Hosting, atau Addons) */}
+            {(order.template_name || order.hosting_duration || order.domain_choice || order.addons) && (
+              <div className="pt-3 border-t border-slate-200/60 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                {order.template_name && (
+                  <div className="p-2.5 rounded-xl bg-white border border-slate-200/70 space-y-1">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                      Template &amp; Framework
+                    </span>
+                    <div className="font-bold text-slate-800 flex items-center justify-between gap-2">
+                      <span>{order.template_name}</span>
+                      {order.template_tech && (
+                        <span className="px-1.5 py-0.5 rounded bg-slate-100 text-[10px] font-mono text-slate-600">
+                          {order.template_tech}
+                        </span>
+                      )}
+                    </div>
+                    {order.template_url && (
+                      <a
+                        href={order.template_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] font-bold text-blue-600 hover:underline inline-flex items-center gap-1 mt-0.5"
+                      >
+                        <span>Lihat Demo Template</span>
+                        <span className="text-[9px]">↗</span>
+                      </a>
+                    )}
+                  </div>
+                )}
+
+                {order.hosting_duration && (
+                  <div className="p-2.5 rounded-xl bg-white border border-slate-200/70 space-y-1">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                      Cloud Hosting
+                    </span>
+                    <div className="font-bold text-slate-800">
+                      ☁️ {order.hosting_duration}
+                    </div>
+                  </div>
+                )}
+
+                {order.domain_choice && (
+                  <div className="p-2.5 rounded-xl bg-white border border-slate-200/70 space-y-1">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                      Pilihan Domain
+                    </span>
+                    <div className="font-bold text-slate-800 font-mono">
+                      🌐 {order.domain_choice}
+                    </div>
+                  </div>
+                )}
+
+                {order.addons && (() => {
+                  let list: string[] = [];
+                  try {
+                    const p = JSON.parse(order.addons);
+                    if (Array.isArray(p)) list = p;
+                    else list = [String(p)];
+                  } catch {
+                    list = order.addons.split(",").map((s) => s.trim()).filter(Boolean);
+                  }
+                  if (list.length === 0) return null;
+                  return (
+                    <div className="p-2.5 rounded-xl bg-white border border-slate-200/70 space-y-1 sm:col-span-2">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                        Add-Ons Pelengkap ({list.length})
+                      </span>
+                      <div className="flex flex-wrap gap-1.5 pt-0.5">
+                        {list.map((addon, i) => (
+                          <span
+                            key={i}
+                            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-[11px] font-medium"
+                          >
+                            <span>✓</span>
+                            <span>{addon}</span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
 
             <div className="pt-3 border-t border-slate-200/80 flex items-center justify-between">
               <span className="text-xs sm:text-sm font-black text-slate-900">
