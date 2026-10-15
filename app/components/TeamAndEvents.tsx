@@ -83,6 +83,7 @@ export default async function TeamAndEvents() {
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                         sizes="112px"
+                        loading="lazy"
                         unoptimized={memberImg.startsWith("data:") || memberImg.startsWith("http")}
                       />
                     </div>
@@ -178,6 +179,7 @@ export default async function TeamAndEvents() {
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-500"
                           sizes="(max-width: 768px) 100vw, 33vw"
+                          loading="lazy"
                           unoptimized={eventImg.startsWith("data:") || eventImg.startsWith("http")}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
@@ -191,7 +193,7 @@ export default async function TeamAndEvents() {
 
                         {/* Status Open Pill */}
                         <div className="absolute top-3.5 right-3.5">
-                          <span className="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-bold text-[10px] tracking-wider uppercase shadow-md flex items-center gap-1">
+                          <span className="px-2.5 py-0.5 rounded-full bg-emerald-800 text-white font-bold text-[10px] tracking-wider uppercase shadow-md flex items-center gap-1">
                             <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_4px_#ffffff]" />
                             Terbuka
                           </span>

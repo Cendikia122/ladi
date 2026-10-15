@@ -317,5 +317,12 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 0.95rem;
 }
 
+/* Mobile Performance: Defer style and layout calculations for off-screen sections */
+#tim-event, #wawasan, #portofolio, #tentang {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 700px;
+}
+
+
 
 

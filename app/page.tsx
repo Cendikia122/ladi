@@ -14,8 +14,8 @@ import BlogSection from "./components/BlogSection";
 import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+// Optimasi Performa Mobile & SEO: ISR Cache 60 detik (TTFB < 50ms)
+export const revalidate = 60;
 
 export default function Home() {
   return (

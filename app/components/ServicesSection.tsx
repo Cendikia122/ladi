@@ -247,7 +247,7 @@ export default function ServicesSection() {
                   <Link
                     href={`/checkout/${current.slug}`}
                     aria-label={`Pesan dan bayar langsung di web untuk ${current.name}`}
-                    className="flex-1 sm:flex-none px-5 py-3 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider text-center transition-all shadow-md"
+                    className="flex-1 sm:flex-none px-5 py-3 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider text-center transition-all shadow-md"
                   >
                     ⚡ Pesan & Bayar di Web
                   </Link>
