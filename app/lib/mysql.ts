@@ -3,7 +3,7 @@ import mysql from "mysql2/promise";
 let pool: mysql.Pool | null = null;
 let offlineUntil = 0;
 
-export function markDbOffline(durationMs = 60000) {
+export function markDbOffline(durationMs = 5000) {
   offlineUntil = Date.now() + durationMs;
 }
 
@@ -20,7 +20,7 @@ export function getPool(): mysql.Pool {
     const isSsl = process.env.DB_SSL === "true";
     pool = mysql.createPool({
       host: process.env.DB_HOST || "srv1762.hstgr.io",
-      user: process.env.DB_USER || "u941811514_admin",
+      user: process.env.DB_USER || "u941811514_ladi",
       password: process.env.DB_PASSWORD || "",
       database: process.env.DB_NAME || "u941811514_ladi",
       port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306,

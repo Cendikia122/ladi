@@ -5,7 +5,8 @@ import Footer from "../components/Footer";
 import WhatsAppButton from "../components/WhatsAppButton";
 import { getServicePackages } from "@/app/lib/storage";
 
-export const revalidate = 120;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata = {
   title: "Layanan & Spesifikasi — Ladi (Layanan Digital)",

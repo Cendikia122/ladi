@@ -7,7 +7,8 @@ import WhatsAppButton from "../components/WhatsAppButton";
 import { getEvents } from "@/app/lib/storage";
 import { Config } from "@/app/lib/config";
 
-export const revalidate = 120;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata = {
   title: "Event & Workshop Digitalisasi Bisnis — Ladi (Layanan Digital)",

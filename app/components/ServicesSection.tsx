@@ -1,8 +1,73 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { ServicePackage } from "@/app/lib/storage";
 
-const packages = [
+const curatedFeatureDescs: Record<string, string> = {
+  "Landing Page Cepat 1 Halaman": "Tampilan profesional dan sangat cepat saat dibuka di smartphone maupun komputer.",
+  "Setup & Verifikasi Google Business Profile": "Titik peta Google Maps resmi lengkap dengan nama, alamat, foto, dan jam operasional.",
+  "Tombol Order WhatsApp Otomatis": "Calon pembeli cukup tekan satu tombol untuk langsung chat dan order ke nomor Anda.",
+  "Aktif & Siap Pakai dalam 5 Hari Kerja": "Pengerjaan kilat dan siap pakai tanpa perlu Anda pusing urusan teknis.",
+  "Konsultasi & Audit Digital 10 Poin Gratis": "Audit menyeluruh kecepatan website, SEO, dan profil Google Maps bisnis Anda.",
+  "Website Lengkap 5–7 Halaman": "Halaman Beranda, Menu/Layanan, Galeri Portofolio, Tentang Kami, dan Kontak resmi.",
+  "Website Lengkap 5–7 Halaman (Menu, Galeri, Profil)": "Halaman Beranda, Menu/Layanan, Galeri Portofolio, Tentang Kami, dan Kontak resmi.",
+  "Terhubung Google Analytics": "Pantau pengunjung secara transparan untuk mengetahui perkembangan bisnis setiap hari.",
+  "Terhubung Google Analytics (Pantau Pengunjung)": "Pantau pengunjung secara transparan untuk mengetahui perkembangan bisnis setiap hari.",
+  "Desain Khusus Brand Anda": "Tampilan eksklusif sesuai warna dan karakter usaha Anda, super responsif di HP.",
+  "Desain Khusus Brand Anda (Responsif di HP)": "Tampilan eksklusif sesuai warna dan karakter usaha Anda, super responsif di HP.",
+  "Gratis Laporan Performa Perdana (30 Hari)": "Laporan pertumbuhan pengunjung dan klik WhatsApp dikirimkan setelah 30 hari website tayang.",
+  "Katalog Produk / Sistem Booking Terpadu": "Pelanggan bisa memesan produk atau menjadwalkan layanan secara mandiri 24 jam nonstop.",
+  "Integrasi Pembayaran QRIS Otomatis": "Dukungan transaksi instan dari semua bank (BCA, Mandiri, BRI, BNI) dan dompet digital (GoPay, OVO, Dana).",
+  "WhatsApp Auto-Reply Template": "Format balasan pesan otomatis profesional agar pesanan pembeli langsung terlayani cepat.",
+  "Siap Jualan Mandiri 24 Jam Nonstop": "Otomatisasi penuh tanpa perlu melayani chat manual satu per satu secara melelahkan.",
+  "Semua Fitur Paket RISE Lengkap": "Seluruh fasilitas, analitik, dan integrasi dari Paket RISE sudah otomatis disertakan.",
+  "Website Dipantau 24 Jam": "Pemantauan keamanan server dan stabilitas kecepatan agar website selalu aktif lancar.",
+  "Website dipantau 24 jam": "Pemantauan keamanan server dan stabilitas kecepatan agar website selalu aktif lancar.",
+  "Bebas Error & Maintenance Rutin": "Perawatan rutin domain, hosting, dan SSL tanpa perlu Anda khawatir kendala teknis.",
+  "Bebas error & maintenance rutin": "Perawatan rutin domain, hosting, dan SSL tanpa perlu Anda khawatir kendala teknis.",
+  "Update Konten Rutin": "Mau ganti harga, tambah foto produk, atau upload info baru? Cukup kirim ke WA kami.",
+  "Update konten rutin": "Mau ganti harga, tambah foto produk, atau upload info baru? Cukup kirim ke WA kami.",
+  "Laporan Pengunjung Dikirim Tiap Bulan ke WhatsApp": "Laporan angka nyata langsung dikirim ke WhatsApp Anda setiap akhir bulan.",
+  "Laporan Pengunjung dikirim tiap bulan ke WhatsApp": "Laporan angka nyata langsung dikirim ke WhatsApp Anda setiap akhir bulan.",
+};
+
+function parseFeatures(deliverablesRaw: string | undefined): Array<{ title: string; desc: string }> {
+  if (!deliverablesRaw) return [];
+  let list: any[] = [];
+  try {
+    list = JSON.parse(deliverablesRaw);
+    if (!Array.isArray(list)) list = [deliverablesRaw];
+  } catch {
+    list = deliverablesRaw.split("\n").map((s) => s.trim()).filter(Boolean);
+  }
+
+  return list.slice(0, 4).map((item) => {
+    if (typeof item === "object" && item !== null && item.title) {
+      return {
+        title: String(item.title),
+        desc: item.desc ? String(item.desc) : (curatedFeatureDescs[String(item.title)] || "Termasuk dalam standar pengerjaan profesional Ladi."),
+      };
+    }
+    const str = String(item).trim();
+    if (curatedFeatureDescs[str]) {
+      return { title: str, desc: curatedFeatureDescs[str] };
+    }
+    if (str.includes(" - ")) {
+      const [t, ...r] = str.split(" - ");
+      return { title: t.trim(), desc: r.join(" - ").trim() };
+    }
+    if (str.includes(": ")) {
+      const [t, ...r] = str.split(": ");
+      return { title: t.trim(), desc: r.join(": ").trim() };
+    }
+    return {
+      title: str,
+      desc: "Fasilitas lengkap dan terintegrasi standar pengerjaan resmi Ladi.",
+    };
+  });
+}
+
+const defaultPackages = [
   {
     id: "exist",
     tag: "SOLUSI AWAL UNTUK BISNIS KECIL",
@@ -14,6 +79,7 @@ const packages = [
     summary: "Cocok untuk UMKM & bisnis lokal yang ingin mulai terlihat online dengan biaya paling terjangkau.",
     ctaText: "Mulai dari sini. →",
     waMessage: "Halo Ladi, saya tertarik dengan Paket EXIST (Mulai Rp 299.000). Biar bisnismu muncul resmi di internet.",
+    badgePopular: false,
     features: [
       {
         title: "Landing Page Cepat 1 Halaman",
@@ -44,6 +110,7 @@ const packages = [
     summary: "Cocok untuk bisnis yang ingin tampil lebih profesional, dipercaya calon pelanggan, dan memiliki profil portofolio mendalam.",
     ctaText: "Naik Level Sekarang →",
     waMessage: "Halo Ladi, saya tertarik dengan Paket RISE (Mulai Rp 999.000). Saya ingin profil lengkap & profesional untuk bisnis saya.",
+    badgePopular: true,
     features: [
       {
         title: "Website Lengkap 5–7 Halaman",
@@ -74,6 +141,7 @@ const packages = [
     summary: "Cocok untuk bisnis yang ingin menerima pesanan dan booking secara online tanpa ribet.",
     ctaText: "Siap Jualan Mandiri →",
     waMessage: "Halo Ladi, saya tertarik dengan Paket RUN (Mulai Rp 2.499.000). Saya ingin website sistem toko online & booking mandiri dengan QRIS otomatis.",
+    badgePopular: false,
     features: [
       {
         title: "Katalog Produk / Sistem Booking Terpadu",
@@ -104,6 +172,7 @@ const packages = [
     summary: "Website tetap aman, terawat, dan berjalan tanpa bikin kamu repot. Kamu fokus menjalankan bisnis, Ladi yang menjaga digitalnya.",
     ctaText: "Pasang Penjaganya →",
     waMessage: "Halo Ladi, saya tertarik berlangganan Paket GUARD (Mulai Rp 300.000 – 500.000 / bulan). Saya ingin website tetap aman, terawat, dan dipantau 24 jam.",
+    badgePopular: false,
     features: [
       {
         title: "Website Dipantau 24 Jam",
@@ -125,9 +194,40 @@ const packages = [
   },
 ];
 
-export default function ServicesSection() {
-  const [activeTab, setActiveTab] = useState(1); // Default to RISE (Paling Populer)
-  const current = packages[activeTab];
+interface ServicesSectionProps {
+  packages?: ServicePackage[];
+}
+
+export default function ServicesSection({ packages: dbPackages }: ServicesSectionProps = {}) {
+  const displayList = (dbPackages && dbPackages.length > 0)
+    ? dbPackages.map((pkg) => {
+        const feats = parseFeatures(pkg.deliverables);
+        const formattedPrice = pkg.price.startsWith("Rp") || pkg.price.startsWith("Mulai")
+          ? pkg.price
+          : `Rp ${pkg.price}`;
+
+        return {
+          id: pkg.slug || String(pkg.id),
+          tag: pkg.tag || "PAKET LADI",
+          name: pkg.name,
+          slug: pkg.slug,
+          price: formattedPrice,
+          period: pkg.period || pkg.timeline || "Sekali Bayar",
+          subtitle: pkg.subtitle || "",
+          summary: pkg.target_audience || pkg.subtitle || "",
+          ctaText: pkg.cta_text || "Pesan Sekarang →",
+          waMessage: pkg.cta_whatsapp_text || `Halo Ladi, saya tertarik dengan ${pkg.name} (${formattedPrice}). ${pkg.subtitle}`,
+          badgePopular: Boolean(pkg.badge_popular),
+          features: feats.length > 0 ? feats : [
+            { title: "Fitur Lengkap Terverifikasi", desc: "Dukungan penuh tim ahli Ladi siap pakai." }
+          ],
+        };
+      })
+    : defaultPackages;
+
+  const defaultIndex = Math.max(0, displayList.findIndex((p) => (p as any).badgePopular));
+  const [activeTab, setActiveTab] = useState(defaultIndex >= 0 ? defaultIndex : 0);
+  const current = displayList[activeTab] || displayList[0];
 
   return (
     <section id="layanan" className="py-24 md:py-32 bg-[#f8fafc] border-b border-slate-200">
@@ -150,7 +250,7 @@ export default function ServicesSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left: Tab Buttons */}
           <div className="lg:col-span-4 space-y-3">
-            {packages.map((pkg, idx) => (
+            {displayList.map((pkg, idx) => (
               <button
                 key={pkg.id}
                 onClick={() => setActiveTab(idx)}

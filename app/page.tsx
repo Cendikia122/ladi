@@ -14,10 +14,15 @@ import BlogSection from "./components/BlogSection";
 import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
 
-// Optimasi Performa Mobile & SEO: ISR Cache 60 detik (TTFB < 50ms)
-export const revalidate = 60;
+import { getServicePackages } from "./lib/storage";
 
-export default function Home() {
+// Realtime Database Sync: Selalu ambil data teranyar dari Hostinger MySQL
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function Home() {
+  const packages = await getServicePackages();
+
   return (
     <>
       {/* 1. Top Bar */}
@@ -34,7 +39,7 @@ export default function Home() {
         <AboutSection />
 
         {/* 5. Services & DPS Packages */}
-        <ServicesSection />
+        <ServicesSection packages={packages} />
 
         {/* 6. Process (Cara Kerja) */}
         <ProcessSection />

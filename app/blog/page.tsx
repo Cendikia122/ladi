@@ -7,7 +7,8 @@ import WhatsAppButton from "../components/WhatsAppButton";
 import { getBlogs } from "@/app/lib/storage";
 import { Config } from "@/app/lib/config";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata = {
   title: "Wawasan & Panduan Bisnis Digital — Ladi (Layanan Digital)",

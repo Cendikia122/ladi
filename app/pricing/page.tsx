@@ -3,13 +3,79 @@ import TopBar from "../components/TopBar";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import WhatsAppButton from "../components/WhatsAppButton";
+import { getServicePackages, ServicePackage } from "@/app/lib/storage";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata = {
   title: "Biaya & Skema Paket — Ladi (Layanan Digital)",
   description: "Skema biaya transparan Ladi untuk UMKM dan bisnis. Mulai dari audit gratis hingga ekosistem penuh.",
 };
 
-export default function PricingPage() {
+const defaultPackagesData: Partial<ServicePackage>[] = [
+  {
+    id: 1,
+    name: "Paket EXIST",
+    slug: "paket-exist",
+    tag: "SOLUSI AWAL",
+    subtitle: "Biar Bisnismu Muncul Resmi di Internet",
+    price: "Rp 299.000",
+    period: "Sekali Bayar · 5 Hari Kerja Siap",
+    timeline: "5 Hari Kerja Siap",
+    deliverables: "[\"Landing Page Cepat 1 Halaman\",\"Setup & Verifikasi Google Business Profile\",\"Tombol Order WhatsApp Otomatis\",\"Aktif & Siap Pakai dalam 5 Hari Kerja\",\"Konsultasi & Audit Digital 10 Poin Gratis\"]",
+    cta_whatsapp_text: "Halo Ladi, saya tertarik dengan Paket EXIST (Mulai Rp 299.000). Biar bisnismu muncul resmi di internet.",
+    badge_popular: 0,
+    status: "active",
+  },
+  {
+    id: 2,
+    name: "Paket RISE",
+    slug: "paket-rise",
+    tag: "BISNIS BERKEMBANG",
+    subtitle: "Profil Lengkap & Profesional untuk Bisnis Jasa / Toko",
+    price: "Rp 999.000",
+    period: "Sekali Bayar · 7–10 Hari Kerja",
+    timeline: "7–10 Hari Kerja",
+    deliverables: "[\"Website Lengkap 5–7 Halaman (Menu, Galeri, Profil)\",\"Terhubung Google Analytics (Pantau Pengunjung)\",\"Desain Khusus Brand Anda (Responsif di HP)\",\"Gratis Laporan Performa Perdana (30 Hari)\",\"Setup & Verifikasi Google Business Profile\",\"Konsultasi & Audit Digital 10 Poin Gratis\"]",
+    cta_whatsapp_text: "Halo Ladi, saya tertarik dengan Paket RISE (Mulai Rp 999.000). Saya ingin profil lengkap & profesional untuk bisnis saya.",
+    badge_popular: 1,
+    status: "active",
+  },
+  {
+    id: 3,
+    name: "Paket RUN",
+    slug: "paket-run",
+    tag: "SOLUSI MANDIRI",
+    subtitle: "Sistem Toko Online & Booking Mandiri",
+    price: "Rp 2.499.000",
+    period: "Sekali Bayar · 10–14 Hari Kerja",
+    timeline: "10–14 Hari Kerja",
+    deliverables: "[\"Katalog Produk / Sistem Booking Terpadu\",\"Integrasi Pembayaran QRIS Otomatis\",\"WhatsApp Auto-Reply Template\",\"Siap Jualan Mandiri 24 Jam Nonstop\",\"Semua Fitur Paket RISE Lengkap\"]",
+    cta_whatsapp_text: "Halo Ladi, saya tertarik dengan Paket RUN (Mulai Rp 2.499.000). Saya ingin website toko online & booking mandiri dengan QRIS.",
+    badge_popular: 0,
+    status: "active",
+  },
+  {
+    id: 4,
+    name: "Paket GUARD",
+    slug: "paket-guard",
+    tag: "PAKET SPESIAL",
+    subtitle: "Satpam Digital Bisnismu",
+    price: "Rp 300rb – 500rb",
+    period: "/ bulan · Dipantau 24 Jam Nonstop",
+    timeline: "Dipantau 24 Jam Nonstop",
+    deliverables: "[\"Website dipantau 24 jam\",\"Bebas error & maintenance rutin\",\"Update konten rutin\",\"Laporan Pengunjung dikirim tiap bulan ke WhatsApp\",\"Konsultasi & Audit Digital 10 Poin Gratis\"]",
+    cta_whatsapp_text: "Halo Ladi, saya tertarik berlangganan Paket GUARD (Mulai Rp 300.000 – 500.000 / bulan). Saya ingin website tetap aman dan terawat.",
+    badge_popular: 0,
+    status: "active",
+  },
+];
+
+export default async function PricingPage() {
+  const dbPackages = await getServicePackages();
+  const displayPackages = dbPackages && dbPackages.length > 0 ? dbPackages : defaultPackagesData;
+
   return (
     <>
       <TopBar />
@@ -59,225 +125,108 @@ export default function PricingPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-              {/* EXIST */}
-              <div className="p-7 rounded-3xl bg-white border border-slate-200 shadow-sm corporate-card flex flex-col justify-between">
-                <div className="space-y-4">
-                  <div>
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-                      SOLUSI AWAL
-                    </span>
-                    <h3 className="text-xl font-extrabold text-slate-900 mt-1">Paket EXIST</h3>
-                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                      &ldquo;Biar Bisnismu Muncul Resmi di Internet&rdquo;
-                    </p>
+              {displayPackages.map((pkg) => {
+                let delivs: string[] = [];
+                try {
+                  delivs = JSON.parse(pkg.deliverables || "[]");
+                  if (!Array.isArray(delivs)) delivs = pkg.deliverables ? [pkg.deliverables] : [];
+                } catch {
+                  delivs = pkg.deliverables ? pkg.deliverables.split("\n").filter(Boolean) : [];
+                }
+
+                const priceStr = pkg.price || "0";
+                const isPopular = Boolean(pkg.badge_popular);
+                const waMsg =
+                  pkg.cta_whatsapp_text ||
+                  `Halo Ladi, saya tertarik dengan ${pkg.name || "Paket"} (${priceStr}). ${pkg.subtitle || ""}`;
+                const ctaBtnText =
+                  pkg.slug === "paket-guard" ? "⚡ Pasang Penjaga di Web →" : "⚡ Pesan & Bayar di Web →";
+
+                return (
+                  <div
+                    key={pkg.id}
+                    className={`p-7 rounded-3xl bg-white corporate-card flex flex-col justify-between ${
+                      isPopular
+                        ? "border-2 border-[#1853a7] shadow-xl relative"
+                        : "border border-slate-200 shadow-sm"
+                    }`}
+                  >
+                    {isPopular && (
+                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#fa824b] text-white text-[10px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full whitespace-nowrap shadow-sm">
+                        ⭐ PALING POPULER
+                      </span>
+                    )}
+
+                    <div className="space-y-4">
+                      <div>
+                        <span
+                          className={`text-[10px] font-bold uppercase tracking-wider block ${
+                            isPopular ? "text-[#fa824b]" : "text-slate-500"
+                          }`}
+                        >
+                          {pkg.tag || "PAKET RESMI"}
+                        </span>
+                        <h3 className="text-xl font-extrabold text-slate-900 mt-1">{pkg.name}</h3>
+                        {pkg.subtitle && (
+                          <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                            &ldquo;{pkg.subtitle}&rdquo;
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="py-4 border-y border-slate-100">
+                        <span className="text-[11px] text-slate-600 font-medium block">
+                          {pkg.slug === "paket-guard" ? "Mulai" : "Mulai dari"}
+                        </span>
+                        <div
+                          className={`${
+                            pkg.slug === "paket-guard" ? "text-2xl" : "text-3xl"
+                          } font-black text-[#1853a7]`}
+                        >
+                          {priceStr.startsWith("Rp") ? priceStr : `Rp ${priceStr}`}
+                        </div>
+                        <div className="text-[11px] text-slate-500 mt-0.5">
+                          {pkg.period || pkg.timeline || "Sekali Bayar"}
+                        </div>
+                      </div>
+
+                      <ul className="space-y-2 text-xs text-slate-600">
+                        {delivs.map((item, idx) => (
+                          <li key={idx} className="flex items-start gap-1.5">
+                            <span className="text-emerald-600 font-bold">✓</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="pt-6 space-y-2">
+                      <Link
+                        href={`/checkout/${pkg.slug}`}
+                        className="block w-full text-center py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
+                        aria-label={`Pesan ${pkg.name} langsung di web`}
+                      >
+                        {ctaBtnText}
+                      </Link>
+                      <a
+                        href={`https://wa.me/6282112477119?text=${encodeURIComponent(waMsg)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block w-full text-center py-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-[11px] transition-all"
+                        aria-label={`Tanya via WhatsApp tentang ${pkg.name}`}
+                      >
+                        Tanya via WA 💬
+                      </a>
+                      <Link
+                        href={`/services/${pkg.slug}`}
+                        className="block text-center text-[10px] font-bold text-slate-400 hover:text-slate-600 transition-colors"
+                      >
+                        Lihat Rincian Lengkap →
+                      </Link>
+                    </div>
                   </div>
-
-                  <div className="py-4 border-y border-slate-100">
-                    <span className="text-[11px] text-slate-600 font-medium block">Mulai dari</span>
-                    <div className="text-3xl font-black text-[#1853a7]">Rp 299.000</div>
-                    <div className="text-[11px] text-slate-500 mt-0.5">Sekali Bayar · 5 Hari Kerja Siap</div>
-                  </div>
-
-                  <ul className="space-y-2 text-xs text-slate-600">
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Landing Page Cepat 1 Halaman</span></li>
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Setup & Verifikasi Google Business Profile</span></li>
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Tombol Order WhatsApp Otomatis</span></li>
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Aktif & Siap Pakai dalam 5 Hari Kerja</span></li>
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Konsultasi & Audit Digital 10 Poin Gratis</span></li>
-                  </ul>
-                </div>
-
-                <div className="pt-6 space-y-2">
-                  <Link
-                    href="/checkout/paket-exist"
-                    className="block w-full text-center py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
-                    aria-label="Pesan Paket EXIST langsung di web"
-                  >
-                    ⚡ Pesan & Bayar di Web →
-                  </Link>
-                  <a
-                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+dengan+Paket+EXIST+(Mulai+Rp+299.000).+Biar+bisnismu+muncul+resmi+di+internet."
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full text-center py-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-[11px] transition-all"
-                    aria-label="Tanya via WhatsApp tentang Paket EXIST"
-                  >
-                    Tanya via WA 💬
-                  </a>
-                  <Link
-                    href="/services/paket-exist"
-                    className="block text-center text-[10px] font-bold text-slate-400 hover:text-slate-600 transition-colors"
-                  >
-                    Lihat Rincian Lengkap →
-                  </Link>
-                </div>
-              </div>
-
-              {/* RISE */}
-              <div className="p-7 rounded-3xl bg-white border-2 border-[#1853a7] shadow-xl corporate-card flex flex-col justify-between relative">
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#fa824b] text-white text-[10px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full whitespace-nowrap shadow-sm">
-                  ⭐ PALING POPULER
-                </span>
-                <div className="space-y-4">
-                  <div>
-                    <span className="text-[10px] font-bold text-[#fa824b] uppercase tracking-wider block">
-                      BISNIS BERKEMBANG
-                    </span>
-                    <h3 className="text-xl font-extrabold text-slate-900 mt-1">Paket RISE</h3>
-                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                      &ldquo;Profil Lengkap & Profesional untuk Bisnis Jasa / Toko&rdquo;
-                    </p>
-                  </div>
-
-                  <div className="py-4 border-y border-slate-100">
-                    <span className="text-[11px] text-slate-600 font-medium block">Mulai dari</span>
-                    <div className="text-3xl font-black text-[#1853a7]">Rp 999.000</div>
-                    <div className="text-[11px] text-slate-500 mt-0.5">Sekali Bayar · 7–10 Hari Kerja</div>
-                  </div>
-
-                  <ul className="space-y-2 text-xs text-slate-600">
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Website Lengkap 5–7 Halaman (Menu, Galeri, Profil)</span></li>
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Terhubung Google Analytics (Pantau Pengunjung)</span></li>
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Desain Khusus Brand Anda (Responsif di HP)</span></li>
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Gratis Laporan Performa Perdana (30 Hari)</span></li>
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Setup & Verifikasi Google Business Profile</span></li>
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Konsultasi & Audit Digital 10 Poin Gratis</span></li>
-                  </ul>
-                </div>
-
-                <div className="pt-6 space-y-2">
-                  <Link
-                    href="/checkout/paket-rise"
-                    className="block w-full text-center py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
-                    aria-label="Pesan Paket RISE langsung di web"
-                  >
-                    ⚡ Pesan & Bayar di Web →
-                  </Link>
-                  <a
-                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+dengan+Paket+RISE+(Mulai+Rp+999.000).+Saya+ingin+profil+lengkap+%26+profesional+untuk+bisnis+saya."
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full text-center py-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-[11px] transition-all"
-                    aria-label="Tanya via WhatsApp tentang Paket RISE"
-                  >
-                    Tanya via WA 💬
-                  </a>
-                  <Link
-                    href="/services/paket-rise"
-                    className="block text-center text-[10px] font-bold text-slate-400 hover:text-slate-600 transition-colors"
-                  >
-                    Lihat Rincian Lengkap →
-                  </Link>
-                </div>
-              </div>
-
-              {/* RUN */}
-              <div className="p-7 rounded-3xl bg-white border border-slate-200 shadow-sm corporate-card flex flex-col justify-between">
-                <div className="space-y-4">
-                  <div>
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-                      SOLUSI MANDIRI
-                    </span>
-                    <h3 className="text-xl font-extrabold text-slate-900 mt-1">Paket RUN</h3>
-                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                      &ldquo;Sistem Toko Online & Booking Mandiri&rdquo;
-                    </p>
-                  </div>
-
-                  <div className="py-4 border-y border-slate-100">
-                    <span className="text-[11px] text-slate-600 font-medium block">Mulai dari</span>
-                    <div className="text-3xl font-black text-[#1853a7]">Rp 2.499.000</div>
-                    <div className="text-[11px] text-slate-500 mt-0.5">Sekali Bayar · 10–14 Hari Kerja</div>
-                  </div>
-
-                  <ul className="space-y-2 text-xs text-slate-600">
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Katalog Produk / Sistem Booking Terpadu</span></li>
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Integrasi Pembayaran QRIS Otomatis</span></li>
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>WhatsApp Auto-Reply Template</span></li>
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Siap Jualan Mandiri 24 Jam Nonstop</span></li>
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Semua Fitur Paket RISE Lengkap</span></li>
-                  </ul>
-                </div>
-
-                <div className="pt-6 space-y-2">
-                  <Link
-                    href="/checkout/paket-run"
-                    className="block w-full text-center py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
-                    aria-label="Pesan Paket RUN langsung di web"
-                  >
-                    ⚡ Pesan & Bayar di Web →
-                  </Link>
-                  <a
-                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+dengan+Paket+RUN+(Mulai+Rp+2.499.000).+Saya+ingin+website+toko+online+%26+booking+mandiri+dengan+QRIS."
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full text-center py-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-[11px] transition-all"
-                    aria-label="Tanya via WhatsApp tentang Paket RUN"
-                  >
-                    Tanya via WA 💬
-                  </a>
-                  <Link
-                    href="/services/paket-run"
-                    className="block text-center text-[10px] font-bold text-slate-400 hover:text-slate-600 transition-colors"
-                  >
-                    Lihat Rincian Lengkap →
-                  </Link>
-                </div>
-              </div>
-
-              {/* GUARD */}
-              <div className="p-7 rounded-3xl bg-white border border-slate-200 shadow-sm corporate-card flex flex-col justify-between">
-                <div className="space-y-4">
-                  <div>
-                    <span className="text-[10px] font-bold text-[#fa824b] uppercase tracking-wider block">
-                      PAKET SPESIAL
-                    </span>
-                    <h3 className="text-xl font-extrabold text-slate-900 mt-1">Paket GUARD</h3>
-                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                      &ldquo;Satpam Digital Bisnismu&rdquo;
-                    </p>
-                  </div>
-
-                  <div className="py-4 border-y border-slate-100">
-                    <span className="text-[11px] text-slate-600 font-medium block">Mulai</span>
-                    <div className="text-2xl font-black text-[#1853a7]">Rp 300rb – 500rb</div>
-                    <div className="text-[11px] text-slate-500 mt-0.5">/ bulan · Dipantau 24 Jam Nonstop</div>
-                  </div>
-
-                  <ul className="space-y-2 text-xs text-slate-600">
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Website dipantau 24 jam</span></li>
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Bebas error & maintenance rutin</span></li>
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Update konten rutin</span></li>
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Laporan Pengunjung dikirim tiap bulan ke WhatsApp</span></li>
-                    <li className="flex items-start gap-1.5"><span className="text-emerald-600 font-bold">✓</span> <span>Konsultasi & Audit Digital 10 Poin Gratis</span></li>
-                  </ul>
-                </div>
-
-                <div className="pt-6 space-y-2">
-                  <Link
-                    href="/checkout/paket-guard"
-                    className="block w-full text-center py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
-                    aria-label="Langganan Paket GUARD langsung di web"
-                  >
-                    ⚡ Pasang Penjaga di Web →
-                  </Link>
-                  <a
-                    href="https://wa.me/6282112477119?text=Halo+Ladi%2C+saya+tertarik+berlangganan+Paket+GUARD+(Mulai+Rp+300.000+%E2%80%93+500.000+/+bulan).+Saya+ingin+website+tetap+aman+dan+terawat."
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full text-center py-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-[11px] transition-all"
-                    aria-label="Tanya via WhatsApp tentang Paket GUARD"
-                  >
-                    Tanya via WA 💬
-                  </a>
-                  <Link
-                    href="/services/paket-guard"
-                    className="block text-center text-[10px] font-bold text-slate-400 hover:text-slate-600 transition-colors"
-                  >
-                    Lihat Rincian Lengkap →
-                  </Link>
-                </div>
-              </div>
+                );
+              })}
             </div>
 
             {/* Note on Free Audit */}
