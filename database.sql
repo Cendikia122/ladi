@@ -455,5 +455,24 @@ CREATE TABLE IF NOT EXISTS `orders` (
   INDEX `idx_payment_status` (`payment_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- -----------------------------------------------------
+-- Table: admin_users (Kontrol Akun Admin, USN, & Password)
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `admin_users` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `username` VARCHAR(100) NOT NULL UNIQUE,
+  `password_hash` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `role` VARCHAR(50) DEFAULT 'admin',
+  `status` VARCHAR(50) DEFAULT 'active',
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX `idx_username` (`username`),
+  INDEX `idx_role` (`role`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
+INSERT INTO `admin_users` (`id`, `username`, `password_hash`, `name`, `role`, `status`)
+VALUES 
+  (1, 'admin', '07dacd7f5225556e748b1efd54df7ee4:c80a71f469ccd2bd845ab3754de8d799122caef3a5cd3ba233316c99a2c7cc671ea0f371fa3c08884156edfae0c72f796cc3d5e43678eebc6d4d3583755e5a86', 'Super Administrator', 'superadmin', 'active'),
+  (2, 'penulis', 'cd6bcabaa02e070859cd4c43abb41e36:daae2a2a6fd93f080a0dc4591731432228293ae17d87668386347658a8b760ca78b09553c15afdba8ea9d0557fb8d6db1c72d470636d161e74928c5477e30815', 'Penulis Konten (Blog)', 'editor', 'active')
+ON DUPLICATE KEY UPDATE `id`=`id`;
