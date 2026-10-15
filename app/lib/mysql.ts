@@ -37,8 +37,8 @@ export function getPool(): mysql.Pool {
 }
 
 let tablesChecked = false;
-async function ensureTables(db: mysql.Pool) {
-  if (tablesChecked) return;
+export async function ensureTables(db: mysql.Pool, force = false) {
+  if (tablesChecked && !force) return;
   tablesChecked = true;
   try {
     // 1. Pastikan tabel blogs ada di Hostinger jika belum dibuat
@@ -379,8 +379,14 @@ async function ensureTables(db: mysql.Pool) {
   }
 }
 
+function isNetworkError(err: any): boolean {
+  if (!err) return false;
+  const netCodes = ["ECONNREFUSED", "ETIMEDOUT", "ENOTFOUND", "PROTOCOL_CONNECTION_LOST", "EHOSTUNREACH", "ECONNRESET"];
+  return netCodes.includes(err.code) || netCodes.includes(err.errno);
+}
+
 export async function query<T = any>(sql: string, params: any[] = []): Promise<T> {
-  // Jika circuit breaker terbuka (baru saja offline), langsung fail fast ke fallback JSON
+  // Jika circuit breaker terbuka (baru saja offline akibat kegagalan jaringan), langsung fail fast ke fallback JSON
   if (isDbCircuitOpen()) {
     throw new Error("MySQL offline (circuit breaker open)");
   }
@@ -395,20 +401,30 @@ export async function query<T = any>(sql: string, params: any[] = []): Promise<T
     const [rows] = await db.query(sql, params);
     return rows as T;
   } catch (error: any) {
-    // Jika tabel belum ada (ER_NO_SUCH_TABLE atau errno 1146), inisialisasi tabel sekali dan coba lagi
-    if (error?.code === "ER_NO_SUCH_TABLE" || error?.errno === 1146) {
+    // 1. Jika tabel belum ada (ER_NO_SUCH_TABLE 1146) atau kolom belum ada (ER_BAD_FIELD_ERROR 1054)
+    if (
+      error?.code === "ER_NO_SUCH_TABLE" ||
+      error?.errno === 1146 ||
+      error?.code === "ER_BAD_FIELD_ERROR" ||
+      error?.errno === 1054
+    ) {
       try {
         const db = getPool();
-        await ensureTables(db);
+        await ensureTables(db, true);
         const [rows] = await db.query(sql, params);
         return rows as T;
-      } catch (retryErr) {
-        markDbOffline(60000);
+      } catch (retryErr: any) {
+        if (isNetworkError(retryErr)) {
+          markDbOffline(5000);
+        }
         throw retryErr;
       }
     }
-    // Tandai offline selama 60 detik agar request berikutnya instan dari JSON
-    markDbOffline(60000);
+
+    // 2. Hanya aktifkan circuit breaker bila murni masalah koneksi jaringan
+    if (isNetworkError(error)) {
+      markDbOffline(5000);
+    }
     throw error;
   }
 }
@@ -427,13 +443,17 @@ export async function checkDbConnection(): Promise<{ connected: boolean; message
     resetDbCircuit();
     const db = getPool();
     await db.query("SELECT 1");
+    // Pastikan seluruh tabel dan kolom selalu sinkron
+    await ensureTables(db, false);
     return {
       connected: true,
       message: "MySQL Hostinger Terhubung & Siap Digunakan.",
       host,
     };
   } catch (err: any) {
-    markDbOffline(60000);
+    if (isNetworkError(err)) {
+      markDbOffline(5000);
+    }
     return {
       connected: false,
       message: `MySQL Offline: ${err.message}. Sistem otomatis menggunakan fallback file JSON lokal.`,

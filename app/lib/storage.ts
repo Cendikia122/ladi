@@ -1480,8 +1480,14 @@ export async function getOrders(limit?: number, statusFilter?: string): Promise<
 }
 
 export async function getOrderByNumber(orderNumber: string): Promise<OrderItem | null> {
+  const clean = (orderNumber || "").trim();
+  if (!clean) return null;
+
   try {
-    const rows = await query<any[]>("SELECT * FROM orders WHERE order_number = ? LIMIT 1", [orderNumber]);
+    const rows = await query<any[]>(
+      "SELECT * FROM orders WHERE order_number = ? OR LOWER(order_number) = ? LIMIT 1",
+      [clean, clean.toLowerCase()]
+    );
     if (rows && rows.length > 0) {
       const r = rows[0];
       return {
@@ -1497,7 +1503,7 @@ export async function getOrderByNumber(orderNumber: string): Promise<OrderItem |
   }
 
   ensureData();
-  const found = inMemoryOrders.find((o) => o.order_number.toLowerCase() === orderNumber.toLowerCase());
+  const found = inMemoryOrders.find((o) => o.order_number.toLowerCase() === clean.toLowerCase());
   return found || null;
 }
 
@@ -1516,9 +1522,10 @@ export async function getOrdersByPhone(phone: string): Promise<OrderItem[]> {
   }
 
   try {
+    const suffix = clean.length >= 8 ? clean.slice(-8) : clean;
     const rows = await query<any[]>(
-      "SELECT * FROM orders WHERE customer_phone = ? OR customer_phone = ? ORDER BY id DESC",
-      [phone1, phone2]
+      "SELECT * FROM orders WHERE customer_phone = ? OR customer_phone = ? OR customer_phone LIKE ? ORDER BY id DESC",
+      [phone1, phone2, `%${suffix}`]
     );
     if (rows && rows.length > 0) {
       return rows.map((r) => ({
@@ -1543,27 +1550,45 @@ export async function getOrdersByPhone(phone: string): Promise<OrderItem[]> {
 }
 
 export async function searchOrdersByKeyword(keyword: string): Promise<OrderItem[]> {
-  const clean = keyword.trim().toLowerCase();
+  const clean = keyword.trim();
   if (!clean) return [];
 
-  // Jika keyword adalah nomor order (cth LADI-...)
-  if (clean.startsWith("ladi-") || clean.length >= 8) {
-    const byOrder = await getOrderByNumber(clean);
-    if (byOrder) return [byOrder];
-  }
+  // 1. Cek nomor invoice langsung
+  const byOrder = await getOrderByNumber(clean);
+  if (byOrder) return [byOrder];
 
-  // Jika keyword adalah angka (kemungkinan nomor telepon)
+  // 2. Jika keyword mengandung angka telepon minimal 6 digit
   const digits = clean.replace(/[^0-9]/g, "");
   if (digits.length >= 6) {
-    return await getOrdersByPhone(digits);
+    const byPhone = await getOrdersByPhone(digits);
+    if (byPhone.length > 0) return byPhone;
   }
 
-  // Fallback pencarian di inMemory
+  // 3. Cari di MySQL berdasarkan nama pelanggan atau nama usaha
+  try {
+    const rows = await query<any[]>(
+      "SELECT * FROM orders WHERE customer_name LIKE ? OR business_name LIKE ? ORDER BY id DESC LIMIT 10",
+      [`%${clean}%`, `%${clean}%`]
+    );
+    if (rows && rows.length > 0) {
+      return rows.map((r) => ({
+        ...r,
+        package_price: Number(r.package_price),
+        created_at: r.created_at ? new Date(r.created_at).toISOString() : new Date().toISOString(),
+        updated_at: r.updated_at ? new Date(r.updated_at).toISOString() : undefined,
+        paid_at: r.paid_at ? new Date(r.paid_at).toISOString() : null,
+      }));
+    }
+  } catch (err) {}
+
+  // 4. Fallback pencarian di inMemory
   ensureData();
+  const lower = clean.toLowerCase();
   return inMemoryOrders.filter((o) =>
-    o.order_number.toLowerCase().includes(clean) ||
-    o.customer_name.toLowerCase().includes(clean) ||
-    (o.customer_phone && o.customer_phone.includes(digits))
+    o.order_number.toLowerCase().includes(lower) ||
+    o.customer_name.toLowerCase().includes(lower) ||
+    o.business_name.toLowerCase().includes(lower) ||
+    (digits.length >= 6 && o.customer_phone && o.customer_phone.includes(digits))
   );
 }
 
@@ -1612,8 +1637,49 @@ export async function createOrder(
     if (res && res.insertId) {
       insertedId = res.insertId;
     }
-  } catch (err) {
-    console.warn("MySQL createOrder error:", err);
+  } catch (err: any) {
+    console.warn("MySQL createOrder full insert error, trying base columns fallback:", err);
+    try {
+      const fallbackNotes = [
+        data.notes,
+        data.template_name ? `Template: ${data.template_name} (${data.template_tech || ""})` : "",
+        data.domain_choice ? `Domain: ${data.domain_choice}` : "",
+        data.hosting_duration ? `Hosting: ${data.hosting_duration}` : "",
+        data.addons ? `Addons: ${data.addons}` : "",
+      ].filter(Boolean).join(" | ");
+
+      const res2 = await query<any>(
+        `INSERT INTO orders (
+          order_number, package_slug, package_name, package_price,
+          customer_name, customer_phone, customer_email, business_name,
+          business_category, domain_requested, notes, payment_method,
+          payment_proof, payment_status, order_status, paid_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          data.order_number,
+          data.package_slug,
+          data.package_name,
+          data.package_price,
+          data.customer_name,
+          data.customer_phone,
+          data.customer_email || "",
+          data.business_name,
+          data.business_category || "",
+          data.domain_requested || "",
+          fallbackNotes,
+          data.payment_method || "QRIS",
+          data.payment_proof || null,
+          data.payment_status || "unpaid",
+          data.order_status || "new",
+          data.paid_at || null,
+        ]
+      );
+      if (res2 && res2.insertId) {
+        insertedId = res2.insertId;
+      }
+    } catch (fallbackErr) {
+      console.error("MySQL createOrder fallback insert error:", fallbackErr);
+    }
   }
 
   ensureData();

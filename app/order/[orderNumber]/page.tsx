@@ -21,7 +21,8 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function OrderInvoicePage({ params }: Props) {
   const { orderNumber } = await params;
-  const order = await getOrderByNumber(orderNumber);
+  const decodedOrderNumber = decodeURIComponent(orderNumber || "").trim();
+  const order = await getOrderByNumber(decodedOrderNumber);
 
   if (!order) {
     notFound();
