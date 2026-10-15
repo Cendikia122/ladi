@@ -14,12 +14,14 @@
     "example_websites": "[{\"name\":\"Bengkel Motor Berkah Jaya\",\"industry\":\"Otomotif & Servis Motor\",\"url\":\"/project/bengkel-motor\",\"image\":\"/images/clients/bengkel-motor.jpg\",\"highlight\":\"Titik Google Maps resmi terverifikasi, alamat jelas di pencarian lokal, dan tombol order WhatsApp langsung.\"},{\"name\":\"Katering Sari Rasa Nusantara\",\"industry\":\"Kuliner & Katering\",\"url\":\"/project/katering-sari-rasa\",\"image\":\"/images/clients/katering-sari-rasa.jpg\",\"highlight\":\"Landing page cepat 1 halaman dengan foto menu andalan dan tombol chat otomatis pemesanan.\"}]",
     "audit_report_sample": "{\"title\":\"Hasil Audit Google Maps & Kecepatan Akses Mobile\",\"speed_score\":98,\"seo_score\":100,\"google_maps_status\":\"Terverifikasi Resmi\",\"metrics\":[\"Waktu muat di HP: 0.8 detik di jaringan seluler\",\"Titik Google Maps muncul di pencarian lokal sekitarmu\",\"Tombol WhatsApp langsung membuka chat tanpa simpan nomor\"]}",
     "description": "<h3>Biar Bisnismu Muncul Resmi di Internet</h3><p>Mulai kehadiran digital usahamu hari ini tanpa perlu biaya mahal atau proses yang ribet. Paket EXIST adalah langkah awal paling terjangkau bagi pelaku UMKM dan bisnis lokal untuk memiliki alamat website resmi sekaligus pendaftaran titik Google Maps yang terverifikasi.</p><ul><li><strong>Landing Page Cepat 1 Halaman:</strong> Tampilan rapi, elegan, dan sangat cepat saat dibuka lewat smartphone.</li><li><strong>Setup & Verifikasi Google Business Profile:</strong> Bisnismu memiliki titik peta resmi di Google Maps lengkap dengan jam buka dan foto tempat usaha.</li><li><strong>Tombol Order WhatsApp Otomatis:</strong> Calon pembeli cukup tekan satu tombol untuk langsung memesan atau bertanya via chat.</li><li><strong>Siap Pakai dalam 5 Hari Kerja:</strong> Tim Ladi yang mengurus semua urusan teknis dari awal hingga website siap tayang.</li></ul>",
+    "faqs": "[]",
     "cta_text": "Mulai dari sini. →",
     "cta_whatsapp_text": "Halo Ladi, saya tertarik dengan Paket EXIST (Mulai Rp 299.000). Biar bisnismu muncul resmi di internet.",
     "badge_popular": 0,
     "status": "active",
     "order_num": 1,
-    "created_at": "2026-10-14 08:00:00"
+    "created_at": "2026-10-13T18:44:00.000Z",
+    "updated_at": "2026-10-13T18:44:00.000Z"
   },
   {
     "id": 2,
@@ -36,12 +38,14 @@
     "example_websites": "[{\"name\":\"Klinik Gigi drg. Sejahtera\",\"industry\":\"Kesehatan & Perawatan Gigi\",\"url\":\"/project/klinik-gigi\",\"image\":\"/images/clients/klinik-gigi.jpg\",\"highlight\":\"Website profil 6 halaman dengan galeri klinik, jadwal praktek dokter, dan integrasi reservasi pasien.\"},{\"name\":\"Pusat Oleh-Oleh Khas Bogor Bu Ratna\",\"industry\":\"Retail & Pusat Oleh-Oleh\",\"url\":\"/project/oleh-oleh-bogor\",\"image\":\"/images/clients/oleh-oleh-bogor.jpg\",\"highlight\":\"Katalog varian oleh-oleh, panduan rute turis Google Maps, dan peningkatan pesanan online +210%.\"}]",
     "audit_report_sample": "{\"title\":\"Contoh Laporan Performa Perdana & Analisis Pengunjung 30 Hari\",\"speed_score\":99,\"seo_score\":100,\"metrics\":[\"Google Analytics 4 aktif memantau jumlah pengunjung harian\",\"Skor SEO semantik 100/100 di mesin pencari Google\",\"Laporan performa perdana dikirimkan setelah 30 hari website tayang\"]}",
     "description": "<h3>Profil Lengkap & Profesional untuk Bisnis Jasa / Toko</h3><p>Paket RISE adalah pilihan <strong>Paling Populer</strong> bagi pemilik bisnis yang ingin membangun reputasi kuat dan memenangkan kepercayaan calon pelanggan baru. Dilengkapi struktur multi-halaman lengkap untuk membedah seluruh keunggulan layanan atau produk Anda.</p><ul><li><strong>Website Lengkap 5–7 Halaman:</strong> Halaman Beranda, Tentang Kami, Layanan/Produk, Galeri Portofolio, Artikel, dan Kontak resmi.</li><li><strong>Terhubung Google Analytics:</strong> Pantau secara transparan berapa banyak calon pembeli yang mengunjungi website Anda setiap hari.</li><li><strong>Desain Khusus Brand Anda:</strong> Tampilan visual eksklusif yang disesuaikan dengan warna, logo, dan identitas brand usaha Anda.</li><li><strong>Gratis Laporan Performa Perdana (30 Hari):</strong> Laporan perkembangan pengunjung dan interaksi WhatsApp dikirimkan langsung setelah 1 bulan berjalan.</li></ul>",
+    "faqs": "[]",
     "cta_text": "Naik Level Sekarang →",
     "cta_whatsapp_text": "Halo Ladi, saya tertarik dengan Paket RISE (Mulai Rp 999.000). Saya ingin profil lengkap & profesional untuk bisnis saya.",
     "badge_popular": 1,
     "status": "active",
     "order_num": 2,
-    "created_at": "2026-10-14 08:00:00"
+    "created_at": "2026-10-13T18:44:00.000Z",
+    "updated_at": "2026-10-13T18:44:00.000Z"
   },
   {
     "id": 3,
@@ -58,12 +62,14 @@
     "example_websites": "[{\"name\":\"Pusat Oleh-Oleh Online Store\",\"industry\":\"Toko Online & E-Commerce\",\"url\":\"/project/oleh-oleh-bogor\",\"image\":\"/images/clients/oleh-oleh-bogor.jpg\",\"highlight\":\"Sistem belanja mandiri dengan pembayaran QRIS otomatis dan notifikasi instan via WhatsApp.\"},{\"name\":\"Katering Sari Rasa Booking System\",\"industry\":\"Katering & Event Organizer\",\"url\":\"/project/katering-sari-rasa\",\"image\":\"/images/clients/katering-sari-rasa.jpg\",\"highlight\":\"Formulir pemesanan paket prasmanan online dengan invoice otomatis dan konfirmasi WhatsApp admin.\"}]",
     "audit_report_sample": "{\"title\":\"Sistem Transaksi Otomatis & Kecepatan Pembayaran QRIS\",\"speed_score\":96,\"seo_score\":98,\"metrics\":[\"Checkout instan dengan QRIS statis/dinamis semua bank & e-wallet\",\"Template WhatsApp Auto-Reply menyambut pesanan dalam 5 detik\",\"Memangkas waktu admin melayani chat manual hingga 70%\"]}",
     "description": "<h3>Sistem Toko Online & Booking Mandiri 24 Jam Nonstop</h3><p>Ketika pesanan mulai ramai, melayani pesan chat satu per satu secara manual sangat menguras waktu. Paket RUN memberikan <strong>Solusi Mandiri</strong> agar calon pembeli bisa melihat katalog, memilih jadwal booking, dan membayar via QRIS otomatis tanpa ribet.</p><ul><li><strong>Katalog Produk / Sistem Booking Terpadu:</strong> Pelanggan memilih produk atau memesan sesi layanan secara mandiri.</li><li><strong>Integrasi Pembayaran QRIS Otomatis:</strong> Mendukung semua aplikasi perbankan (BCA, Mandiri, BRI, BNI) serta e-wallet (GoPay, OVO, Dana, ShopeePay).</li><li><strong>WhatsApp Auto-Reply Template:</strong> Template balasan cepat profesional agar calon pembeli langsung terlayani meski Anda sedang beristirahat.</li><li><strong>Siap Jualan Mandiri 24 Jam Nonstop:</strong> Bisnis tetap menerima order kapan pun dan di mana pun.</li></ul>",
+    "faqs": "[]",
     "cta_text": "Siap Jualan Mandiri →",
     "cta_whatsapp_text": "Halo Ladi, saya tertarik dengan Paket RUN (Mulai Rp 2.499.000). Saya ingin website sistem toko online & booking mandiri dengan QRIS otomatis.",
     "badge_popular": 0,
     "status": "active",
     "order_num": 3,
-    "created_at": "2026-10-14 08:00:00"
+    "created_at": "2026-10-13T18:44:01.000Z",
+    "updated_at": "2026-10-13T18:44:01.000Z"
   },
   {
     "id": 4,
@@ -80,11 +86,13 @@
     "example_websites": "[{\"name\":\"Contoh Laporan Pengunjung Bulanan via WA\",\"industry\":\"Satpam Digital & Maintenance\",\"url\":\"#\",\"image\":\"/images/clients/bengkel-motor.jpg\",\"highlight\":\"Laporan angka nyata: berapa orang telepon, berapa orang cari rute di peta Google, dan rekomendasi perbaikan bulan berikutnya.\"}]",
     "audit_report_sample": "{\"title\":\"Laporan Pemeliharaan Rutin & Keamanan Satpam Digital\",\"speed_score\":99,\"seo_score\":100,\"metrics\":[\"Website dipantau 24 jam nonstop bebas down time\",\"Pembaruan konten dan harga dibantu tim Ladi kapan saja\",\"Laporan pengunjung dikirim rutin setiap bulan langsung ke nomor WhatsApp pemilik\"]}",
     "description": "<h3>\"Satpam Digital Bisnismu\"</h3><p>Website tetap aman, terawat, dan berjalan tanpa bikin kamu repot. Kamu fokus menjalankan operasional dan pelayanan bisnis, biar tim ahli Ladi yang menjaga seluruh sisi teknologi digitalnya setiap hari.</p><ul><li><strong>Website Dipantau 24 Jam:</strong> Keamanan sistem dan kecepatan akses selalu dalam kondisi prima.</li><li><strong>Bebas Error & Maintenance Rutin:</strong> Perawatan berkala terhadap server, domain, dan sertifikat SSL.</li><li><strong>Update Konten Rutin:</strong> Butuh ganti daftar harga, promo bulan ini, atau tambah foto baru? Cukup kirim via WA, tim kami yang pasang.</li><li><strong>Laporan Pengunjung Dikirim Tiap Bulan ke WhatsApp:</strong> Ketahui data nyata pengunjung dan telepon yang masuk tanpa perlu buka dashboard rumit.</li></ul>",
+    "faqs": "[]",
     "cta_text": "Pasang Penjaganya →",
     "cta_whatsapp_text": "Halo Ladi, saya tertarik berlangganan Paket GUARD (Mulai Rp 300.000 – 500.000 / bulan). Saya ingin website tetap aman, terawat, dan dipantau 24 jam.",
     "badge_popular": 0,
     "status": "active",
     "order_num": 4,
-    "created_at": "2026-10-14 08:00:00"
+    "created_at": "2026-10-13T18:44:01.000Z",
+    "updated_at": "2026-10-13T18:44:01.000Z"
   }
 ]

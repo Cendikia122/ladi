@@ -12,29 +12,20 @@ export default async function TeamAndEvents() {
   const teamMembers = dynamicTeam.length > 0 ? dynamicTeam : [
     {
       id: 1,
-      name: "Rizky Pratama",
+      name: "Cendikia Prananta Ardian",
       role: "Project Lead & Digital Strategist",
-      badge: "PPLG Wikrama Lead",
+      badge: "CEO of Ladi",
       image: "/images/team/team1.jpg",
       desc: "Memastikan arsitektur website prima, SEO maksimal, dan setiap proyek digital selesai tepat waktu dengan standar visual kelas dunia.",
-      focus: "Arsitektur & SEO Semantik",
+      focus: "Project Leadership & Strategi Bisnis",
     },
     {
       id: 2,
-      name: "Fajar Ramadhan",
-      role: "Lead Fullstack & UI Engineer",
-      badge: "Web & Mobile Specialist",
+      name: "Hilmi Haroki Ar Rantisi",
+      role: "Content Specialist",
+      badge: "Design & Visual",
       image: "/images/team/team2.jpg",
-      desc: "Membangun website responsif super kencang, mulus dibuka di semua tipe HP, dan terintegrasi langsung dengan database serta WhatsApp bisnis.",
-      focus: "Performa & Integrasi Sistem",
-    },
-    {
-      id: 3,
-      name: "Sarah Amalia",
-      role: "Digital Branding & Client Support",
-      badge: "Client Care & Strategist",
-      image: "/images/team/team3.jpg",
-      desc: "Menata copywriting promosi, estetika visual foto usaha, serta mendampingi pemilik UMKM langkah demi langkah agar usahanya ramai dicari pembeli.",
+      desc: "Menata copywriting promosi, estetika visual foto usaha, serta memastikan konten digital menarik dan memikat calon pembeli.",
       focus: "Visual & Konten Promosi",
     },
   ];
@@ -66,7 +57,13 @@ export default async function TeamAndEvents() {
           </div>
 
           {/* Dynamic Team Profile Cards (Informative Apple/iPhone aesthetic, No CTA button) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className={`grid gap-8 ${
+            teamMembers.length === 1
+              ? "grid-cols-1 max-w-md mx-auto"
+              : teamMembers.length === 2
+              ? "grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto"
+              : "grid-cols-1 md:grid-cols-3"
+          }`}>
             {teamMembers.map((member) => {
               const memberImg = member.image || "/images/team/team1.jpg";
               return (
