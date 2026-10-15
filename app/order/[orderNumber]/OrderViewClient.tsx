@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { OrderItem } from "@/app/lib/storage";
 import { Config } from "@/app/lib/config";
+import { downloadInvoicePdf } from "@/app/lib/invoicePdf";
 
 interface OrderViewClientProps {
   initialOrder: OrderItem;
@@ -15,6 +16,7 @@ export default function OrderViewClient({ initialOrder }: OrderViewClientProps) 
   const [copiedBank, setCopiedBank] = useState<string | null>(null);
   const [uploadMessage, setUploadMessage] = useState("");
   const [uploadError, setUploadError] = useState("");
+  const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
 
   const formattedPrice = new Intl.NumberFormat("id-ID", {
     style: "currency",
@@ -26,6 +28,17 @@ export default function OrderViewClient({ initialOrder }: OrderViewClientProps) 
     navigator.clipboard.writeText(text);
     setCopiedBank(key);
     setTimeout(() => setCopiedBank(null), 2500);
+  };
+
+  const handleDownloadPdf = async () => {
+    setIsDownloadingPdf(true);
+    try {
+      await downloadInvoicePdf(order, { includeProof: true });
+    } catch (err: any) {
+      alert("Gagal mengunduh PDF: " + (err?.message || "Terjadi kendala."));
+    } finally {
+      setIsDownloadingPdf(false);
+    }
   };
 
   // Helper kompres & upload gambar bukti transfer
@@ -182,6 +195,33 @@ export default function OrderViewClient({ initialOrder }: OrderViewClientProps) 
               >
                 <span>📲 Simpan ke WA</span>
               </a>
+              <button
+                type="button"
+                onClick={handleDownloadPdf}
+                disabled={isDownloadingPdf}
+                className="px-2.5 py-1 rounded-lg bg-orange-50 hover:bg-orange-100 text-[#fa824b] text-[11px] font-bold transition-colors flex items-center gap-1 border border-orange-200 cursor-pointer"
+                title="Unduh Bukti Invoice Resmi sebagai file PDF"
+              >
+                {isDownloadingPdf ? (
+                  <>
+                    <span className="w-2.5 h-2.5 rounded-full border-2 border-[#fa824b] border-t-transparent animate-spin"></span>
+                    <span>Mengunduh...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>📄</span>
+                    <span>Unduh PDF</span>
+                  </>
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold transition-colors flex items-center gap-1 print:hidden cursor-pointer"
+                title="Cetak langsung kuitansi"
+              >
+                <span>🖨️ Cetak</span>
+              </button>
             </div>
             <span className="text-xs text-slate-500 mt-1 block">
               Dibuat pada {new Date(order.created_at).toLocaleDateString("id-ID", {

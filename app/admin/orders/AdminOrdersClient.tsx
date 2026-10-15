@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { OrderItem } from "@/app/lib/storage";
+import { downloadInvoicePdf, downloadProofPdf } from "@/app/lib/invoicePdf";
 
 interface AdminOrdersClientProps {
   initialOrders: OrderItem[];
@@ -12,8 +13,9 @@ export default function AdminOrdersClient({ initialOrders }: AdminOrdersClientPr
   const [orders, setOrders] = useState<OrderItem[]>(initialOrders);
   const [filter, setFilter] = useState<string>("all");
   const [search, setSearch] = useState("");
-  const [selectedProof, setSelectedProof] = useState<string | null>(null);
+  const [selectedProofOrder, setSelectedProofOrder] = useState<OrderItem | null>(null);
   const [isUpdating, setIsUpdating] = useState<string | null>(null);
+  const [downloadingPdf, setDownloadingPdf] = useState<string | null>(null);
 
   // Perhitungan KPI
   const totalOrders = orders.length;
@@ -51,6 +53,17 @@ export default function AdminOrdersClient({ initialOrders }: AdminOrdersClientPr
 
     return true;
   });
+
+  const handleDownloadPdf = async (order: OrderItem) => {
+    setDownloadingPdf(order.order_number);
+    try {
+      await downloadInvoicePdf(order, { includeProof: true });
+    } catch (err: any) {
+      alert("Gagal mengunduh PDF: " + (err?.message || "Terjadi kendala."));
+    } finally {
+      setDownloadingPdf(null);
+    }
+  };
 
   const handleUpdateStatus = async (
     orderNumber: string,
@@ -391,7 +404,7 @@ export default function AdminOrdersClient({ initialOrders }: AdminOrdersClientPr
                         {order.payment_proof && (
                           <button
                             type="button"
-                            onClick={() => setSelectedProof(order.payment_proof || null)}
+                            onClick={() => setSelectedProofOrder(order)}
                             className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 hover:text-blue-800 hover:underline"
                           >
                             <span>📷 Lihat Bukti Transfer</span>
@@ -421,11 +434,30 @@ export default function AdminOrdersClient({ initialOrders }: AdminOrdersClientPr
                       </td>
 
                       {/* Aksi */}
-                      <td className="px-5 py-4 align-top text-right space-x-2 whitespace-nowrap">
+                      <td className="px-5 py-4 align-top text-right space-x-1.5 whitespace-nowrap">
+                        <button
+                          type="button"
+                          onClick={() => handleDownloadPdf(order)}
+                          disabled={downloadingPdf === order.order_number}
+                          className="px-2.5 py-1.5 rounded-lg bg-orange-50 hover:bg-orange-100 text-[#fa824b] font-bold text-[11px] inline-flex items-center gap-1 transition-colors border border-orange-200"
+                          title="Unduh Bukti Invoice Resmi sebagai file PDF"
+                        >
+                          {downloadingPdf === order.order_number ? (
+                            <>
+                              <span className="w-3 h-3 rounded-full border-2 border-[#fa824b] border-t-transparent animate-spin"></span>
+                              <span>Proses...</span>
+                            </>
+                          ) : (
+                            <>
+                              <span>📄</span>
+                              <span>Unduh PDF</span>
+                            </>
+                          )}
+                        </button>
                         <Link
                           href={`/order/${order.order_number}`}
                           target="_blank"
-                          className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 inline-block font-medium text-[11px] transition-colors"
+                          className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 inline-block font-medium text-[11px] transition-colors"
                           title="Buka Invoice Digital"
                         >
                           Buka ↗
@@ -434,7 +466,7 @@ export default function AdminOrdersClient({ initialOrders }: AdminOrdersClientPr
                           type="button"
                           disabled={isUpdating === order.order_number}
                           onClick={() => handleDelete(order.order_number)}
-                          className="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-medium text-[11px] transition-colors"
+                          className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-medium text-[11px] transition-colors"
                           title="Hapus Pesanan"
                         >
                           Hapus 🗑️
@@ -450,22 +482,27 @@ export default function AdminOrdersClient({ initialOrders }: AdminOrdersClientPr
       </div>
 
       {/* Modal Preview Bukti Transfer */}
-      {selectedProof && (
+      {selectedProofOrder && selectedProofOrder.payment_proof && (
         <div
           className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setSelectedProof(null)}
+          onClick={() => setSelectedProofOrder(null)}
         >
           <div
             className="bg-white rounded-3xl p-5 max-w-lg w-full max-h-[90vh] overflow-y-auto space-y-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between border-b pb-3 border-slate-100">
-              <h3 className="text-sm font-extrabold text-slate-900">
-                Bukti Transfer Pembayaran Klien
-              </h3>
+              <div>
+                <h3 className="text-sm font-extrabold text-slate-900">
+                  Bukti Transfer Pembayaran Klien
+                </h3>
+                <span className="text-[11px] font-mono text-slate-500">
+                  Invoice #{selectedProofOrder.order_number} · {selectedProofOrder.customer_name}
+                </span>
+              </div>
               <button
                 type="button"
-                onClick={() => setSelectedProof(null)}
+                onClick={() => setSelectedProofOrder(null)}
                 className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center font-bold text-slate-500"
               >
                 ✕
@@ -475,17 +512,46 @@ export default function AdminOrdersClient({ initialOrders }: AdminOrdersClientPr
             <div className="rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 flex items-center justify-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={selectedProof}
-                alt="Bukti Transfer"
-                className="max-h-[65vh] w-auto object-contain"
+                src={selectedProofOrder.payment_proof}
+                alt={`Bukti Transfer #${selectedProofOrder.order_number}`}
+                className="max-h-[60vh] w-auto object-contain"
               />
             </div>
 
-            <div className="flex justify-end gap-2 pt-2">
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => downloadProofPdf(selectedProofOrder)}
+                  className="px-3 py-1.5 rounded-xl bg-[#00a5cf] hover:bg-[#008cb0] text-white font-bold text-xs inline-flex items-center gap-1.5 transition-colors shadow-sm"
+                  title="Unduh Bukti Transfer ini sebagai dokumen PDF resmi"
+                >
+                  <span>📥</span>
+                  <span>Unduh Bukti PDF</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDownloadPdf(selectedProofOrder)}
+                  className="px-3 py-1.5 rounded-xl bg-orange-50 hover:bg-orange-100 text-[#fa824b] font-bold text-xs inline-flex items-center gap-1.5 transition-colors border border-orange-200"
+                  title="Unduh Invoice Lengkap + Lampiran Bukti Transfer"
+                >
+                  <span>📄</span>
+                  <span>Invoice Lengkap PDF</span>
+                </button>
+                <a
+                  href={selectedProofOrder.payment_proof}
+                  download={`Bukti-Transfer-${selectedProofOrder.order_number}.jpg`}
+                  className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs inline-flex items-center gap-1.5 transition-colors"
+                  title="Simpan file gambar asli"
+                >
+                  <span>🖼️</span>
+                  <span>Gambar Asli</span>
+                </a>
+              </div>
               <button
                 type="button"
-                onClick={() => setSelectedProof(null)}
-                className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs"
+                onClick={() => setSelectedProofOrder(null)}
+                className="px-4 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs"
               >
                 Tutup
               </button>
