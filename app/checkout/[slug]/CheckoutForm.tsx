@@ -1,8 +1,8 @@
 "use client";
-
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { TemplateItem } from "@/app/lib/storage";
+import { GUARD_ADDONS } from "@/app/components/GuardBuilder";
 
 interface CheckoutFormProps {
   packageSlug: string;
@@ -10,6 +10,7 @@ interface CheckoutFormProps {
   packagePrice: number;
   formattedPrice: string;
   availableTemplates?: TemplateItem[];
+  initialSelectedAddons?: string[];
 }
 
 interface AddonOption {
@@ -26,8 +27,10 @@ export default function CheckoutForm({
   packagePrice,
   formattedPrice: initialFormattedPrice,
   availableTemplates = [],
+  initialSelectedAddons,
 }: CheckoutFormProps) {
   const router = useRouter();
+  const isGuard = packageSlug === "paket-guard";
 
   // Template Mode & Selection
   const [templateMode, setTemplateMode] = useState<"pick" | "research">("pick");
@@ -35,8 +38,14 @@ export default function CheckoutForm({
     availableTemplates.length > 0 ? availableTemplates[0].id : ""
   );
 
-  // Add-ons
-  const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
+  // Add-ons: jika guard dan ada initial dari builder, gunakan initial
+  const [selectedAddons, setSelectedAddons] = useState<string[]>(
+    initialSelectedAddons && initialSelectedAddons.length > 0
+      ? initialSelectedAddons
+      : isGuard
+      ? ["uptime_247", "ssl_firewall", "seo_90", "gmaps_sync", "wa_report"]
+      : []
+  );
 
   const [formData, setFormData] = useState({
     customer_name: "",
@@ -64,10 +73,17 @@ export default function CheckoutForm({
   ];
 
   // Konfigurasi Add-ons sesuai batasan paket dari pengguna:
-  // - EXIST: tanpa blog, tanpa otomatis pesanan
-  // - RISE: tanpa otomatis pesanan, ada blog
-  // - RUN: mencakup sistem pemesanan otomatis
   const packageAddons: AddonOption[] = useMemo(() => {
+    if (isGuard) {
+      return GUARD_ADDONS.map((a) => ({
+        id: a.id,
+        name: a.name,
+        price: a.price,
+        icon: a.icon,
+        desc: a.desc,
+      }));
+    }
+
     const list: AddonOption[] = [
       {
         id: "gmaps",
@@ -111,7 +127,7 @@ export default function CheckoutForm({
     }
 
     return list;
-  }, [packageSlug]);
+  }, [packageSlug, isGuard]);
 
   // Pesan aturan per paket
   const packageRuleNote = useMemo(() => {
@@ -124,6 +140,9 @@ export default function CheckoutForm({
     if (packageSlug === "paket-run") {
       return "ℹ️ Ketentuan Paket RUN: Sistem website mandiri modern (Next.js/React/Laravel) dengan integrasi katalog/booking dan QRIS otomatis.";
     }
+    if (packageSlug === "paket-guard") {
+      return "ℹ️ Ketentuan Paket GUARD: Sistem Satpam Digital pecahan modular (LEGO). Centang modul proteksi, SEO skor 90+, atau Google Maps yang Anda butuhkan.";
+    }
     return null;
   }, [packageSlug]);
 
@@ -132,13 +151,20 @@ export default function CheckoutForm({
   }, [availableTemplates, selectedTemplateId]);
 
   // Hitung total harga
-  const researchFee = templateMode === "research" ? 100000 : 0;
-  const addonsTotal = selectedAddons.reduce((acc, id) => {
+  const researchFee = (!isGuard && templateMode === "research") ? 100000 : 0;
+  const rawAddonsTotal = selectedAddons.reduce((acc, id) => {
     const found = packageAddons.find((a) => a.id === id);
     return acc + (found ? found.price : 0);
   }, 0);
 
-  const grandTotal = packagePrice + researchFee + addonsTotal;
+  // Jika paket-guard: harga dasar Rp 0 dan jika semua 12 modul dipilih (atau > 500rb), cap bundle 500rb!
+  const isAllGuard = isGuard && selectedAddons.length === GUARD_ADDONS.length;
+  const addonsTotal = (isGuard && isAllGuard && rawAddonsTotal > 500000)
+    ? 500000
+    : rawAddonsTotal;
+
+  const effectiveBasePrice = isGuard ? 0 : packagePrice;
+  const grandTotal = effectiveBasePrice + researchFee + addonsTotal;
 
   const formattedTotal = new Intl.NumberFormat("id-ID", {
     style: "currency",
@@ -173,9 +199,21 @@ export default function CheckoutForm({
       return;
     }
 
+    if (isGuard && !formData.domain_requested.trim()) {
+      setErrorMessage("Silakan masukkan alamat / URL website usaha yang ingin dijaga & dioptimasi.");
+      return;
+    }
+
+    if (isGuard && selectedAddons.length === 0) {
+      setErrorMessage("Pilih minimal 1 fitur pecahan satpam / SEO untuk Paket GUARD.");
+      return;
+    }
+
     setIsLoading(true);
 
-    const templateSummary = templateMode === "research"
+    const templateSummary = isGuard
+      ? `Paket GUARD Modular (${selectedAddons.length} Fitur Terpilih)`
+      : templateMode === "research"
       ? "Rekomendasi Template Khusus oleh Tim Ladi (+Rp 100.000 Riset)"
       : (activeTemplate ? `${activeTemplate.name} (${activeTemplate.tech})` : "Default Paket");
 
@@ -350,119 +388,149 @@ export default function CheckoutForm({
         </div>
       </div>
 
-      {/* Bagian 3: Pilihan Template Desain untuk Paket Ini */}
-      <div className="space-y-4 pt-2">
-        <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
-          <span className="w-6 h-6 rounded-full bg-[#1853a7] text-white text-xs font-bold flex items-center justify-center">
-            3
-          </span>
-          <h2 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider">
-            Pilihan Template Desain Website
-          </h2>
-        </div>
-
-        {packageRuleNote && (
-          <div className="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-200/80 text-blue-900 text-xs leading-relaxed">
-            {packageRuleNote}
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-          <div
-            onClick={() => setTemplateMode("pick")}
-            className={`p-3.5 rounded-2xl border-2 cursor-pointer transition-all ${
-              templateMode === "pick"
-                ? "border-[#fa824b] bg-orange-50/30 ring-1 ring-[#fa824b]"
-                : "border-slate-200 hover:border-slate-300 bg-white"
-            }`}
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-bold text-slate-900">
-                🎨 Pilih Template yang Tersedia
-              </span>
-              <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                Gratis (+Rp 0)
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-500">
-              Pilih dari katalog template resmi yang kompatibel dengan {packageName}.
-            </p>
-          </div>
-
-          <div
-            onClick={() => setTemplateMode("research")}
-            className={`p-3.5 rounded-2xl border-2 cursor-pointer transition-all ${
-              templateMode === "research"
-                ? "border-[#1853a7] bg-blue-50/40 ring-1 ring-[#1853a7]"
-                : "border-slate-200 hover:border-slate-300 bg-white"
-            }`}
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-bold text-slate-900">
-                💡 Rekomendasi Khusus Tim Ladi
-              </span>
-              <span className="text-[10px] font-bold text-[#1853a7] bg-blue-100 px-2 py-0.5 rounded-full">
-                +Rp 100.000 Riset
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-500">
-              Tim desainer Ladi akan meriset template paling conversion-friendly khusus bisnis Anda.
-            </p>
-          </div>
-        </div>
-
-        {/* List Template yang kompatibel dengan paket ini */}
-        {templateMode === "pick" && availableTemplates.length > 0 && (
-          <div className="space-y-2 pt-1">
-            <span className="text-[11px] font-bold text-slate-500 block">
-              Pilih salah satu template di bawah:
+      {/* Bagian 3: Pilihan Template Desain untuk Paket Web / Input Website untuk Paket GUARD */}
+      {isGuard ? (
+        <div className="space-y-4 pt-2">
+          <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+            <span className="w-6 h-6 rounded-full bg-[#1853a7] text-white text-xs font-bold flex items-center justify-center">
+              3
             </span>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[320px] overflow-y-auto pr-1">
-              {availableTemplates.map((item) => {
-                const isPicked = selectedTemplateId === item.id;
-                return (
-                  <div
-                    key={item.id}
-                    onClick={() => setSelectedTemplateId(item.id)}
-                    className={`p-3 rounded-xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
-                      isPicked
-                        ? "border-[#fa824b] bg-orange-50/20 shadow-sm ring-1 ring-[#fa824b]"
-                        : "border-slate-200 hover:border-slate-300 bg-white"
-                    }`}
-                  >
-                    <div>
-                      <div className="flex items-center justify-between gap-1 mb-1">
-                        <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-900 text-white">
-                          {item.tech}
-                        </span>
-                        <span className="text-[9px] text-slate-500 font-medium">{item.industry}</span>
-                      </div>
-                      <h4 className="text-xs font-extrabold text-slate-900 leading-snug">{item.name}</h4>
-                      <p className="text-[10px] text-slate-500 mt-0.5 line-clamp-2">{item.description}</p>
-                    </div>
+            <h2 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider">
+              Alamat Website yang Akan Dijaga &amp; Dioptimasi
+            </h2>
+          </div>
 
-                    <div className="pt-2 mt-2 border-t border-slate-100 flex items-center justify-between">
-                      <a
-                        href={item.envato_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-[10px] font-bold text-blue-600 hover:underline flex items-center gap-0.5"
-                      >
-                        <span>Demo Envato</span>
-                        <span>↗</span>
-                      </a>
-                      <span className={`text-[10px] font-bold ${isPicked ? "text-[#fa824b]" : "text-slate-400"}`}>
-                        {isPicked ? "✓ Terpilih" : "Pilih"}
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
+          <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 space-y-2">
+            <label className="block text-xs font-bold text-slate-800">
+              URL / Link Website Usaha Anda <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              required
+              placeholder="cth. https://usahasaya.com atau www.namausaha.id"
+              value={formData.domain_requested}
+              onChange={(e) => setFormData({ ...formData, domain_requested: e.target.value })}
+              className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-[#fa824b] focus:ring-1 focus:ring-[#fa824b]"
+            />
+            <p className="text-[11px] text-slate-500 leading-relaxed">
+              Tim Ladi akan mengaktifkan monitoring satpam server, verifikasi Google Maps, dan optimasi SEO 90+ langsung pada alamat website ini.
+            </p>
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-4 pt-2">
+          <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+            <span className="w-6 h-6 rounded-full bg-[#1853a7] text-white text-xs font-bold flex items-center justify-center">
+              3
+            </span>
+            <h2 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider">
+              Pilihan Template Desain Website
+            </h2>
+          </div>
+
+          {packageRuleNote && (
+            <div className="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-200/80 text-blue-900 text-xs leading-relaxed">
+              {packageRuleNote}
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div
+              onClick={() => setTemplateMode("pick")}
+              className={`p-3.5 rounded-2xl border-2 cursor-pointer transition-all ${
+                templateMode === "pick"
+                  ? "border-[#fa824b] bg-orange-50/30 ring-1 ring-[#fa824b]"
+                  : "border-slate-200 hover:border-slate-300 bg-white"
+              }`}
+            >
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-xs font-bold text-slate-900">
+                  🎨 Pilih Template yang Tersedia
+                </span>
+                <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                  Gratis (+Rp 0)
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-500">
+                Pilih dari katalog template resmi yang kompatibel dengan {packageName}.
+              </p>
+            </div>
+
+            <div
+              onClick={() => setTemplateMode("research")}
+              className={`p-3.5 rounded-2xl border-2 cursor-pointer transition-all ${
+                templateMode === "research"
+                  ? "border-[#1853a7] bg-blue-50/40 ring-1 ring-[#1853a7]"
+                  : "border-slate-200 hover:border-slate-300 bg-white"
+              }`}
+            >
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-xs font-bold text-slate-900">
+                  💡 Rekomendasi Khusus Tim Ladi
+                </span>
+                <span className="text-[10px] font-bold text-[#1853a7] bg-blue-100 px-2 py-0.5 rounded-full">
+                  +Rp 100.000 Riset
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-500">
+                Tim desainer Ladi akan meriset template paling conversion-friendly khusus bisnis Anda.
+              </p>
             </div>
           </div>
-        )}
-      </div>
+
+          {/* List Template yang kompatibel dengan paket ini */}
+          {templateMode === "pick" && availableTemplates.length > 0 && (
+            <div className="space-y-2 pt-1">
+              <span className="text-[11px] font-bold text-slate-500 block">
+                Pilih salah satu template di bawah:
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[320px] overflow-y-auto pr-1">
+                {availableTemplates.map((item) => {
+                  const isPicked = selectedTemplateId === item.id;
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => setSelectedTemplateId(item.id)}
+                      className={`p-3 rounded-xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
+                        isPicked
+                          ? "border-[#fa824b] bg-orange-50/20 shadow-sm ring-1 ring-[#fa824b]"
+                          : "border-slate-200 hover:border-slate-300 bg-white"
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-1 mb-1">
+                          <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-900 text-white">
+                            {item.tech}
+                          </span>
+                          <span className="text-[9px] text-slate-500 font-medium">{item.industry}</span>
+                        </div>
+                        <h4 className="text-xs font-extrabold text-slate-900 leading-snug">{item.name}</h4>
+                        <p className="text-[10px] text-slate-500 mt-0.5 line-clamp-2">{item.description}</p>
+                      </div>
+
+                      <div className="pt-2 mt-2 border-t border-slate-100 flex items-center justify-between">
+                        <a
+                          href={item.envato_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-[10px] font-bold text-blue-600 hover:underline flex items-center gap-0.5"
+                        >
+                          <span>Demo Envato</span>
+                          <span>↗</span>
+                        </a>
+                        <span className={`text-[10px] font-bold ${isPicked ? "text-[#fa824b]" : "text-slate-400"}`}>
+                          {isPicked ? "✓ Terpilih" : "Pilih"}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Bagian 4: Add-Ons Pelengkap */}
       <div className="space-y-4 pt-2">
@@ -471,12 +539,14 @@ export default function CheckoutForm({
             4
           </span>
           <h2 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider">
-            Add-Ons Pelengkap (Opsional)
+            {isGuard ? "Pecahan Fitur Satpam & SEO Terpilih (Pecahan LEGO)" : "Add-Ons Pelengkap (Opsional)"}
           </h2>
         </div>
 
         <p className="text-xs text-slate-500">
-          Tambahkan fitur ekstra yang Anda butuhkan tanpa membuat biaya membengkak.
+          {isGuard
+            ? "Centang pecahan fitur satpam, SEO 90+, Google Maps, atau update konten sesuai kebutuhan Anda. Total tagihan terhitung otomatis."
+            : "Tambahkan fitur ekstra yang Anda butuhkan tanpa membuat biaya membengkak."}
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

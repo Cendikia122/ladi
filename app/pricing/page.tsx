@@ -140,7 +140,9 @@ export default async function PricingPage() {
                   pkg.cta_whatsapp_text ||
                   `Halo Ladi, saya tertarik dengan ${pkg.name || "Paket"} (${priceStr}). ${pkg.subtitle || ""}`;
                 const ctaBtnText =
-                  pkg.slug === "paket-guard" ? "⚡ Pasang Penjaga di Web →" : "⚡ Pesan & Bayar di Web →";
+                  pkg.slug === "paket-guard" ? "🧩 Rakit Satpam Web →" : "⚡ Pesan & Bayar di Web →";
+                const ctaBtnHref =
+                  pkg.slug === "paket-guard" ? `/services/paket-guard#rakit-guard` : `/checkout/${pkg.slug}`;
 
                 return (
                   <div
@@ -202,7 +204,7 @@ export default async function PricingPage() {
 
                     <div className="pt-6 space-y-2">
                       <Link
-                        href={`/checkout/${pkg.slug}`}
+                        href={ctaBtnHref}
                         className="block w-full text-center py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
                         aria-label={`Pesan ${pkg.name} langsung di web`}
                       >

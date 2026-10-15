@@ -9,6 +9,7 @@ export const dynamic = "force-dynamic";
 
 interface Props {
   params: Promise<{ slug: string }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export async function generateMetadata({ params }: Props) {
@@ -20,15 +21,27 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-export default async function CheckoutPage({ params }: Props) {
+export default async function CheckoutPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  const sp = searchParams ? await searchParams : {};
   const pkg = await getServicePackageBySlug(slug);
 
   if (!pkg) {
     notFound();
   }
 
-  const templates = await getTemplatesByPackage(slug);
+  const isGuard = slug === "paket-guard";
+  const templates = isGuard ? [] : await getTemplatesByPackage(slug);
+
+  // Jika paket-guard, tangani query params dan initialSelectedAddons
+  let initialSelectedAddons: string[] = [];
+  if (isGuard) {
+    if (sp?.addons) {
+      initialSelectedAddons = String(sp.addons).split(",").filter(Boolean);
+    } else {
+      initialSelectedAddons = ["uptime_247", "ssl_firewall", "seo_90", "gmaps_sync", "wa_report"];
+    }
+  }
 
   let deliverablesList: string[] = [];
   try {
@@ -43,12 +56,23 @@ export default async function CheckoutPage({ params }: Props) {
   }
 
   // Bersihkan angka harga
-  const cleanPriceNum = parseInt(pkg.price.replace(/[^0-9]/g, "") || "299000", 10);
-  const formattedPrice = new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    maximumFractionDigits: 0,
-  }).format(cleanPriceNum);
+  let cleanPriceNum = 299000;
+  if (isGuard) {
+    cleanPriceNum = 0; // Guard harga dihitung dinamis dari total addons terpilih
+  } else {
+    const firstMatch = pkg.price.match(/\d[\d.,]*/);
+    cleanPriceNum = firstMatch
+      ? parseInt(firstMatch[0].replace(/[.,]/g, ""), 10)
+      : 299000;
+  }
+
+  const formattedPrice = isGuard
+    ? "Pecahan Modular"
+    : new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        maximumFractionDigits: 0,
+      }).format(cleanPriceNum);
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] selection:bg-[#fa824b] selection:text-white">
@@ -97,6 +121,29 @@ export default async function CheckoutPage({ params }: Props) {
           </p>
         </div>
 
+        {/* Banner Khusus Paket GUARD Modular */}
+        {isGuard && (
+          <div className="mb-8 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-blue-900 via-[#1853a7] to-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-4 border border-blue-800 shadow-md">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">🧩</span>
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-amber-300">
+                  Paket GUARD Modular (Sistem Pecahan LEGO)
+                </div>
+                <p className="text-xs sm:text-sm text-slate-200 mt-0.5">
+                  Anda bisa bebas mencentang atau menyesuaikan modul satpam, SEO 90+, Google Maps, dll. sesuai kebutuhan.
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/services/paket-guard#rakit-guard"
+              className="px-5 py-2.5 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-bold text-xs uppercase tracking-wider whitespace-nowrap transition-all shadow-md shrink-0"
+            >
+              Rakit di Kalkulator →
+            </Link>
+          </div>
+        )}
+
         {/* 2-Column Checkout Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Kolom Kiri: Form Checkout */}
@@ -107,6 +154,7 @@ export default async function CheckoutPage({ params }: Props) {
               packagePrice={cleanPriceNum}
               formattedPrice={formattedPrice}
               availableTemplates={templates}
+              initialSelectedAddons={initialSelectedAddons}
             />
           </div>
 
@@ -133,15 +181,23 @@ export default async function CheckoutPage({ params }: Props) {
               {/* Box Harga */}
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
                 <div>
-                  <span className="text-[11px] text-slate-500 block">Total Investasi</span>
-                  <div className="text-2xl font-black text-[#1853a7]">{formattedPrice}</div>
-                  <span className="text-[11px] text-slate-400">{pkg.period || "Sekali Bayar"}</span>
+                  <span className="text-[11px] text-slate-500 block">
+                    {isGuard ? "Skema Biaya" : "Total Investasi"}
+                  </span>
+                  <div className="text-xl font-black text-[#1853a7]">
+                    {isGuard ? "Sistem Pecahan LEGO" : formattedPrice}
+                  </div>
+                  <span className="text-[11px] text-slate-400">
+                    {isGuard ? "Total terhitung dinamis dari modul terpilih" : (pkg.period || "Sekali Bayar")}
+                  </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[11px] text-slate-500 block">Estimasi Selesai</span>
-                  <span className="inline-block px-2.5 py-1 rounded-lg bg-white border border-slate-200 font-mono text-xs font-bold text-slate-800">
-                    ⚡ {pkg.timeline || "5–7 Hari"}
+                  <span className="text-[11px] text-slate-500 block">
+                    {isGuard ? "Aktivasi" : "Estimasi Selesai"}
                   </span>
+                  <div className="text-sm font-bold text-slate-800">
+                    ⚡ {pkg.timeline || "Langsung Aktif"}
+                  </div>
                 </div>
               </div>
 

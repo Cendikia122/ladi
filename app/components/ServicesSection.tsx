@@ -163,32 +163,32 @@ const defaultPackages = [
   },
   {
     id: "guard",
-    tag: "PAKET SPESIAL",
+    tag: "SISTEM PECAHAN LEGO · RAKIT SENDIRI",
     name: "Paket GUARD",
     slug: "paket-guard",
-    price: "Mulai Rp 300.000 – 500.000",
-    period: "/ bulan · Dipantau 24 Jam Nonstop",
+    price: "Mulai Rp 150.000 – 500.000",
+    period: "/ bulan · Bebas Pilih Modul",
     subtitle: "Satpam Digital Bisnismu",
-    summary: "Website tetap aman, terawat, dan berjalan tanpa bikin kamu repot. Kamu fokus menjalankan bisnis, Ladi yang menjaga digitalnya.",
-    ctaText: "Pasang Penjaganya →",
-    waMessage: "Halo Ladi, saya tertarik berlangganan Paket GUARD (Mulai Rp 300.000 – 500.000 / bulan). Saya ingin website tetap aman, terawat, dan dipantau 24 jam.",
+    summary: "Sistem pecahan modular fleksibel: bebas rakit sendiri proteksi server, SEO Booster skor 90+, sinkronisasi Google Maps, dan update konten via WA sesuai kebutuhan usaha.",
+    ctaText: "🧩 Rakit Satpam Sendiri →",
+    waMessage: "Halo Ladi, saya tertarik merakit modul Paket GUARD (Mulai Rp 150.000 – 500.000 / bulan). Saya ingin proteksi & optimasi digital yang bisa dipilih fiturnya.",
     badgePopular: false,
     features: [
       {
-        title: "Website Dipantau 24 Jam",
-        desc: "Pemantauan keamanan server dan stabilitas kecepatan agar website selalu aktif lancar.",
+        title: "Sistem Pecahan Modular",
+        desc: "Pilih sendiri modul yang dibutuhkan (Uptime 24/7, Firewall, SEO 90+, Google Maps, Konten WA).",
       },
       {
-        title: "Bebas Error & Maintenance Rutin",
-        desc: "Perawatan rutin domain, hosting, dan SSL tanpa perlu Anda khawatir kendala teknis.",
+        title: "SEO Booster PageSpeed 90+",
+        desc: "Optimasi skor kecepatan dan performa pencarian Google agar bisnis selalu di halaman depan.",
       },
       {
-        title: "Update Konten Rutin",
-        desc: "Mau ganti harga, tambah foto produk, atau upload info baru? Cukup kirim ke WA kami.",
+        title: "Google Maps & Review Sync",
+        desc: "Sinkronisasi titik peta lokasi usaha, foto geotagging, dan pemeliharaan reputasi ulasan.",
       },
       {
-        title: "Laporan Pengunjung Dikirim Tiap Bulan ke WhatsApp",
-        desc: "Laporan angka nyata langsung dikirim ke WhatsApp Anda setiap akhir bulan.",
+        title: "Update Konten & Hotline WA VIP",
+        desc: "Ganti harga, menu, promo baru via WhatsApp langsung diproses tanpa repot teknis.",
       },
     ],
   },
@@ -340,24 +340,36 @@ export default function ServicesSection({ packages: dbPackages }: ServicesSectio
               {/* Bottom Action */}
               <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100">
                 <div className="text-xs text-slate-600 text-center sm:text-left">
-                  ✅ DP 50% di awal · Pelunasan setelah website siap tayang
+                  {current.slug === "paket-guard"
+                    ? "🧩 Bebas pilih modul · Diskon hingga 20% · Tanpa kontrak mengikat"
+                    : "✅ DP 50% di awal · Pelunasan setelah website siap tayang"}
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
-                  <Link
-                    href={`/checkout/${current.slug}`}
-                    aria-label={`Pesan dan bayar langsung di web untuk ${current.name}`}
-                    className="flex-1 sm:flex-none px-5 py-3 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider text-center transition-all shadow-md"
-                  >
-                    ⚡ Pesan & Bayar di Web
-                  </Link>
+                  {current.slug === "paket-guard" ? (
+                    <Link
+                      href="/services/paket-guard#rakit-guard"
+                      aria-label="Rakit modul Paket GUARD sendiri"
+                      className="flex-1 sm:flex-none px-5 py-3 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider text-center transition-all shadow-md"
+                    >
+                      🧩 Rakit Satpam Sendiri →
+                    </Link>
+                  ) : (
+                    <Link
+                      href={`/checkout/${current.slug}`}
+                      aria-label={`Pesan dan bayar langsung di web untuk ${current.name}`}
+                      className="flex-1 sm:flex-none px-5 py-3 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs uppercase tracking-wider text-center transition-all shadow-md"
+                    >
+                      ⚡ Pesan & Bayar di Web
+                    </Link>
+                  )}
 
                   <Link
                     href={`/services/${current.slug}`}
-                    aria-label={`Lihat landing page dan contoh untuk ${current.name}`}
+                    aria-label={`Lihat detail untuk ${current.name}`}
                     className="flex-1 sm:flex-none px-5 py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider text-center transition-all shadow-sm"
                   >
-                    Lihat Contoh →
+                    {current.slug === "paket-guard" ? "Lihat Detail →" : "Lihat Contoh →"}
                   </Link>
 
                   <a

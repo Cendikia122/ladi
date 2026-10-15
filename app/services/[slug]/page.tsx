@@ -5,6 +5,7 @@ import TopBar from "../../components/TopBar";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import WhatsAppButton from "../../components/WhatsAppButton";
+import GuardBuilder from "@/app/components/GuardBuilder";
 import { getServicePackageBySlug, getServicePackages } from "@/app/lib/storage";
 import { Config } from "@/app/lib/config";
 
@@ -216,14 +217,25 @@ export default async function ServiceDetailPage({
 
                 {/* Tombol Aksi Cepat (Pesan Mandiri & Tanya WA) */}
                 <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
-                  <Link
-                    href={`/checkout/${slug}`}
-                    className="py-4 px-8 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-extrabold text-sm uppercase tracking-wider shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-center group cursor-pointer"
-                  >
-                    <span>⚡</span>
-                    <span>Pesan & Bayar Langsung</span>
-                    <span className="group-hover:translate-x-1 transition-transform">→</span>
-                  </Link>
+                  {slug === "paket-guard" ? (
+                    <a
+                      href="#rakit-guard"
+                      className="py-4 px-8 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-extrabold text-sm uppercase tracking-wider shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-center group cursor-pointer"
+                    >
+                      <span>🧩</span>
+                      <span>Rakit Satpam Web Sendiri</span>
+                      <span className="group-hover:translate-y-0.5 transition-transform">↓</span>
+                    </a>
+                  ) : (
+                    <Link
+                      href={`/checkout/${slug}`}
+                      className="py-4 px-8 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white font-extrabold text-sm uppercase tracking-wider shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-center group cursor-pointer"
+                    >
+                      <span>⚡</span>
+                      <span>Pesan & Bayar Langsung</span>
+                      <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </Link>
+                  )}
 
                   <a
                     href={waUrl}
@@ -237,10 +249,10 @@ export default async function ServiceDetailPage({
                   </a>
 
                   <a
-                    href="#hal-didapatkan"
+                    href={slug === "paket-guard" ? "#rakit-guard" : "#hal-didapatkan"}
                     className="py-3.5 px-6 rounded-full bg-transparent hover:bg-white/10 text-slate-300 font-bold text-xs uppercase tracking-wider transition-all text-center"
                   >
-                    Lihat Fitur ↓
+                    {slug === "paket-guard" ? "Katalog Modul ↓" : "Lihat Fitur ↓"}
                   </a>
                 </div>
               </div>
@@ -271,44 +283,89 @@ export default async function ServiceDetailPage({
 
                   {/* Nilai Kepastian Transaksi */}
                   <div className="space-y-3 text-xs text-slate-700">
-                    <div className="flex items-start gap-2.5">
-                      <span className="text-emerald-600 font-bold text-sm">✓</span>
-                      <div>
-                        <strong>Skema Pembayaran Adil & Aman:</strong>
-                        <span className="text-slate-500 block">
-                          DP 50% di awal, dan pelunasan 50% HANYA setelah website siap tayang.
-                        </span>
-                      </div>
-                    </div>
+                    {slug === "paket-guard" ? (
+                      <>
+                        <div className="flex items-start gap-2.5">
+                          <span className="text-emerald-600 font-bold text-sm">✓</span>
+                          <div>
+                            <strong>Sistem Pecahan Modular:</strong>
+                            <span className="text-slate-500 block">
+                              Bayar hanya modul satpam digital yang bisnis Anda butuhkan, hemat & terarah.
+                            </span>
+                          </div>
+                        </div>
 
-                    <div className="flex items-start gap-2.5">
-                      <span className="text-emerald-600 font-bold text-sm">✓</span>
-                      <div>
-                        <strong>Kedaulatan Klien 100%:</strong>
-                        <span className="text-slate-500 block">
-                          Nama domain dan konten menjadi hak milik penuh bisnis Anda.
-                        </span>
-                      </div>
-                    </div>
+                        <div className="flex items-start gap-2.5">
+                          <span className="text-emerald-600 font-bold text-sm">✓</span>
+                          <div>
+                            <strong>Bebas Upgrade / Downgrade:</strong>
+                            <span className="text-slate-500 block">
+                              Tambah SEO 90+, Google Maps, atau proteksi kapan saja tanpa denda.
+                            </span>
+                          </div>
+                        </div>
 
-                    <div className="flex items-start gap-2.5">
-                      <span className="text-emerald-600 font-bold text-sm">✓</span>
-                      <div>
-                        <strong>Garansi Waktu Pengerjaan:</strong>
-                        <span className="text-slate-500 block">
-                          Selesai tepat waktu sesuai estimasi ({pkg.timeline}).
-                        </span>
-                      </div>
-                    </div>
+                        <div className="flex items-start gap-2.5">
+                          <span className="text-emerald-600 font-bold text-sm">✓</span>
+                          <div>
+                            <strong>Pantauan & Respon Cepat:</strong>
+                            <span className="text-slate-500 block">
+                              Tim teknis bersiaga mengawal performa website dan reputasi online Anda.
+                            </span>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="flex items-start gap-2.5">
+                          <span className="text-emerald-600 font-bold text-sm">✓</span>
+                          <div>
+                            <strong>Skema Pembayaran Adil & Aman:</strong>
+                            <span className="text-slate-500 block">
+                              DP 50% di awal, dan pelunasan 50% HANYA setelah website siap tayang.
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start gap-2.5">
+                          <span className="text-emerald-600 font-bold text-sm">✓</span>
+                          <div>
+                            <strong>Kedaulatan Klien 100%:</strong>
+                            <span className="text-slate-500 block">
+                              Nama domain dan konten menjadi hak milik penuh bisnis Anda.
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start gap-2.5">
+                          <span className="text-emerald-600 font-bold text-sm">✓</span>
+                          <div>
+                            <strong>Garansi Waktu Pengerjaan:</strong>
+                            <span className="text-slate-500 block">
+                              Selesai tepat waktu sesuai estimasi ({pkg.timeline}).
+                            </span>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   <div className="pt-2 space-y-2.5">
-                    <Link
-                      href={`/checkout/${slug}`}
-                      className="block w-full py-3.5 px-4 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white text-center font-extrabold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all"
-                    >
-                      ⚡ Pesan & Bayar di Web →
-                    </Link>
+                    {slug === "paket-guard" ? (
+                      <a
+                        href="#rakit-guard"
+                        className="block w-full py-3.5 px-4 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white text-center font-extrabold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all"
+                      >
+                        🧩 Rakit Satpam Website Sekarang ↓
+                      </a>
+                    ) : (
+                      <Link
+                        href={`/checkout/${slug}`}
+                        className="block w-full py-3.5 px-4 rounded-full bg-[#fa824b] hover:bg-[#e5723b] text-white text-center font-extrabold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all"
+                      >
+                        ⚡ Pesan & Bayar di Web →
+                      </Link>
+                    )}
                     <a
                       href={waUrl}
                       target="_blank"
@@ -326,6 +383,17 @@ export default async function ServiceDetailPage({
             </div>
           </div>
         </section>
+
+        {/* =================================================================== */}
+        {/* KHUSUS PAKET GUARD: MODULAR RAKIT SATPAM DIGITAL BUILDER */}
+        {/* =================================================================== */}
+        {slug === "paket-guard" && (
+          <section id="rakit-guard" className="py-14 sm:py-20 bg-slate-50 border-b border-slate-200 scroll-mt-20">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <GuardBuilder />
+            </div>
+          </section>
+        )}
 
         {/* =================================================================== */}
         {/* 2. HAL-HAL YANG ANDA DAPATKAN (Deliverables Checklist) */}
