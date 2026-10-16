@@ -74,6 +74,18 @@ export default function ContactPage() {
                   </div>
 
                   <div className="flex items-start gap-3.5 pt-3 border-t border-slate-100">
+                    <span className="w-10 h-10 rounded-xl bg-blue-100/70 text-[#1853a7] flex items-center justify-center font-bold text-lg shrink-0">
+                      🕒
+                    </span>
+                    <div>
+                      <div className="text-xs text-slate-500 font-bold uppercase">Jam Layanan Konsultasi</div>
+                      <div className="text-sm font-bold text-slate-900">Senin – Jumat: 15.30 – 21.00 WIB</div>
+                      <div className="text-xs text-slate-700 font-semibold mt-0.5">Sabtu: 09.00 – 17.00 WIB</div>
+                      <div className="text-[11px] text-slate-500 mt-0.5">Minggu &amp; Libur: Tutup (Auto-Reply &amp; Monitoring Server Aktif)</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3.5 pt-3 border-t border-slate-100">
                     <span className="w-10 h-10 rounded-xl bg-[#1853a7]/10 text-[#1853a7] flex items-center justify-center font-bold text-lg shrink-0">
                       ✉️
                     </span>
@@ -89,7 +101,7 @@ export default function ContactPage() {
                     </span>
                     <div>
                       <div className="text-xs text-slate-500 font-bold uppercase">Wilayah Layanan Utama</div>
-                      <div className="text-sm font-bold text-slate-900">Bogor & Depok, Jawa Barat</div>
+                      <div className="text-sm font-bold text-slate-900">Kota Bogor, Kab. Bogor, Kota Depok, &amp; Jabodetabek (Online)</div>
                       <div className="text-[11px] text-slate-500 mt-0.5">Melayani UMKM di seluruh Indonesia</div>
                     </div>
                   </div>

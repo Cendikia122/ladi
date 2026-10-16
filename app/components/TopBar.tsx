@@ -11,11 +11,11 @@ export default function TopBar() {
               <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
               <circle cx="12" cy="10" r="3" />
             </svg>
-            <span>Bogor & Depok, Indonesia</span>
+            <span>Kota &amp; Kab. Bogor, Depok, Jabodetabek (Online)</span>
           </div>
 
           <a
-            href="https://wa.me/6282112477119?text=Halo+Ladi+Consulting%2C+saya+ingin+konsultasi."
+            href="https://wa.me/6282112477119?text=Halo%20Ladi,%20saya%20ingin%20konsultasi%20kehadiran%20digital%20usaha."
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 hover:text-white transition-colors"
@@ -46,7 +46,7 @@ export default function TopBar() {
 
           <div className="hidden lg:flex items-center gap-1.5 text-slate-300 font-mono text-[11px]">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
-            <span>Senin - Jumat · 08.00 - 18.00 WIB</span>
+            <span>Senin – Jumat 15.30 – 21.00 WIB · Sabtu 09.00 – 17.00 WIB</span>
           </div>
 
           <div className="flex items-center gap-3 text-slate-300 pl-2 sm:border-l sm:border-slate-800">

@@ -9,9 +9,9 @@ import { getTemplates } from "@/app/lib/storage";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Custom Web Builder (Pecahan LEGO) — Ladi (Layanan Digital)",
+  title: "Kalkulator & Rakit Website Custom (Pecahan Kebutuhan Bisnis) — Ladi",
   description:
-    "Rancang sendiri website bisnis Anda sesuai budget. Pilih framework teknologi (HTML, PHP, Laravel, Next.js), 23 template Envato, durasi hosting, dan add-on kebutuhan Anda.",
+    "Rancang sendiri website bisnis Anda sesuai budget. Pilih skala fondasi, referensi desain katalog Ladi, domain resmi, dan add-ons kebutuhan usaha Anda.",
 };
 
 export default async function BuilderPage() {
@@ -31,15 +31,15 @@ export default async function BuilderPage() {
               <span>/</span>
               <Link href="/pricing" className="hover:text-slate-800">Paket Harga</Link>
               <span>/</span>
-              <span className="text-slate-800 font-semibold">Custom Web Builder (Pecahan LEGO)</span>
+              <span className="text-slate-800 font-semibold">Custom Web Builder (Pecahan Kebutuhan Bisnis)</span>
             </div>
 
             <div className="max-w-3xl">
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
-                Kalkulator &amp; Rakit Website Custom
+                Kalkulator &amp; Rakit Website Sesuai Kebutuhan
               </h1>
               <p className="text-sm sm:text-base text-slate-600 mt-2 leading-relaxed">
-                Mau website yang benar-benar pas dengan kebutuhan dan kantong Anda? Pilih komponen secara transparan: pondasi framework, template Envato, domain, hosting, dan add-ons pelengkap.
+                Mau website yang benar-benar pas dengan skala operasional dan budget usaha Anda? Rakit komponen secara transparan: fondasi website, katalog referensi desain Ladi, visibilitas Google Maps, dan ekstensi domain resmi.
               </p>
             </div>
           </div>

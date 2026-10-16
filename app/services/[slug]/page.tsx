@@ -138,7 +138,7 @@ export default async function ServiceDetailPage({
       "@type": "Offer",
       url: `${baseUrl}/services/${slug}`,
       priceCurrency: "IDR",
-      price: pkg.price.replace(/[^0-9]/g, "") || "299000",
+      price: pkg.price.replace(/[^0-9]/g, "") || "500000",
       availability: "https://schema.org/InStock",
       seller: {
         "@type": "Organization",

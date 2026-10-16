@@ -9,131 +9,151 @@ interface BuilderClientProps {
   initialTemplates: TemplateItem[];
 }
 
-interface AddonItem {
+interface ScaleOption {
   id: string;
   name: string;
   price: number;
+  badge: string;
+  subtitle: string;
   desc: string;
-  badge?: string;
-  icon: string;
+  color: string;
 }
 
-const TECH_OPTIONS = [
+interface AddonOption {
+  id: string;
+  name: string;
+  price: number;
+  icon: string;
+  desc: string;
+  badge: string;
+}
+
+const SCALE_OPTIONS: ScaleOption[] = [
   {
-    id: "HTML5",
-    name: "HTML5 & Bootstrap / Tailwind",
-    price: 299000,
-    badge: "Paling Hemat & Cepat",
-    desc: "Sangat ringan, loading kilat, tanpa database rumit. Cocok untuk landing page, profil bisnis, dan katalog ringkas.",
+    id: "landing-1page",
+    name: "Landing Page 1 Halaman Ringkas",
+    price: 350000,
+    badge: "Paling Ringkas & Cepat",
+    subtitle: "Fokus 1 Tindakan Utama ke WhatsApp",
+    desc: "Cocok untuk UMKM pemula, bengkel, katering, atau jasa lokal yang ingin calon pembeli langsung chat WhatsApp tanpa berputar-putar. Super cepat dibuka di HP.",
     color: "from-blue-500/10 to-indigo-500/10 border-blue-200 text-blue-900",
   },
   {
-    id: "PHP",
-    name: "PHP Modern (Dinamis)",
-    price: 599000,
-    badge: "Dinamis & Fleksibel",
-    desc: "Mendukung formulir pemesanan, pengiriman email notifikasi, dan struktur multi-halaman dinamis.",
+    id: "profile-5page",
+    name: "Web Profil Usaha 5 Halaman",
+    price: 950000,
+    badge: "Paling Populer & Kredibel",
+    subtitle: "Profil Usaha Multi-Halaman Lengkap & Profesional",
+    desc: "Halaman Beranda, Tentang Usaha, Daftar Layanan/Produk, Galeri Portofolio, dan Kontak & Peta. Cocok untuk membangun kredibilitas bisnis yang matang dan memenangkan kepercayaan calon klien.",
     color: "from-purple-500/10 to-violet-500/10 border-purple-200 text-purple-900",
   },
   {
-    id: "Laravel",
-    name: "Laravel Framework",
-    price: 1499000,
-    badge: "Standar Korporat",
-    desc: "Arsitektur MVC tangguh, database MySQL terstruktur, keamanan enterprise, dan backend panel komplit.",
-    color: "from-rose-500/10 to-red-500/10 border-rose-200 text-rose-900",
-  },
-  {
-    id: "Next.JS",
-    name: "Next.js / React (Super Modern)",
-    price: 2499000,
-    badge: "Performa Kelas Dunia",
-    desc: "Teknologi tercanggih 2026. Server-side rendering super ngebut, transisi animasi mulus, SEO maksimal, dan API ready.",
+    id: "toko-booking",
+    name: "Web Toko Online & Sistem Booking",
+    price: 2050000,
+    badge: "Sistem Mandiri Siap Jualan",
+    subtitle: "Katalog Dinamis & Alur Pemesanan Terstruktur",
+    desc: "Pelanggan dapat menjelajahi katalog produk, memesan sesi reservasi layanan, dan checkout otomatis mandiri tanpa admin harus mengetik manual berulang kali.",
     color: "from-amber-500/10 to-orange-500/10 border-amber-200 text-amber-900",
   },
 ];
 
-const DOMAIN_OPTIONS = [
-  { id: ".com", name: ".com (Standar Global)", price: 180000, badge: "Paling Populer" },
-  { id: ".id", name: ".id (Resmi Indonesia)", price: 250000, badge: "Terpercaya" },
-  { id: ".co.id", name: ".co.id (Badan Usaha / PT / CV)", price: 300000, badge: "Legalitas Resmi" },
-  { id: ".my.id", name: ".my.id (Ekonomis UMKM)", price: 45000, badge: "Super Hemat" },
-  { id: "self", name: "Sudah Punya Domain Sendiri", price: 0, badge: "Gratis Setup" },
-];
-
-const HOSTING_OPTIONS = [
-  { id: "3_bulan", name: "3 Bulan Hosting Cloud", price: 150000, note: "Rp 50rb/bln" },
-  { id: "6_bulan", name: "6 Bulan Hosting Cloud", price: 275000, note: "Diskon 8% (Rp 45.8rb/bln)" },
-  { id: "12_bulan", name: "12 Bulan (1 Tahun Penuh)", price: 499000, note: "⭐ Paling Hemat 17% (Rp 41.5rb/bln)", isBest: true },
-  { id: "self_host", name: "Hosting di Server Milik Sendiri", price: 0, note: "Klien sediakan cPanel / VPS" },
-];
-
-const ADDONS_CATALOG: AddonItem[] = [
+const GOOGLE_ADDONS: AddonOption[] = [
   {
-    id: "gmaps",
-    name: "Google Business Profile & Google Maps",
-    price: 150000,
+    id: "gmb_setup",
+    name: "Setup & Verifikasi Google Business Profile / Maps",
+    price: 200000,
     icon: "📍",
-    desc: "Setup titik lokasi di Google Maps, optimasi nama bisnis, dan panduan verifikasi.",
-    badge: "Wajib untuk Toko Fisik",
+    desc: "Pendaftaran titik resmi lokasi usaha di Google Maps lengkap dengan nama, alamat, jam operasional, dan verifikasi.",
+    badge: "Fondasi Peta",
   },
   {
-    id: "wa_auto",
-    name: "WhatsApp Order Auto-Reply / Generator",
-    price: 99000,
-    icon: "💬",
-    desc: "Tombol klik pesan WhatsApp dengan format order rapi otomatis masuk ke chat bisnis Anda.",
-    badge: "Praktis",
-  },
-  {
-    id: "qris_auto",
-    name: "QRIS Pembayaran Otomatis Dinamis",
+    id: "gmaps_local_opt",
+    name: "Optimasi Titik Google Maps Lokal Wilayah",
     price: 250000,
-    icon: "📱",
-    desc: "Integrasi QRIS barcode langsung di layar pelanggan untuk transaksi instan tanpa cek mutasi manual.",
-    badge: "Otomatisasi",
+    icon: "🗺️",
+    desc: "Riset kata kunci lokal (misal: 'bengkel terdekat Bogor'), akurasi pin, dan panduan mendapatkan 5 ulasan bintang pertama.",
+    badge: "Ranking Lokal",
   },
   {
-    id: "copywriting",
-    name: "Penulisan Konten & Copywriting Promosi",
+    id: "basic_seo",
+    name: "Basic SEO On-Page (Meta Tag & Heading)",
+    price: 100000,
+    icon: "🔍",
+    desc: "Penataan judul meta, deskripsi pencarian Google, dan struktur H1-H2 agar mudah diindeks mesin pencari.",
+    badge: "Mudah Ditemukan",
+  },
+  {
+    id: "local_seo_ga4",
+    name: "Local SEO Dominance & Google Analytics 4",
+    price: 350000,
+    icon: "📊",
+    desc: "Setup Schema.org LocalBusiness, sitemap otomatis, Google Search Console, dan GA4 untuk pantau jumlah pengunjung nyata.",
+    badge: "Dominasi Wilayah",
+  },
+];
+
+const AUTO_ADDONS: AddonOption[] = [
+  {
+    id: "report_30d_rev",
+    name: "Laporan Performa 30 Hari & Garansi Revisi",
+    price: 250000,
+    icon: "📈",
+    desc: "Laporan pertumbuhan pengunjung di bulan pertama + garansi 1x revisi minor berkala.",
+    badge: "Evaluasi Awal",
+  },
+  {
+    id: "qris_wa_auto",
+    name: "Integrasi QRIS Otomatis & Template WA Auto-Reply",
+    price: 550000,
+    icon: "💳",
+    desc: "Integrasi pembayaran QRIS resmi 100% atas nama rekening Anda + template auto-reply WhatsApp agar order pelanggan langsung tertata rapi.",
+    badge: "Otomatisasi Kasir",
+  },
+  {
+    id: "report_3m_strategy",
+    name: "Laporan Bulanan 3 Bulan & Konsultasi Strategi",
+    price: 500000,
+    icon: "🎯",
+    desc: "Pendampingan performa bulanan selama 3 bulan pertama dan sesi konsultasi strategi digital 1-on-1 (60 menit) bersama tim Ladi.",
+    badge: "Mentoring Digital",
+  },
+  {
+    id: "copywriting_photo",
+    name: "Penulisan Copywriting Konten & Foto Produk",
     price: 150000,
     icon: "✍️",
-    desc: "Tim Ladi yang menuliskan kata-kata promosi memikat, headline, dan deskripsi produk Anda.",
+    desc: "Tim Ladi membantu merapikan kata-kata promosi memikat, headline penawaran, dan perapian layout foto produk agar menarik pembeli.",
     badge: "Anti Pusing Nulis",
   },
-  {
-    id: "blog_cms",
-    name: "Modul Blog / Artikel SEO Interaktif",
-    price: 200000,
-    icon: "📰",
-    desc: "Halaman publikasi artikel untuk mendongkrak pencarian organik Google tanpa batas waktu.",
-    badge: "Tingkatkan Traffic",
-  },
-  {
-    id: "backup_security",
-    name: "Satpam Digital & Backup Cloud Berkala",
-    price: 150000,
-    icon: "🛡️",
-    desc: "Proteksi firewall anti hack, monitor uptime 24/7, dan backup file mingguan selama 3 bulan.",
-    badge: "Aman Tentram",
-  },
+];
+
+const DOMAIN_OPTIONS = [
+  { id: "subdomain", name: "Subdomain Gratis Ladi (usahamu.ladi.web.id)", price: 0, badge: "Gratis Selamanya", note: "Tanpa biaya tahunan" },
+  { id: ".my.id", name: "Domain Resmi .my.id", price: 50000, badge: "Ekonomis UMKM", note: "Rp 50.000 / tahun" },
+  { id: ".com", name: "Domain Standar Global .com", price: 220000, badge: "Paling Populer", note: "Rp 220.000 / tahun" },
+  { id: ".id", name: "Domain Resmi Indonesia .id", price: 275000, badge: "Paling Kredibel", note: "Rp 275.000 / tahun" },
+  { id: "self", name: "Sudah Punya Domain Sendiri", price: 0, badge: "Bebas Biaya", note: "Klien sediakan domain sendiri" },
 ];
 
 export default function BuilderClient({ initialTemplates }: BuilderClientProps) {
   const router = useRouter();
 
-  // State Pilihan Pecahan LEGO
-  const [selectedTech, setSelectedTech] = useState<string>("HTML5");
+  // State Pilihan Pecahan LEGO Bisnis
+  const [selectedScaleId, setSelectedScaleId] = useState<string>("landing-1page");
   const [templateMode, setTemplateMode] = useState<"pick" | "research">("pick");
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string>("hawaa-travel");
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>(
+    initialTemplates.length > 0 ? initialTemplates[0].id : ""
+  );
   const [industryFilter, setIndustryFilter] = useState<string>("all");
-  const [selectedDomain, setSelectedDomain] = useState<string>(".com");
+
+  // Add-ons State
+  const [selectedGoogleAddons, setSelectedGoogleAddons] = useState<string[]>(["gmb_setup"]);
+  const [selectedAutoAddons, setSelectedAutoAddons] = useState<string[]>([]);
+
+  // Domain State
+  const [selectedDomainId, setSelectedDomainId] = useState<string>(".com");
   const [domainNameInput, setDomainNameInput] = useState<string>("");
-  const [selectedHosting, setSelectedHosting] = useState<string>("12_bulan");
-  const [selectedAddons, setSelectedAddons] = useState<string[]>([
-    "gmaps",
-    "wa_auto",
-  ]);
 
   // Form Klien
   const [customerName, setCustomerName] = useState("");
@@ -141,7 +161,6 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
   const [customerEmail, setCustomerEmail] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [businessCategory, setBusinessCategory] = useState("Kuliner / F&B (Resto, Kafe, Katering)");
-  const [paymentMethod, setPaymentMethod] = useState("GOPAY");
   const [notes, setNotes] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
@@ -149,7 +168,7 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
 
   // Daftar Kategori Industri
   const industries = useMemo(() => {
-    const list = Array.from(new Set(initialTemplates.map((t) => t.industry)));
+    const list = Array.from(new Set(initialTemplates.map((t) => t.industry))).filter(Boolean);
     return ["all", ...list];
   }, [initialTemplates]);
 
@@ -166,21 +185,30 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
     return initialTemplates.find((t) => t.id === selectedTemplateId) || initialTemplates[0];
   }, [initialTemplates, selectedTemplateId]);
 
-  // Biaya Komponen
-  const techObj = TECH_OPTIONS.find((t) => t.id === selectedTech) || TECH_OPTIONS[0];
-  const domainObj = DOMAIN_OPTIONS.find((d) => d.id === selectedDomain) || DOMAIN_OPTIONS[0];
-  const hostingObj = HOSTING_OPTIONS.find((h) => h.id === selectedHosting) || HOSTING_OPTIONS[2];
+  // Objek Terpilih
+  const scaleObj = SCALE_OPTIONS.find((s) => s.id === selectedScaleId) || SCALE_OPTIONS[0];
+  const domainObj = DOMAIN_OPTIONS.find((d) => d.id === selectedDomainId) || DOMAIN_OPTIONS[2];
 
   const researchFee = templateMode === "research" ? 100000 : 0;
 
-  const addonsTotal = useMemo(() => {
-    return selectedAddons.reduce((acc, addonId) => {
-      const found = ADDONS_CATALOG.find((a) => a.id === addonId);
+  const googleAddonsTotal = useMemo(() => {
+    return selectedGoogleAddons.reduce((acc, id) => {
+      const found = GOOGLE_ADDONS.find((a) => a.id === id);
       return acc + (found ? found.price : 0);
     }, 0);
-  }, [selectedAddons]);
+  }, [selectedGoogleAddons]);
 
-  const grandTotal = techObj.price + researchFee + domainObj.price + hostingObj.price + addonsTotal;
+  const autoAddonsTotal = useMemo(() => {
+    return selectedAutoAddons.reduce((acc, id) => {
+      const found = AUTO_ADDONS.find((a) => a.id === id);
+      return acc + (found ? found.price : 0);
+    }, 0);
+  }, [selectedAutoAddons]);
+
+  // Subtotal Jasa vs Domain
+  const totalJasa = scaleObj.price + researchFee + googleAddonsTotal + autoAddonsTotal;
+  const totalDomain = domainObj.price;
+  const grandTotal = totalJasa + totalDomain;
 
   const formatRupiah = (val: number) => {
     return new Intl.NumberFormat("id-ID", {
@@ -190,28 +218,82 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
     }).format(val);
   };
 
-  const handleToggleAddon = (id: string) => {
-    if (selectedAddons.includes(id)) {
-      setSelectedAddons(selectedAddons.filter((item) => item !== id));
+  const handleToggleGoogleAddon = (id: string) => {
+    if (selectedGoogleAddons.includes(id)) {
+      setSelectedGoogleAddons(selectedGoogleAddons.filter((item) => item !== id));
     } else {
-      setSelectedAddons([...selectedAddons, id]);
+      setSelectedGoogleAddons([...selectedGoogleAddons, id]);
     }
   };
 
-  const handleSelectTemplate = (template: TemplateItem) => {
-    setSelectedTemplateId(template.id);
-    setTemplateMode("pick");
-    // Selaraskan teknologi framework otomatis jika template berbeda
-    if (template.tech === "HTML5" && selectedTech !== "HTML5") {
-      setSelectedTech("HTML5");
-    } else if (template.tech === "PHP" && selectedTech !== "PHP") {
-      setSelectedTech("PHP");
-    } else if (template.tech === "Laravel" && selectedTech !== "Laravel") {
-      setSelectedTech("Laravel");
-    } else if ((template.tech === "Next.JS" || template.tech === "React") && selectedTech !== "Next.JS") {
-      setSelectedTech("Next.JS");
+  const handleToggleAutoAddon = (id: string) => {
+    if (selectedAutoAddons.includes(id)) {
+      setSelectedAutoAddons(selectedAutoAddons.filter((item) => item !== id));
+    } else {
+      setSelectedAutoAddons([...selectedAutoAddons, id]);
     }
   };
+
+  // Format pesan WhatsApp untuk tombol WhatsApp
+  const waOrderText = useMemo(() => {
+    const googleNames = selectedGoogleAddons
+      .map((id) => GOOGLE_ADDONS.find((a) => a.id === id)?.name)
+      .filter(Boolean);
+    const autoNames = selectedAutoAddons
+      .map((id) => AUTO_ADDONS.find((a) => a.id === id)?.name)
+      .filter(Boolean);
+
+    const templateLabel =
+      templateMode === "research"
+        ? "Riset Desain Khusus oleh Tim Ladi (+Rp 100rb)"
+        : activeTemplate
+        ? `${activeTemplate.name} (${activeTemplate.industry})`
+        : "Katalog Referensi Ladi";
+
+    const domainLabel =
+      selectedDomainId === "self"
+        ? `Domain Sendiri (${domainNameInput || "Belum ditentukan"})`
+        : `${domainObj.name} ${domainNameInput ? `[${domainNameInput}]` : ""}`;
+
+    return `Halo Ladi, saya sudah merakit kebutuhan website di Builder layanandigital.id:
+
+📋 *DETAIL SPESIFIKASI RAKITAN:*
+• Fondasi Usaha: ${scaleObj.name} (${formatRupiah(scaleObj.price)})
+• Desain Tampilan: ${templateLabel}
+• Google & Visibilitas: ${googleNames.length > 0 ? googleNames.join(", ") : "Tidak memilih"}
+• Otomatisasi & Fitur: ${autoNames.length > 0 ? autoNames.join(", ") : "Tidak memilih"}
+• Domain: ${domainLabel}
+
+💰 *RINCIAN INVESTASI:*
+• Biaya Jasa Pembuatan: ${formatRupiah(totalJasa)}
+• Biaya Ekstensi Domain: ${formatRupiah(totalDomain)} / tahun
+• Grand Total Investasi: ${formatRupiah(grandTotal)}
+
+👤 *DATA USAHA & PEMESAN:*
+• Nama Pemesan: ${customerName || "-"}
+• WhatsApp: ${customerPhone || "-"}
+• Nama Usaha / Brand: ${businessName || "-"} (${businessCategory})
+${notes ? `• Catatan: ${notes}` : ""}
+
+Mohon dibantu konfirmasi estimasi waktu pengerjaan dan langkah berikutnya. Terima kasih!`;
+  }, [
+    scaleObj,
+    templateMode,
+    activeTemplate,
+    selectedGoogleAddons,
+    selectedAutoAddons,
+    selectedDomainId,
+    domainObj,
+    domainNameInput,
+    totalJasa,
+    totalDomain,
+    grandTotal,
+    customerName,
+    customerPhone,
+    businessName,
+    businessCategory,
+    notes,
+  ]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -232,19 +314,22 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
 
     setIsLoading(true);
 
-    const templateSummary = templateMode === "research"
-      ? "Rekomendasi Template Khusus oleh Tim Ladi (+Rp 100.000 Riset)"
-      : `${activeTemplate.name} (${activeTemplate.tech})`;
+    const templateSummary =
+      templateMode === "research"
+        ? "Riset Desain Khusus oleh Tim Ladi (+Rp 100.000)"
+        : activeTemplate
+        ? `${activeTemplate.name} (Katalog Desain Ladi)`
+        : "Katalog Referensi Ladi";
 
-    const templateDemoUrl = templateMode === "research" ? "" : activeTemplate.envato_url;
+    const allAddonsSummary = [
+      ...selectedGoogleAddons.map((id) => GOOGLE_ADDONS.find((a) => a.id === id)?.name),
+      ...selectedAutoAddons.map((id) => AUTO_ADDONS.find((a) => a.id === id)?.name),
+    ].filter(Boolean);
 
-    const addonsSummary = selectedAddons
-      .map((id) => ADDONS_CATALOG.find((a) => a.id === id)?.name)
-      .filter(Boolean);
-
-    const domainSummary = selectedDomain === "self"
-      ? `Domain Sendiri: ${domainNameInput || "Belum ditentukan"}`
-      : `${domainNameInput ? domainNameInput + " " : ""}(${domainObj.name})`;
+    const domainSummary =
+      selectedDomainId === "self"
+        ? `Domain Sendiri: ${domainNameInput || "Belum ditentukan"}`
+        : `${domainNameInput ? domainNameInput + " " : ""}(${domainObj.name})`;
 
     try {
       const res = await fetch("/api/orders", {
@@ -252,7 +337,7 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           package_slug: "custom-builder",
-          package_name: `Custom Builder (${techObj.name})`,
+          package_name: `Custom Builder (${scaleObj.name})`,
           package_price: grandTotal,
           customer_name: customerName,
           customer_phone: customerPhone,
@@ -261,14 +346,14 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
           business_category: businessCategory,
           domain_requested: domainNameInput || domainObj.name,
           notes: notes,
-          payment_method: paymentMethod,
+          payment_method: "GOPAY",
           order_type: "pecahan",
           template_name: templateSummary,
-          template_url: templateDemoUrl,
-          template_tech: techObj.id,
+          template_url: "",
+          template_tech: scaleObj.name,
           domain_choice: domainSummary,
-          hosting_duration: hostingObj.name,
-          addons: addonsSummary,
+          hosting_duration: "Cloud Server Aktif 100%",
+          addons: allAddonsSummary,
         }),
       });
 
@@ -298,160 +383,162 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
       <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-[#fa824b]/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="space-y-2 text-center md:text-left z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fa824b]/20 text-[#fa824b] text-xs font-bold font-mono uppercase tracking-wider">
-            <span>🧩 Sistem LEGO Builder</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 text-[#fa824b] text-xs font-mono font-bold uppercase tracking-wider">
+            <span>⚙️ Fleksibilitas Penuh</span>
           </div>
-          <h2 className="text-xl sm:text-3xl font-extrabold tracking-tight">
-            Pilih Komponen Sesukamu, Bayar yang Diperlukan Saja
+          <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+            Rakit Sendiri Website Sesuai Kebutuhan Bisnis Anda
           </h2>
-          <p className="text-slate-300 text-xs sm:text-sm max-w-xl leading-relaxed">
-            Tidak mau terikat paket baku? Rancang sendiri website impianmu: pilih framework, pilih dari 23 template Envato siap pakai, tentukan durasi hosting, dan pasang add-on yang kamu mau.
+          <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
+            Tidak mau terikat paket baku? Rancang sendiri website impian Anda: pilih skala fondasi, tentukan referensi desain dari katalog Ladi, dan pasang fitur visibilitas Google yang benar-benar Anda butuhkan.
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 z-10 shrink-0">
+        <div className="flex items-center gap-3 shrink-0 z-10">
           <Link
             href="/pricing"
-            className="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase tracking-wider text-center transition-all border border-white/10"
+            className="px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white text-xs sm:text-sm font-bold border border-slate-700 transition-all flex items-center gap-2"
           >
-            ← Lihat Paketan Siap Pakai
+            <span>← Lihat Paket Bundel Siap Pakai</span>
           </Link>
-          <a
-            href="#kalkulator-form"
-            className="px-6 py-3 rounded-2xl bg-[#fa824b] hover:bg-[#e5723b] text-white text-xs font-extrabold uppercase tracking-wider text-center shadow-lg transition-all"
-          >
-            Rakit Sekarang ↓
-          </a>
         </div>
       </div>
 
-      {/* Main Grid: Left Steps, Right Sticky Calculator */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start" id="kalkulator-form">
-        {/* Kolom Kiri: Konfigurasi Pecahan */}
-        <div className="lg:col-span-8 space-y-10">
-          {/* LANGKAH 1: Pilih Pondasi Framework / Teknologi */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Kolom Kiri: 5 Langkah Rakit + Form Pemesan */}
+        <div className="lg:col-span-8 space-y-8">
+          {/* LANGKAH 1: Fondasi & Skala Kebutuhan Usaha */}
           <section className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
-            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-              <span className="w-8 h-8 rounded-2xl bg-[#1853a7] text-white text-sm font-black flex items-center justify-center shadow-md">
-                1
-              </span>
-              <div>
-                <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
-                  Pilih Fondasi Framework & Teknologi Web
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Tentukan mesin utama website sesuai kebutuhan fitur dan anggaran Anda.
-                </p>
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-3">
+                <span className="w-8 h-8 rounded-2xl bg-[#1853a7] text-white text-sm font-black flex items-center justify-center shadow-md">
+                  1
+                </span>
+                <div>
+                  <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
+                    Fondasi &amp; Skala Kebutuhan Usaha
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Pilih struktur website sesuai skala operasional bisnis Anda saat ini.
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {TECH_OPTIONS.map((tech) => {
-                const isSelected = selectedTech === tech.id;
+            <div className="grid grid-cols-1 gap-4">
+              {SCALE_OPTIONS.map((scale) => {
+                const isSelected = selectedScaleId === scale.id;
                 return (
                   <div
-                    key={tech.id}
-                    onClick={() => setSelectedTech(tech.id)}
-                    className={`p-5 rounded-2xl border-2 transition-all cursor-pointer relative flex flex-col justify-between ${
+                    key={scale.id}
+                    onClick={() => setSelectedScaleId(scale.id)}
+                    className={`p-5 rounded-2xl border-2 transition-all cursor-pointer relative ${
                       isSelected
-                        ? "border-[#1853a7] bg-blue-50/40 shadow-md ring-2 ring-[#1853a7]/20"
+                        ? "border-[#1853a7] bg-blue-50/30 shadow-md ring-2 ring-[#1853a7]/20"
                         : "border-slate-200 hover:border-slate-300 bg-white"
                     }`}
                   >
-                    <div>
-                      <div className="flex items-start justify-between gap-2 mb-2">
-                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700">
-                          {tech.badge}
-                        </span>
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                          isSelected ? "border-[#1853a7] bg-[#1853a7]" : "border-slate-300"
-                        }`}>
-                          {isSelected && <span className="text-white text-[10px]">✓</span>}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-sm sm:text-base font-extrabold text-slate-900">
+                            {scale.name}
+                          </h4>
+                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">
+                            {scale.badge}
+                          </span>
                         </div>
+                        <div className="text-xs font-semibold text-[#1853a7]">{scale.subtitle}</div>
                       </div>
-                      <h4 className="text-sm font-extrabold text-slate-900">{tech.name}</h4>
-                      <p className="text-xs text-slate-500 mt-1 leading-relaxed">{tech.desc}</p>
+
+                      <div className="text-right shrink-0">
+                        <span className="text-base sm:text-xl font-black text-[#1853a7] block">
+                          {formatRupiah(scale.price)}
+                        </span>
+                        <span className="text-[10px] text-slate-400">Biaya Fondasi</span>
+                      </div>
                     </div>
 
-                    <div className="pt-4 mt-3 border-t border-slate-100/80 flex items-baseline justify-between">
-                      <span className="text-[11px] text-slate-400 font-medium">Biaya Fondasi:</span>
-                      <span className="text-sm sm:text-base font-black text-[#1853a7]">
-                        {formatRupiah(tech.price)}
-                      </span>
-                    </div>
+                    <p className="text-xs text-slate-600 mt-3 leading-relaxed border-t border-slate-100 pt-3">
+                      {scale.desc}
+                    </p>
                   </div>
                 );
               })}
             </div>
           </section>
 
-          {/* LANGKAH 2: Pilih Template Desain (23 Envato) atau Rekomendasi Tim */}
+          {/* LANGKAH 2: Gaya Tampilan & Desain Industri */}
           <section className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
-            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-              <span className="w-8 h-8 rounded-2xl bg-[#1853a7] text-white text-sm font-black flex items-center justify-center shadow-md">
-                2
-              </span>
-              <div>
-                <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
-                  Pilih Desain / Template Website
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Pilih langsung dari 23 template Envato terverifikasi atau minta rekomendasi dari tim riset Ladi.
-                </p>
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-3">
+                <span className="w-8 h-8 rounded-2xl bg-[#1853a7] text-white text-sm font-black flex items-center justify-center shadow-md">
+                  2
+                </span>
+                <div>
+                  <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
+                    Gaya Tampilan &amp; Desain Industri
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Semua referensi desain resmi Ladi sudah termasuk dalam biaya jasa fondasi (Rp 0).
+                  </p>
+                </div>
               </div>
             </div>
 
-            {/* Opsi Rekomendasi vs Pilih Sendiri */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div
+            {/* Switch Mode: Pick from Catalog vs Research */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                type="button"
                 onClick={() => setTemplateMode("pick")}
-                className={`p-4 rounded-2xl border-2 cursor-pointer transition-all ${
+                className={`p-4 rounded-2xl border-2 text-left transition-all ${
                   templateMode === "pick"
-                    ? "border-[#fa824b] bg-orange-50/30 shadow-sm ring-1 ring-[#fa824b]"
+                    ? "border-[#1853a7] bg-blue-50/40 shadow-sm"
                     : "border-slate-200 hover:border-slate-300 bg-white"
                 }`}
               >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-extrabold text-slate-900">
-                    🎨 Saya Pilih Template Sendiri
+                <div className="flex items-center justify-between">
+                  <span className="text-xs sm:text-sm font-bold text-slate-900">
+                    Pilih dari Katalog Desain Ladi
                   </span>
-                  <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                    Termasuk (+Rp 0)
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+                    Gratis (Rp 0)
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  Bebas pilih salah satu dari 23 template Envato di bawah sesuai selera visual Anda.
+                <p className="text-[11px] text-slate-500 mt-1">
+                  Pilih gaya visual yang paling cocok dari kurasi portofolio desain Ladi.
                 </p>
-              </div>
+              </button>
 
-              <div
+              <button
+                type="button"
                 onClick={() => setTemplateMode("research")}
-                className={`p-4 rounded-2xl border-2 cursor-pointer transition-all ${
+                className={`p-4 rounded-2xl border-2 text-left transition-all ${
                   templateMode === "research"
-                    ? "border-[#1853a7] bg-blue-50/40 shadow-sm ring-1 ring-[#1853a7]"
+                    ? "border-[#fa824b] bg-orange-50/30 shadow-sm"
                     : "border-slate-200 hover:border-slate-300 bg-white"
                 }`}
               >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-extrabold text-slate-900">
-                    💡 Rekomendasikan oleh Tim Ladi
+                <div className="flex items-center justify-between">
+                  <span className="text-xs sm:text-sm font-bold text-slate-900">
+                    Riset &amp; Kurasi Khusus Tim Ladi
                   </span>
-                  <span className="text-[11px] font-bold text-[#1853a7] bg-blue-100/70 px-2 py-0.5 rounded-full">
-                    +Rp 100.000 Riset
+                  <span className="px-2 py-0.5 rounded-full bg-orange-100 text-[#fa824b] text-[10px] font-bold">
+                    +Rp 100.000
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  Tim kami akan meriset niche bisnis Anda dan memilihkan template premium yang paling cocok &amp; berkonversi tinggi.
+                <p className="text-[11px] text-slate-500 mt-1">
+                  Tim kami yang meriset 3 opsi desain eksklusif sesuai segmen pembeli Anda.
                 </p>
-              </div>
+              </button>
             </div>
 
-            {/* Daftar Template Envato (Hanya tampil jika mode 'pick') */}
+            {/* Katalog Desain Ladi (Hanya tampil jika mode 'pick') */}
             {templateMode === "pick" && (
               <div className="space-y-4 pt-2">
-                {/* Filter Industri Tab */}
-                <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none text-xs">
-                  <span className="text-slate-400 font-bold shrink-0">Filter:</span>
+                {/* Filter Kategori Industri */}
+                <div className="flex items-center gap-2 overflow-x-auto pb-2 text-xs">
+                  <span className="text-slate-400 font-bold shrink-0">Filter Sektor:</span>
                   {industries.map((ind) => (
                     <button
                       key={ind}
@@ -463,19 +550,20 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
                           : "bg-slate-100 hover:bg-slate-200 text-slate-600"
                       }`}
                     >
-                      {ind === "all" ? "Semua Kategori (23)" : ind}
+                      {ind === "all" ? "Semua Desain" : ind}
                     </button>
                   ))}
                 </div>
 
                 {/* Grid Template Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[560px] overflow-y-auto pr-1">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[520px] overflow-y-auto pr-1">
                   {filteredTemplates.map((item) => {
                     const isPicked = selectedTemplateId === item.id;
                     return (
                       <div
                         key={item.id}
-                        className={`p-4 rounded-2xl border-2 transition-all flex flex-col justify-between ${
+                        onClick={() => setSelectedTemplateId(item.id)}
+                        className={`p-4 rounded-2xl border-2 transition-all flex flex-col justify-between cursor-pointer ${
                           isPicked
                             ? "border-[#fa824b] bg-orange-50/30 shadow-md ring-2 ring-[#fa824b]/20"
                             : "border-slate-200 hover:border-slate-300 bg-white"
@@ -483,11 +571,11 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
                       >
                         <div className="space-y-2">
                           <div className="flex items-start justify-between gap-2">
-                            <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-slate-900 text-white">
-                              {item.tech}
-                            </span>
-                            <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                            <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full">
                               {item.industry}
+                            </span>
+                            <span className="text-[10px] font-mono text-emerald-700 font-bold">
+                              Termasuk (Rp 0)
                             </span>
                           </div>
 
@@ -502,26 +590,23 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
                         </div>
 
                         <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-                          <a
-                            href={item.envato_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-[11px] font-bold text-blue-600 hover:underline flex items-center gap-1"
-                          >
-                            <span>Live Preview Envato</span>
-                            <span className="text-[9px]">↗</span>
-                          </a>
+                          <span className="text-[11px] text-slate-400 font-medium">
+                            Katalog Desain Ladi
+                          </span>
 
                           <button
                             type="button"
-                            onClick={() => handleSelectTemplate(item)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedTemplateId(item.id);
+                            }}
                             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                               isPicked
                                 ? "bg-[#fa824b] text-white shadow-sm"
                                 : "bg-slate-100 hover:bg-slate-200 text-slate-700"
                             }`}
                           >
-                            {isPicked ? "✓ Terpilih" : "Pilih Ini"}
+                            {isPicked ? "✓ Terpilih" : "Pilih Desain Ini"}
                           </button>
                         </div>
                       </div>
@@ -532,7 +617,7 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
             )}
           </section>
 
-          {/* LANGKAH 3: Pilihan Domain */}
+          {/* LANGKAH 3: Visibilitas Google & Pencarian Lokal */}
           <section className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
             <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
               <span className="w-8 h-8 rounded-2xl bg-[#1853a7] text-white text-sm font-black flex items-center justify-center shadow-md">
@@ -540,21 +625,131 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
               </span>
               <div>
                 <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
-                  Pilihan Ekstensi Domain
+                  Visibilitas Google &amp; Pencarian Lokal
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Alamat resmi website Anda di internet.
+                  Pastikan toko fisik atau kantor Anda ditemukan calon pembeli di sekitar lokasi usaha.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              {GOOGLE_ADDONS.map((addon) => {
+                const isChecked = selectedGoogleAddons.includes(addon.id);
+                return (
+                  <div
+                    key={addon.id}
+                    onClick={() => handleToggleGoogleAddon(addon.id)}
+                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-3 ${
+                      isChecked
+                        ? "border-[#1853a7] bg-blue-50/20 shadow-sm"
+                        : "border-slate-200 hover:border-slate-300 bg-white"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={() => {}}
+                      className="mt-1 rounded text-[#1853a7] focus:ring-[#1853a7] w-4 h-4 cursor-pointer"
+                    />
+                    <div className="flex-1 space-y-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-xs font-extrabold text-slate-900">
+                          {addon.icon} {addon.name}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 leading-relaxed">{addon.desc}</p>
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-[10px] font-bold text-slate-400">{addon.badge}</span>
+                        <span className="text-xs font-black text-[#1853a7]">
+                          +{formatRupiah(addon.price)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* LANGKAH 4: Otomatisasi & Fitur Pendukung Bisnis */}
+          <section className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+              <span className="w-8 h-8 rounded-2xl bg-[#1853a7] text-white text-sm font-black flex items-center justify-center shadow-md">
+                4
+              </span>
+              <div>
+                <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
+                  Otomatisasi &amp; Fitur Pendukung Bisnis
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Kemudahan bertransaksi, pemantauan performa, dan pendampingan strategi pertumbuhan.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              {AUTO_ADDONS.map((addon) => {
+                const isChecked = selectedAutoAddons.includes(addon.id);
+                return (
+                  <div
+                    key={addon.id}
+                    onClick={() => handleToggleAutoAddon(addon.id)}
+                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-3 ${
+                      isChecked
+                        ? "border-[#fa824b] bg-orange-50/20 shadow-sm"
+                        : "border-slate-200 hover:border-slate-300 bg-white"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={() => {}}
+                      className="mt-1 rounded text-[#fa824b] focus:ring-[#fa824b] w-4 h-4 cursor-pointer"
+                    />
+                    <div className="flex-1 space-y-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-xs font-extrabold text-slate-900">
+                          {addon.icon} {addon.name}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 leading-relaxed">{addon.desc}</p>
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-[10px] font-bold text-slate-400">{addon.badge}</span>
+                        <span className="text-xs font-black text-[#fa824b]">
+                          +{formatRupiah(addon.price)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* LANGKAH 5: Ekstensi Alamat Domain Resmi */}
+          <section className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+              <span className="w-8 h-8 rounded-2xl bg-[#1853a7] text-white text-sm font-black flex items-center justify-center shadow-md">
+                5
+              </span>
+              <div>
+                <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
+                  Ekstensi Alamat Domain Resmi
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Alamat resmi website Anda di internet. Didaftarkan 100% atas nama pemilik bisnis.
                 </p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {DOMAIN_OPTIONS.map((dom) => {
-                const isSelected = selectedDomain === dom.id;
+                const isSelected = selectedDomainId === dom.id;
                 return (
                   <div
                     key={dom.id}
-                    onClick={() => setSelectedDomain(dom.id)}
+                    onClick={() => setSelectedDomainId(dom.id)}
                     className={`p-3.5 rounded-2xl border-2 transition-all cursor-pointer ${
                       isSelected
                         ? "border-[#1853a7] bg-blue-50/40 shadow-sm ring-1 ring-[#1853a7]"
@@ -586,114 +781,12 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
                 className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-[#fa824b] bg-slate-50/50"
               />
               <span className="text-[10px] text-slate-400 mt-1 block">
-                Jika belum punya ide nama domain, kosongkan saja. Tim Ladi akan mencarikan 3 rekomendasi terbaik.
+                Jika belum punya ide nama domain, kosongkan saja. Tim Ladi akan mencarikan 3 rekomendasi terbaik saat konsultasi.
               </span>
             </div>
           </section>
 
-          {/* LANGKAH 4: Durasi Hosting */}
-          <section className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
-            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-              <span className="w-8 h-8 rounded-2xl bg-[#1853a7] text-white text-sm font-black flex items-center justify-center shadow-md">
-                4
-              </span>
-              <div>
-                <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
-                  Durasi Cloud Hosting & Server
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Server berkecepatan tinggi dengan uptime 99.9% dan SSL gratis.
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-              {HOSTING_OPTIONS.map((host) => {
-                const isSelected = selectedHosting === host.id;
-                return (
-                  <div
-                    key={host.id}
-                    onClick={() => setSelectedHosting(host.id)}
-                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer relative ${
-                      isSelected
-                        ? "border-[#1853a7] bg-blue-50/40 shadow-sm ring-1 ring-[#1853a7]"
-                        : "border-slate-200 hover:border-slate-300 bg-white"
-                    }`}
-                  >
-                    {host.isBest && (
-                      <span className="absolute -top-2.5 right-4 px-2.5 py-0.5 rounded-full bg-[#fa824b] text-white text-[9px] font-bold uppercase tracking-wider">
-                        Rekomendasi
-                      </span>
-                    )}
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-extrabold text-slate-900">{host.name}</span>
-                    </div>
-                    <div className="text-[11px] text-slate-500 mt-1">{host.note}</div>
-                    <div className="text-xs sm:text-sm font-black text-[#1853a7] mt-2">
-                      {host.price === 0 ? "Gratis (Pakai Server Sendiri)" : formatRupiah(host.price)}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-
-          {/* LANGKAH 5: Add-Ons Pelengkap */}
-          <section className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
-            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-              <span className="w-8 h-8 rounded-2xl bg-[#1853a7] text-white text-sm font-black flex items-center justify-center shadow-md">
-                5
-              </span>
-              <div>
-                <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
-                  Add-Ons Pilihan (Biar Ga Kerasa Mahal)
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Pilih fitur tambahan yang benar-benar Anda butuhkan secara modular.
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-              {ADDONS_CATALOG.map((addon) => {
-                const isChecked = selectedAddons.includes(addon.id);
-                return (
-                  <div
-                    key={addon.id}
-                    onClick={() => handleToggleAddon(addon.id)}
-                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-3 ${
-                      isChecked
-                        ? "border-[#fa824b] bg-orange-50/20 shadow-sm"
-                        : "border-slate-200 hover:border-slate-300 bg-white"
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={isChecked}
-                      onChange={() => {}} // Di-handle oleh parent div
-                      className="mt-1 rounded text-[#fa824b] focus:ring-[#fa824b] w-4 h-4 cursor-pointer"
-                    />
-                    <div className="flex-1 space-y-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-xs font-extrabold text-slate-900">
-                          {addon.icon} {addon.name}
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-slate-500 leading-relaxed">{addon.desc}</p>
-                      <div className="flex items-center justify-between pt-1">
-                        <span className="text-[10px] font-bold text-slate-400">{addon.badge}</span>
-                        <span className="text-xs font-black text-[#1853a7]">
-                          +{formatRupiah(addon.price)}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-
-          {/* LANGKAH 6: Formulir Data Pemesan & Pembayaran */}
+          {/* LANGKAH 6: Formulir Data Pemesan & Koordinasi */}
           <section className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
             <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
               <span className="w-8 h-8 rounded-2xl bg-[#1853a7] text-white text-sm font-black flex items-center justify-center shadow-md">
@@ -701,10 +794,10 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
               </span>
               <div>
                 <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
-                  Data Pemesan & Metode Pembayaran
+                  Data Pemesan &amp; Koordinasi
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Data untuk penerbitan invoice resmi dan koordinasi pengerjaan.
+                  Data untuk verifikasi kepemilikan aset dan koordinasi pengerjaan.
                 </p>
               </div>
             </div>
@@ -764,15 +857,21 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Alamat Email (Opsional)
+                    Kategori Bidang Usaha
                   </label>
-                  <input
-                    type="email"
-                    placeholder="cth. hendra@gmail.com"
-                    value={customerEmail}
-                    onChange={(e) => setCustomerEmail(e.target.value)}
+                  <select
+                    value={businessCategory}
+                    onChange={(e) => setBusinessCategory(e.target.value)}
                     className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-[#fa824b] bg-slate-50/50"
-                  />
+                  >
+                    <option value="Kuliner / F&B (Resto, Kafe, Katering)">Kuliner / F&B (Resto, Kafe, Katering)</option>
+                    <option value="Otomotif & Bengkel">Otomotif &amp; Bengkel</option>
+                    <option value="Toko Fisik & Retail">Toko Fisik &amp; Retail</option>
+                    <option value="Jasa Profesional & Servis">Jasa Profesional &amp; Servis</option>
+                    <option value="Kesehatan & Klinik">Kesehatan &amp; Klinik</option>
+                    <option value="Tour & Travel">Tour &amp; Travel</option>
+                    <option value="Lainnya">Lainnya</option>
+                  </select>
                 </div>
               </div>
 
@@ -782,50 +881,33 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
                 </label>
                 <textarea
                   rows={2}
-                  placeholder="Ceritakan preferensi warna, referensi website yang disukai, atau catatan penting lainnya..."
+                  placeholder="Ceritakan preferensi warna, alamat toko fisik untuk Google Maps, atau kebutuhan khusus lainnya..."
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-[#fa824b] bg-slate-50/50"
                 />
               </div>
 
-              {/* Pilihan Metode Bayar */}
-              <div className="pt-2">
-                <label className="block text-xs font-bold text-slate-700 mb-2">
-                  Metode Pembayaran Resmi
-                </label>
-                <div className="p-3.5 rounded-xl border-2 border-[#00a5cf] bg-cyan-50/20 flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-2.5">
-                    <span className="px-2 py-0.5 rounded-md bg-[#00a5cf] text-white text-[11px] font-black">
-                      GoPay
-                    </span>
-                    <div>
-                      <span className="text-xs font-bold text-slate-800 block">
-                        Transfer E-Wallet GoPay
-                      </span>
-                      <span className="text-xs font-mono font-bold text-[#00a5cf]">
-                        0821-1247-7119
-                      </span>
-                    </div>
-                  </div>
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">
-                    ✓ Aktif
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
-                  a/n <strong>Ladi Layanan Digital</strong>. Pembayaran diverifikasi cepat via unggah bukti di invoice.
-                </p>
-              </div>
+              {/* Dua Tombol Aksi: WhatsApp & Invoice Online */}
+              <div className="pt-4 border-t border-slate-100 space-y-3">
+                <a
+                  href={`https://wa.me/6282112477119?text=${encodeURIComponent(waOrderText)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-4 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm sm:text-base tracking-wide shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <span>💬 Konsultasikan Rakitan via WhatsApp</span>
+                  <span>↗</span>
+                </a>
 
-              <div className="pt-4 border-t border-slate-100">
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-4 px-6 rounded-2xl bg-[#fa824b] hover:bg-[#e5723b] disabled:bg-slate-300 text-white font-extrabold text-sm sm:text-base uppercase tracking-wider shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3.5 px-6 rounded-2xl bg-slate-900 hover:bg-slate-800 disabled:bg-slate-300 text-white font-extrabold text-xs sm:text-sm tracking-wider shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {isLoading ? (
                     <>
-                      <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24" fill="none">
+                      <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24" fill="none">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                       </svg>
@@ -833,7 +915,7 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
                     </>
                   ) : (
                     <>
-                      <span>Buat Pesanan Custom & Lanjut Bayar ({formatRupiah(grandTotal)})</span>
+                      <span>💳 Terbitkan Pesanan &amp; Invoice Online ({formatRupiah(grandTotal)})</span>
                       <span>→</span>
                     </>
                   )}
@@ -843,7 +925,7 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
           </section>
         </div>
 
-        {/* Kolom Kanan: Sticky Ringkasan Real-Time */}
+        {/* Kolom Kanan: Sticky Ringkasan Real-Time & Decoy Alerts */}
         <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
           <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-5">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -851,29 +933,84 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
                 Kalkulator Real-Time
               </span>
               <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-bold">
-                Kustom LEGO
+                Pecahan Modular
               </span>
             </div>
 
+            {/* Smart Upsell Alert (Decoy Pricing) */}
+            {totalJasa >= 500000 && totalJasa <= 850000 && (
+              <div className="p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 text-amber-900 space-y-2">
+                <div className="flex items-center gap-2 font-black text-xs sm:text-sm">
+                  <span>💡 Tips Hemat Pemula</span>
+                </div>
+                <p className="text-xs leading-relaxed">
+                  Total jasa pilihan Anda saat ini mencapai <strong>{formatRupiah(totalJasa)}</strong>.
+                  Tahukah Anda? Anda bisa memilih <strong>Paket EXIST (Rp 500.000 Sekali Bayar)</strong> yang sudah memaketkan Landing Page + Verifikasi Google Maps + Tombol WhatsApp + Basic SEO langsung jadi lebih hemat!
+                </p>
+                <Link
+                  href="/pricing"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-amber-900 hover:text-black underline"
+                >
+                  Lihat Detail Paket EXIST (Rp 500.000) →
+                </Link>
+              </div>
+            )}
+
+            {totalJasa >= 1400000 && totalJasa <= 2200000 && (
+              <div className="p-4 rounded-2xl bg-blue-50 border-2 border-[#1853a7]/40 text-blue-950 space-y-2">
+                <div className="flex items-center gap-2 font-black text-xs sm:text-sm text-[#1853a7]">
+                  <span>💡 Rekomendasi Paling Untung</span>
+                </div>
+                <p className="text-xs leading-relaxed">
+                  Total jasa pilihan Anda saat ini mencapai <strong>{formatRupiah(totalJasa)}</strong>.
+                  Anda jauh lebih hemat dengan mengambil bundel <strong>Paket RISE (Rp 1.500.000 Sekali Bayar)</strong>! Sudah dapat Website Lengkap 5–7 Halaman + Optimasi Google Maps Lokal + GA4 + Laporan Performa 30 Hari + Garansi 3 Bulan Revisi!
+                </p>
+                <Link
+                  href="/pricing"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-[#1853a7] hover:underline"
+                >
+                  Ambil Paket Bundel RISE (Hemat s/d Rp 300.000+) →
+                </Link>
+              </div>
+            )}
+
+            {totalJasa > 3200000 && (
+              <div className="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-400 text-emerald-950 space-y-2">
+                <div className="flex items-center gap-2 font-black text-xs sm:text-sm text-emerald-800">
+                  <span>💡 Solusi Mandiri &amp; Toko Online Komplit</span>
+                </div>
+                <p className="text-xs leading-relaxed">
+                  Kebutuhan usaha Anda sudah di skala sistem mandiri (total jasa <strong>{formatRupiah(totalJasa)}</strong>).
+                  Pertimbangkan <strong>Paket RUN (Rp 3.500.000)</strong> untuk mendapatkan Toko Online / Booking System + QRIS Otomatis + Laporan 3 Bulan + Konsultasi Strategi Digital 1-on-1 (60 Menit) komplit siap jualan 24 jam!
+                </p>
+                <Link
+                  href="/pricing"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 hover:underline"
+                >
+                  Lihat Detail Paket RUN (Rp 3.500.000) →
+                </Link>
+              </div>
+            )}
+
             {/* Rincian Komponen */}
             <div className="space-y-3 text-xs">
-              {/* Fondasi Framework */}
+              {/* Fondasi Usaha */}
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <div className="font-bold text-slate-800">Framework: {techObj.name}</div>
-                  <div className="text-[11px] text-slate-400">Fondasi utama website</div>
+                  <div className="font-bold text-slate-800">{scaleObj.name}</div>
+                  <div className="text-[11px] text-slate-400">Fondasi skala usaha</div>
                 </div>
-                <div className="font-black text-slate-800">{formatRupiah(techObj.price)}</div>
+                <div className="font-black text-slate-800">{formatRupiah(scaleObj.price)}</div>
               </div>
 
-              {/* Template */}
+              {/* Referensi Desain */}
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <div className="font-bold text-slate-800">
-                    Template: {templateMode === "research" ? "Riset Tim Ladi" : activeTemplate.name}
+                    Desain: {templateMode === "research" ? "Riset Tim Ladi" : activeTemplate?.name || "Katalog Ladi"}
                   </div>
                   <div className="text-[11px] text-slate-400">
-                    {templateMode === "research" ? "Kurasi khusus niche bisnis" : activeTemplate.tech}
+                    {templateMode === "research" ? "Kurasi khusus niche bisnis" : "Katalog referensi Ladi"}
                   </div>
                 </div>
                 <div className="font-black text-slate-800">
@@ -881,38 +1018,14 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
                 </div>
               </div>
 
-              {/* Domain */}
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <div className="font-bold text-slate-800">Domain: {domainObj.name}</div>
-                  <div className="text-[11px] text-slate-400">
-                    {domainNameInput ? domainNameInput : "Alamat web resmi"}
-                  </div>
-                </div>
-                <div className="font-black text-slate-800">
-                  {domainObj.price === 0 ? "Rp 0" : "+" + formatRupiah(domainObj.price)}
-                </div>
-              </div>
-
-              {/* Hosting */}
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <div className="font-bold text-slate-800">Hosting: {hostingObj.name}</div>
-                  <div className="text-[11px] text-slate-400">{hostingObj.note}</div>
-                </div>
-                <div className="font-black text-slate-800">
-                  {hostingObj.price === 0 ? "Rp 0" : "+" + formatRupiah(hostingObj.price)}
-                </div>
-              </div>
-
-              {/* Add-ons list */}
-              {selectedAddons.length > 0 && (
+              {/* Google Add-ons list */}
+              {selectedGoogleAddons.length > 0 && (
                 <div className="pt-2 border-t border-slate-100 space-y-1.5">
                   <span className="text-[11px] font-bold text-slate-500 block">
-                    Add-Ons Terpilih ({selectedAddons.length}):
+                    Visibilitas Google ({selectedGoogleAddons.length}):
                   </span>
-                  {selectedAddons.map((id) => {
-                    const addon = ADDONS_CATALOG.find((a) => a.id === id);
+                  {selectedGoogleAddons.map((id) => {
+                    const addon = GOOGLE_ADDONS.find((a) => a.id === id);
                     if (!addon) return null;
                     return (
                       <div key={id} className="flex items-center justify-between text-[11px] text-slate-600">
@@ -925,32 +1038,83 @@ export default function BuilderClient({ initialTemplates }: BuilderClientProps) 
                   })}
                 </div>
               )}
+
+              {/* Auto Add-ons list */}
+              {selectedAutoAddons.length > 0 && (
+                <div className="pt-2 border-t border-slate-100 space-y-1.5">
+                  <span className="text-[11px] font-bold text-slate-500 block">
+                    Otomatisasi &amp; Fitur ({selectedAutoAddons.length}):
+                  </span>
+                  {selectedAutoAddons.map((id) => {
+                    const addon = AUTO_ADDONS.find((a) => a.id === id);
+                    if (!addon) return null;
+                    return (
+                      <div key={id} className="flex items-center justify-between text-[11px] text-slate-600">
+                        <span className="truncate pr-2">✓ {addon.name}</span>
+                        <span className="font-semibold text-slate-700 shrink-0">
+                          +{formatRupiah(addon.price)}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Subtotal Jasa */}
+              <div className="pt-2 border-t border-slate-200 flex items-center justify-between font-bold text-slate-800">
+                <span>Subtotal Biaya Jasa:</span>
+                <span className="font-black text-[#1853a7]">{formatRupiah(totalJasa)}</span>
+              </div>
+
+              {/* Domain */}
+              <div className="pt-2 border-t border-slate-100 flex items-start justify-between gap-2">
+                <div>
+                  <div className="font-bold text-slate-800">Domain: {domainObj.name}</div>
+                  <div className="text-[11px] text-slate-400">
+                    {domainNameInput ? domainNameInput : "Alamat web resmi"}
+                  </div>
+                </div>
+                <div className="font-black text-slate-800">
+                  {domainObj.price === 0 ? "Rp 0" : "+" + formatRupiah(domainObj.price) + " / thn"}
+                </div>
+              </div>
             </div>
 
             {/* Total Box */}
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1">
-              <span className="text-[11px] text-slate-500 block font-medium">Total Investasi Akhir:</span>
+              <span className="text-[11px] text-slate-500 block font-medium">Total Investasi Transparan:</span>
               <div className="text-2xl sm:text-3xl font-black text-[#1853a7]">
                 {formatRupiah(grandTotal)}
               </div>
               <span className="text-[10px] text-slate-400 block">
-                Termasuk garansi revisi &amp; pendampingan teknis Ladi.
+                Sistem DP 50%, pelunasan setelah hasil demo siap tayang.
               </span>
             </div>
+
+            {/* WhatsApp Quick CTA button */}
+            <a
+              href={`https://wa.me/6282112477119?text=${encodeURIComponent(waOrderText)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-3 px-4 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+            >
+              <span>💬 Kirim Rincian Ini ke WhatsApp Ladi</span>
+              <span>↗</span>
+            </a>
 
             {/* Jaminan */}
             <div className="space-y-2 text-[11px] text-slate-500 pt-2 border-t border-slate-100">
               <div className="flex items-center gap-2">
                 <span>🛡️</span>
-                <span><strong>Tanpa Biaya Tersembunyi:</strong> Harga tercantum final.</span>
+                <span><strong>Tanpa Biaya Tersembunyi:</strong> Harga tercantum final dan transparan.</span>
               </div>
               <div className="flex items-center gap-2">
                 <span>⚡</span>
-                <span><strong>Pengerjaan Kilat:</strong> Langsung dimulai setelah DP / pelunasan.</span>
+                <span><strong>Aset 100% Milik Anda:</strong> Domain, akun Google Maps &amp; kode diserahkan penuh.</span>
               </div>
               <div className="flex items-center gap-2">
                 <span>📑</span>
-                <span><strong>Invoice & QRIS Resmi:</strong> Terbit seketika di layar Anda.</span>
+                <span><strong>Garansi Revisi:</strong> Pendampingan teknis langsung dari tim Ladi.</span>
               </div>
             </div>
           </div>

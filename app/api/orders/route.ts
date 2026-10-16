@@ -15,10 +15,10 @@ function generateOrderNumber(): string {
 
 // Fallback pricing mapping jika slug cocok
 const PRICE_MAP: Record<string, { name: string; price: number }> = {
-  "paket-exist": { name: "Paket EXIST", price: 299000 },
-  "paket-rise": { name: "Paket RISE", price: 999000 },
-  "paket-run": { name: "Paket RUN", price: 2499000 },
-  "paket-guard": { name: "Paket GUARD", price: 350000 },
+  "paket-exist": { name: "Paket EXIST", price: 500000 },
+  "paket-rise": { name: "Paket RISE", price: 1500000 },
+  "paket-run": { name: "Paket RUN", price: 3500000 },
+  "paket-guard": { name: "Paket GUARD", price: 500000 },
 };
 
 export async function POST(req: NextRequest) {
@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
     // 2. Ambil informasi paket & harga
     const cleanSlug = String(package_slug || "").toLowerCase().trim();
     let packageName = customPackageName || "Paket Kustom Ladi";
-    let packagePrice = 299000;
+    let packagePrice = 500000;
 
     if (customPackagePrice && Number(customPackagePrice) > 0) {
       packagePrice = Math.round(Number(customPackagePrice));

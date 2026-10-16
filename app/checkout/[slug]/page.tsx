@@ -56,14 +56,14 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
   }
 
   // Bersihkan angka harga
-  let cleanPriceNum = 299000;
+  let cleanPriceNum = 500000;
   if (isGuard) {
     cleanPriceNum = 0; // Guard harga dihitung dinamis dari total addons terpilih
   } else {
     const firstMatch = pkg.price.match(/\d[\d.,]*/);
     cleanPriceNum = firstMatch
       ? parseInt(firstMatch[0].replace(/[.,]/g, ""), 10)
-      : 299000;
+      : 500000;
   }
 
   const formattedPrice = isGuard

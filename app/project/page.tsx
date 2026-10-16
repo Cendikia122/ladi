@@ -142,6 +142,17 @@ export default async function ProjectPage() {
                           0{idx + 1}
                         </span>
                         <div>
+                          <div className="mb-2">
+                            {item.client_name?.toLowerCase().includes("fasel") || item.slug?.toLowerCase().includes("fasel") ? (
+                              <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold inline-flex items-center gap-1 shadow-sm border border-emerald-300">
+                                ✓ Portofolio Klien Resmi Ladi
+                              </span>
+                            ) : (
+                              <span className="px-3 py-1 rounded-full bg-blue-100 text-[#1853a7] text-[11px] font-bold inline-flex items-center gap-1 shadow-sm border border-blue-200">
+                                💡 Simulasi Studi Kasus &amp; Proyeksi Dampak UMKM
+                              </span>
+                            )}
+                          </div>
                           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
                             {item.title}
                           </h2>

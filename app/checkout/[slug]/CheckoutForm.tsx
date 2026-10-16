@@ -509,16 +509,9 @@ export default function CheckoutForm({
                       </div>
 
                       <div className="pt-2 mt-2 border-t border-slate-100 flex items-center justify-between">
-                        <a
-                          href={item.envato_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          className="text-[10px] font-bold text-blue-600 hover:underline flex items-center gap-0.5"
-                        >
-                          <span>Demo Envato</span>
-                          <span>↗</span>
-                        </a>
+                        <span className="text-[10px] font-semibold text-slate-500">
+                          Katalog Resmi Ladi
+                        </span>
                         <span className={`text-[10px] font-bold ${isPicked ? "text-[#fa824b]" : "text-slate-400"}`}>
                           {isPicked ? "✓ Terpilih" : "Pilih"}
                         </span>

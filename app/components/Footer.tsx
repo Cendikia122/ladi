@@ -71,7 +71,7 @@ export default function Footer() {
             <div className="space-y-2.5 text-xs text-slate-300">
               <div className="flex items-start gap-2">
                 <span className="text-[#fa824b] font-bold">📍</span>
-                <span>Bogor & Depok, Jawa Barat, Indonesia</span>
+                <span>Kota Bogor, Kab. Bogor, Kota Depok, dan Jabodetabek (Online)</span>
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-[#fa824b] font-bold">💬</span>
@@ -84,6 +84,10 @@ export default function Footer() {
                 >
                   +62 821-1247-7119 (WhatsApp)
                 </a>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-[#fa824b] font-bold">🕒</span>
+                <span>Senin–Jumat: 15.30–21.00 WIB · Sabtu: 09.00–17.00 WIB<br /><span className="text-[11px] text-slate-400">Minggu &amp; Libur Nasional: Tutup (Pemantauan Server Aktif)</span></span>
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-[#fa824b] font-bold">✉️</span>
