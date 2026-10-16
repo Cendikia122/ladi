@@ -57,6 +57,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+// Helper agar seluruh tabel artikel blog otomatis terbungkus container responsive anti-keluar-frame
+function formatBlogContent(content: string): string {
+  if (!content) return "";
+  const cleaned = content.replace(/<p>\s*(<table(?:\s+[^>]*)?>[\s\S]*?<\/table>)\s*<\/p>/gi, "$1");
+  if (cleaned.includes("table-container")) {
+    return cleaned;
+  }
+  return cleaned.replace(
+    /(<table(?:\s+[^>]*)?>[\s\S]*?<\/table>)/gi,
+    '<div class="table-container my-6 w-full overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-xs"><div class="inline-block min-w-full align-middle">$1</div></div>'
+  );
+}
+
 export default async function BlogDetailPage({
   params,
 }: {
@@ -173,7 +186,7 @@ export default async function BlogDetailPage({
         {/* Article Body */}
         <article className="py-16 md:py-24">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-sm space-y-8 text-base sm:text-lg leading-relaxed text-slate-700">
+            <div className="bg-white rounded-3xl p-6 sm:p-10 md:p-12 border border-slate-200 shadow-sm space-y-8 text-base sm:text-lg leading-relaxed text-slate-700 overflow-hidden max-w-full">
               {blogImg && (
                 <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-slate-100 border border-slate-200">
                   <Image
@@ -187,8 +200,8 @@ export default async function BlogDetailPage({
               )}
 
               <div
-                className="prose prose-slate max-w-none space-y-5"
-                dangerouslySetInnerHTML={{ __html: blog.content }}
+                className="prose prose-slate max-w-none space-y-5 overflow-hidden"
+                dangerouslySetInnerHTML={{ __html: formatBlogContent(blog.content) }}
               />
 
               {/* Share & Tag Footer */}

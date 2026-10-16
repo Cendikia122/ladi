@@ -302,6 +302,40 @@ export default function RichTextEditor({
           >
             &lt;a&gt; Link WA
           </button>
+          <button
+            type="button"
+            onClick={() =>
+              insertTag(
+                `<div class="table-container my-6 w-full overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-xs">\n` +
+                `  <table class="w-full text-left border-collapse text-sm">\n` +
+                `    <thead>\n` +
+                `      <tr class="bg-slate-50 border-b border-slate-200">\n` +
+                `        <th class="p-3 font-bold text-slate-800 border border-slate-200">Aspek / Kriteria</th>\n` +
+                `        <th class="p-3 font-bold text-slate-800 border border-slate-200">Opsi Pertama</th>\n` +
+                `        <th class="p-3 font-bold text-[#1853a7] border border-slate-200">Opsi Kedua (Rekomendasi)</th>\n` +
+                `      </tr>\n` +
+                `    </thead>\n` +
+                `    <tbody>\n` +
+                `      <tr>\n` +
+                `        <td class="p-3 font-semibold text-slate-700 border border-slate-200">Poin 1</td>\n` +
+                `        <td class="p-3 text-slate-600 border border-slate-200">Keterangan opsi pertama</td>\n` +
+                `        <td class="p-3 text-[#1853a7] font-semibold border border-slate-200">Keunggulan opsi rekomendasi</td>\n` +
+                `      </tr>\n` +
+                `      <tr class="bg-slate-50/50">\n` +
+                `        <td class="p-3 font-semibold text-slate-700 border border-slate-200">Poin 2</td>\n` +
+                `        <td class="p-3 text-slate-600 border border-slate-200">Keterangan opsi pertama</td>\n` +
+                `        <td class="p-3 text-[#1853a7] font-semibold border border-slate-200">Keunggulan opsi rekomendasi</td>\n` +
+                `      </tr>\n` +
+                `    </tbody>\n` +
+                `  </table>\n` +
+                `</div>\n`
+              )
+            }
+            title="Sisipkan Tabel Rapi (Anti-Keluar Frame)"
+            className="px-2.5 py-1 rounded-md bg-emerald-50 border border-emerald-300 hover:bg-emerald-100 text-emerald-800 font-mono text-[11px] font-bold cursor-pointer inline-flex items-center gap-1"
+          >
+            📊 + Tabel Rapi
+          </button>
         </div>
 
         <textarea
@@ -323,13 +357,13 @@ export default function RichTextEditor({
 
       {/* Mode 3: Pratinjau Tampilan */}
       <div className={activeTab === "preview" ? "block" : "hidden"}>
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 min-h-[240px] shadow-xs">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 min-h-[240px] shadow-xs overflow-x-auto">
           <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider pb-3 mb-3 border-b border-slate-100">
             Pratinjau Hasil Tampilan di Halaman Web
           </div>
           {value ? (
             <div
-              className="text-slate-800 text-sm leading-relaxed space-y-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-slate-900 [&_h2]:mt-4 [&_h2]:mb-2 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:text-slate-900 [&_h3]:mt-3 [&_h3]:mb-1 [&_p]:my-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:space-y-1 [&_blockquote]:border-l-4 [&_blockquote]:border-[#1853a7] [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-slate-600 [&_a]:text-[#1853a7] [&_a]:underline [&_img]:rounded-xl [&_img]:max-w-full [&_img]:my-3"
+              className="prose prose-slate max-w-none text-slate-800 text-sm leading-relaxed space-y-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-slate-900 [&_h2]:mt-4 [&_h2]:mb-2 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:text-slate-900 [&_h3]:mt-3 [&_h3]:mb-1 [&_p]:my-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:space-y-1 [&_blockquote]:border-l-4 [&_blockquote]:border-[#1853a7] [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-slate-600 [&_a]:text-[#1853a7] [&_a]:underline [&_img]:rounded-xl [&_img]:max-w-full [&_img]:my-3 [&_table]:w-full [&_table]:border-collapse [&_th]:p-2.5 [&_th]:border [&_th]:border-slate-200 [&_th]:bg-slate-50 [&_th]:font-bold [&_td]:p-2.5 [&_td]:border [&_td]:border-slate-200"
               dangerouslySetInnerHTML={{ __html: value }}
             />
           ) : (
