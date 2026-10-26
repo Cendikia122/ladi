@@ -8,6 +8,8 @@ import LadiLogo from "@/app/components/LadiLogo";
 
 export const dynamic = "force-dynamic";
 
+// Ladi Workspace Notion-Style Kanban & Work Tracker v1.1.0
+
 export const metadata = {
   title: "Kanban Desain & Jam Kerja — Ladi",
   description: "Manajemen proyek desain Notion-style, Canva live embed, dan pelacak jam kerja desainer.",
