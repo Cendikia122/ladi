@@ -125,13 +125,17 @@ export interface OrderItem {
 export interface TemplateItem {
   id: string;
   name: string;
-  tech: "HTML5" | "PHP" | "Laravel" | "React" | "Next.JS";
+  tech: "HTML5" | "PHP" | "Laravel" | "React" | "Next.JS" | string;
   type: string;
   industry: string;
-  envato_url: string;
+  image?: string;
+  envato_url?: string;
   allowed_packages: string[];
   description: string;
   badge?: string;
+  display_name?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -251,6 +255,17 @@ function persistOrders() {
       fs.mkdirSync(DATA_DIR, { recursive: true });
     }
     fs.writeFileSync(ORDERS_FILE, JSON.stringify(inMemoryOrders, null, 2), "utf-8");
+  } catch (err) {
+    console.warn("File write skipped (serverless environment):", err);
+  }
+}
+
+function persistTemplates() {
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    fs.writeFileSync(TEMPLATES_FILE, JSON.stringify(inMemoryTemplates, null, 2), "utf-8");
   } catch (err) {
     console.warn("File write skipped (serverless environment):", err);
   }
@@ -1808,14 +1823,149 @@ export async function deleteOrder(orderNumber: string): Promise<boolean> {
   return deletedFromMysql || deletedFromJson;
 }
 
-export async function getTemplates(): Promise<TemplateItem[]> {
+// ==========================================
+// 🎨 TEMPLATE FUNCTIONS (CRUD & DEDUPLIKASI)
+// ==========================================
+
+export async function getTemplates(all = false): Promise<TemplateItem[]> {
   ensureData();
   return inMemoryTemplates;
 }
 
+export async function getTemplateById(id: string): Promise<TemplateItem | null> {
+  ensureData();
+  const cleanId = String(id).toLowerCase().trim();
+  return inMemoryTemplates.find((t) => t.id.toLowerCase() === cleanId) || null;
+}
+
+export function cleanTemplateName(name: string): string {
+  return name
+    .replace(/\s*\((HTML5?|PHP|Laravel|React|Next\.?JS|Tailwind|Tailwind HTML)\)/gi, "")
+    .replace(/\s*-\s*(HTML5?|PHP|Laravel|React|Next\.?JS)\b/gi, "")
+    .trim();
+}
+
 export async function getTemplatesByPackage(slug: string): Promise<TemplateItem[]> {
   ensureData();
-  return inMemoryTemplates.filter((t) => t.allowed_packages.includes(slug) || t.allowed_packages.includes("custom"));
+  const cleanSlug = String(slug).toLowerCase().trim();
+
+  // Aturan Khusus Pilihan Paket:
+  // 1. Hanya template yang memiliki basis HTML & PHP (ramah, ringan & praktis untuk paket baku)
+  // 2. Jika 1 website memiliki 2 framework (misal HTML dan PHP), digabung/didupikasi cukup 1 kali
+  // 3. Nama yang ditampilkan berurutan rapi: "Website 1", "Website 2", dst. tanpa menyebut teknologi coding
+  const compatible = inMemoryTemplates.filter((t) => {
+    const isAllowed = t.allowed_packages.includes(cleanSlug) || t.allowed_packages.includes("custom");
+    if (!isAllowed) return false;
+
+    const techLower = (t.tech || "").toLowerCase();
+    const isHtmlOrPhp = techLower.includes("html") || techLower.includes("php");
+    return isHtmlOrPhp;
+  });
+
+  // Deduplikasi website berdasarkan nama dasar (base name)
+  const seenBaseNames = new Set<string>();
+  const deduplicated: TemplateItem[] = [];
+
+  for (const item of compatible) {
+    const baseName = cleanTemplateName(item.name).toLowerCase();
+    if (!seenBaseNames.has(baseName)) {
+      seenBaseNames.add(baseName);
+      deduplicated.push(item);
+    }
+  }
+
+  // Berikan label "Website 1", "Website 2" dst.
+  return deduplicated.map((t, index) => {
+    const websiteNumber = index + 1;
+    const cleanName = cleanTemplateName(t.name);
+    return {
+      ...t,
+      display_name: `Website ${websiteNumber}`,
+      name: `Website ${websiteNumber} — ${cleanName}`,
+    };
+  });
+}
+
+export async function createTemplate(data: Partial<TemplateItem>): Promise<TemplateItem> {
+  ensureData();
+  const now = new Date().toISOString();
+
+  // Generate ID jika belum ada
+  let baseId = (data.id || data.name || "template")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  if (!baseId) baseId = `template-${Date.now()}`;
+
+  // Pastikan ID unik
+  let finalId = baseId;
+  let counter = 1;
+  while (inMemoryTemplates.some((t) => t.id === finalId)) {
+    finalId = `${baseId}-${counter++}`;
+  }
+
+  const newTemplate: TemplateItem = {
+    id: finalId,
+    name: data.name || "Template Baru",
+    tech: data.tech || "HTML5",
+    type: data.type || "Landing Page",
+    industry: data.industry || "Umum & Bisnis Lokal",
+    image: data.image || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80",
+    envato_url: data.envato_url || "",
+    allowed_packages: Array.isArray(data.allowed_packages) && data.allowed_packages.length > 0
+      ? data.allowed_packages
+      : ["paket-exist", "paket-rise", "custom"],
+    description: data.description || "Desain website modern, responsif di HP, dan siap pakai untuk bisnis Anda.",
+    badge: data.badge || "",
+    created_at: now,
+    updated_at: now,
+  };
+
+  inMemoryTemplates.push(newTemplate);
+  persistTemplates();
+
+  return newTemplate;
+}
+
+export async function updateTemplate(
+  id: string,
+  data: Partial<TemplateItem>
+): Promise<TemplateItem | null> {
+  ensureData();
+  const cleanId = String(id).toLowerCase().trim();
+  const index = inMemoryTemplates.findIndex((t) => t.id.toLowerCase() === cleanId);
+  if (index === -1) {
+    return null;
+  }
+
+  const existing = inMemoryTemplates[index];
+  const now = new Date().toISOString();
+
+  const updated: TemplateItem = {
+    ...existing,
+    ...data,
+    id: existing.id, // ID tidak boleh berubah
+    updated_at: now,
+  };
+
+  inMemoryTemplates[index] = updated;
+  persistTemplates();
+
+  return updated;
+}
+
+export async function deleteTemplate(id: string): Promise<boolean> {
+  ensureData();
+  const cleanId = String(id).toLowerCase().trim();
+  const index = inMemoryTemplates.findIndex((t) => t.id.toLowerCase() === cleanId);
+  if (index === -1) {
+    return false;
+  }
+
+  inMemoryTemplates.splice(index, 1);
+  persistTemplates();
+  return true;
 }
 
 

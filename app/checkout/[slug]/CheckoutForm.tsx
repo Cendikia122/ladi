@@ -213,10 +213,10 @@ export default function CheckoutForm({
       ? `Jasa Maintenance Digital (${selectedAddons.length} Modul Terpilih)`
       : templateMode === "research"
       ? "Rekomendasi Template Khusus oleh Tim Ladi (+Rp 100.000 Riset)"
-      : (activeTemplate ? `${activeTemplate.name} (${activeTemplate.tech})` : "Default Paket");
+      : (activeTemplate ? (activeTemplate.display_name ? `${activeTemplate.display_name}: ${activeTemplate.name}` : activeTemplate.name) : "Default Paket");
 
     const templateDemoUrl = templateMode === "research" ? "" : (activeTemplate ? activeTemplate.envato_url : "");
-    const templateTech = activeTemplate ? activeTemplate.tech : "";
+    const templateTech = activeTemplate ? (activeTemplate.display_name || "Desain Resmi Ladi") : "";
 
     const addonsSummary = selectedAddons
       .map((id) => packageAddons.find((a) => a.id === id)?.name)
@@ -484,36 +484,52 @@ export default function CheckoutForm({
               <span className="text-[11px] font-bold text-slate-500 block">
                 Pilih salah satu template di bawah:
               </span>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[320px] overflow-y-auto pr-1">
-                {availableTemplates.map((item) => {
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-h-[460px] overflow-y-auto pr-1">
+                {availableTemplates.map((item, idx) => {
                   const isPicked = selectedTemplateId === item.id;
+                  const labelTitle = item.display_name || `Website ${idx + 1}`;
                   return (
                     <div
                       key={item.id}
                       onClick={() => setSelectedTemplateId(item.id)}
-                      className={`p-3 rounded-xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
+                      className={`group p-3 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
                         isPicked
-                          ? "border-[#fa824b] bg-orange-50/20 shadow-sm ring-1 ring-[#fa824b]"
+                          ? "border-[#fa824b] bg-orange-50/20 shadow-md ring-1 ring-[#fa824b]"
                           : "border-slate-200 hover:border-slate-300 bg-white"
                       }`}
                     >
                       <div>
-                        <div className="flex items-center justify-between gap-1 mb-1">
-                          <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-900 text-white">
-                            {item.tech}
+                        {/* Gambar Preview Template */}
+                        <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-slate-100 mb-2.5 border border-slate-100">
+                          <img
+                            src={item.image || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80"}
+                            alt={labelTitle}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            loading="lazy"
+                          />
+                          <span className="absolute top-2 left-2 px-2.5 py-0.5 rounded-lg bg-slate-900/85 backdrop-blur-xs text-white text-[11px] font-bold shadow-sm">
+                            {labelTitle}
                           </span>
-                          <span className="text-[9px] text-slate-500 font-medium">{item.industry}</span>
+                        </div>
+
+                        <div className="flex items-center justify-between gap-1 mb-1">
+                          <span className="text-[10px] text-slate-500 font-semibold bg-slate-100 px-2 py-0.5 rounded-full">
+                            {item.industry}
+                          </span>
+                          <span className="text-[10px] text-emerald-700 font-bold">
+                            ✓ Termasuk Paket
+                          </span>
                         </div>
                         <h4 className="text-xs font-extrabold text-slate-900 leading-snug">{item.name}</h4>
-                        <p className="text-[10px] text-slate-500 mt-0.5 line-clamp-2">{item.description}</p>
+                        <p className="text-[11px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">{item.description}</p>
                       </div>
 
-                      <div className="pt-2 mt-2 border-t border-slate-100 flex items-center justify-between">
-                        <span className="text-[10px] font-semibold text-slate-500">
+                      <div className="pt-2.5 mt-2.5 border-t border-slate-100 flex items-center justify-between">
+                        <span className="text-[10px] font-semibold text-slate-400">
                           Katalog Resmi Ladi
                         </span>
-                        <span className={`text-[10px] font-bold ${isPicked ? "text-[#fa824b]" : "text-slate-400"}`}>
-                          {isPicked ? "✓ Terpilih" : "Pilih"}
+                        <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${isPicked ? "bg-[#fa824b] text-white" : "text-slate-500 bg-slate-100"}`}>
+                          {isPicked ? "✓ Terpilih" : "Pilih Desain"}
                         </span>
                       </div>
                     </div>

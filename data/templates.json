@@ -6,9 +6,14 @@
     "type": "Landing Page",
     "industry": "Travel & Tour",
     "envato_url": "https://elements.envato.com/hawaa-travel-and-tour-booking-bootstrap-5-html-t-MVDVH2N",
-    "allowed_packages": ["paket-exist", "paket-rise", "custom"],
+    "allowed_packages": [
+      "paket-exist",
+      "paket-rise",
+      "custom"
+    ],
     "description": "Desain cepat responsif Bootstrap 5 khusus agen travel, tour operator, dan rental wisata.",
-    "badge": "Hemat & Cepat"
+    "badge": "Hemat & Cepat",
+    "image": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "gowilds-react",
@@ -17,9 +22,13 @@
     "type": "Full App Booking",
     "industry": "Travel & Tour",
     "envato_url": "https://elements.envato.com/gowilds-travel-tour-booking-react-nextjs-template-YX6YVJA",
-    "allowed_packages": ["paket-run", "custom"],
+    "allowed_packages": [
+      "paket-run",
+      "custom"
+    ],
     "description": "Sistem booking modern Next.js/React super cepat dengan animasi interaktif dan filtering destinasi.",
-    "badge": "Super Modern"
+    "badge": "Super Modern",
+    "image": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "gowilds-laravel",
@@ -28,9 +37,13 @@
     "type": "Dynamic System",
     "industry": "Travel & Tour",
     "envato_url": "https://elements.envato.com/gowilds-travel-tour-booking-laravel-template-ZUDY3SP",
-    "allowed_packages": ["paket-run", "custom"],
+    "allowed_packages": [
+      "paket-run",
+      "custom"
+    ],
     "description": "Aplikasi tour & travel berbasis Laravel dengan arsitektur database lengkap dan manajemen order.",
-    "badge": "Sistem Mandiri"
+    "badge": "Sistem Mandiri",
+    "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "gowilds-html",
@@ -39,9 +52,14 @@
     "type": "Multi-page Website",
     "industry": "Travel & Tour",
     "envato_url": "https://elements.envato.com/gowilds-travel-tour-booking-html-template-K3VAVED",
-    "allowed_packages": ["paket-exist", "paket-rise", "custom"],
+    "allowed_packages": [
+      "paket-exist",
+      "paket-rise",
+      "custom"
+    ],
     "description": "Versi HTML ringan dari Gowilds dengan tampilan katalog destinasi yang estetik dan ramah HP.",
-    "badge": "Ringan"
+    "badge": "Ringan",
+    "image": "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "gowilds-php",
@@ -50,9 +68,13 @@
     "type": "Dynamic Website",
     "industry": "Travel & Tour",
     "envato_url": "https://elements.envato.com/gowilds-travel-tour-booking-php-template-2MKT7F5",
-    "allowed_packages": ["paket-rise", "custom"],
+    "allowed_packages": [
+      "paket-rise",
+      "custom"
+    ],
     "description": "Template berbasis PHP dinamis untuk pemrosesan form booking dan kirim email otomatis.",
-    "badge": "Dinamis"
+    "badge": "Dinamis",
+    "image": "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "touriza-html",
@@ -61,9 +83,14 @@
     "type": "Multi-page Website",
     "industry": "Travel & Tour",
     "envato_url": "https://elements.envato.com/touriza-tour-travel-booking-html-template-PHTMUUR",
-    "allowed_packages": ["paket-exist", "paket-rise", "custom"],
+    "allowed_packages": [
+      "paket-exist",
+      "paket-rise",
+      "custom"
+    ],
     "description": "Template travel modern dengan tata letak itinerary paket liburan dan galeri foto memikat.",
-    "badge": "Populer"
+    "badge": "Populer",
+    "image": "https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "rasalina-portfolio",
@@ -72,9 +99,14 @@
     "type": "Portfolio / Profil",
     "industry": "Personal & Portfolio",
     "envato_url": "https://elements.envato.com/rasalina-personal-portfolio-html5-template-CVTP4N2",
-    "allowed_packages": ["paket-exist", "paket-rise", "custom"],
+    "allowed_packages": [
+      "paket-exist",
+      "paket-rise",
+      "custom"
+    ],
     "description": "Profil profesional minimalis untuk freelancer, arsitek, fotografer, desainer, dan praktisi ahli.",
-    "badge": "Elegan"
+    "badge": "Elegan",
+    "image": "https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "pallas-masonry",
@@ -83,9 +115,14 @@
     "type": "Masonry Gallery",
     "industry": "Personal & Portfolio",
     "envato_url": "https://elements.envato.com/pallas-creative-masonry-portfolio-template-PREHXU",
-    "allowed_packages": ["paket-exist", "paket-rise", "custom"],
+    "allowed_packages": [
+      "paket-exist",
+      "paket-rise",
+      "custom"
+    ],
     "description": "Galeri portofolio gaya grid masonry unik untuk memamerkan karya visual, produk, atau arsitektur.",
-    "badge": "Visual Fokus"
+    "badge": "Visual Fokus",
+    "image": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "noxfolio-laravel",
@@ -94,9 +131,13 @@
     "type": "Backend Portfolio",
     "industry": "Personal & Portfolio",
     "envato_url": "https://elements.envato.com/noxfolio-personal-portfolio-laravel-template-URQ597N",
-    "allowed_packages": ["paket-run", "custom"],
+    "allowed_packages": [
+      "paket-run",
+      "custom"
+    ],
     "description": "Portofolio berbasis Laravel dengan panel backend untuk kelola karya dan pesan klien langsung.",
-    "badge": "Backend Siap"
+    "badge": "Backend Siap",
+    "image": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "noxfolio-html",
@@ -105,9 +146,14 @@
     "type": "Resume & CV",
     "industry": "Personal & Portfolio",
     "envato_url": "https://elements.envato.com/noxfolio-personal-portfolio-resume-html-template-M9UMNHM",
-    "allowed_packages": ["paket-exist", "paket-rise", "custom"],
+    "allowed_packages": [
+      "paket-exist",
+      "paket-rise",
+      "custom"
+    ],
     "description": "Template CV digital interaktif dengan efek transisi gelap (dark mode) berkelas eksekutif.",
-    "badge": "Dark Mode"
+    "badge": "Dark Mode",
+    "image": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "nexin-laravel",
@@ -116,9 +162,13 @@
     "type": "Agency Platform",
     "industry": "Digital Agency & Konsultan",
     "envato_url": "https://elements.envato.com/nexin-digital-agency-laravel-template-G8CBYQ9",
-    "allowed_packages": ["paket-run", "custom"],
+    "allowed_packages": [
+      "paket-run",
+      "custom"
+    ],
     "description": "Platform agensi digital lengkap dengan sistem layanan, portofolio terpadu, dan manajemen leads.",
-    "badge": "Agensi Lengkap"
+    "badge": "Agensi Lengkap",
+    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "nexin-nextjs",
@@ -127,9 +177,13 @@
     "type": "Interactive Agency",
     "industry": "Digital Agency & Konsultan",
     "envato_url": "https://elements.envato.com/nexin-creative-digital-agency-next-js-template-SFY3BTD",
-    "allowed_packages": ["paket-run", "custom"],
+    "allowed_packages": [
+      "paket-run",
+      "custom"
+    ],
     "description": "Next.js template bertenaga tinggi dengan micro-interaction dan komponen UI mutakhir.",
-    "badge": "Super Kencang"
+    "badge": "Super Kencang",
+    "image": "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "consulo-html",
@@ -138,9 +192,14 @@
     "type": "Corporate Profile",
     "industry": "Digital Agency & Konsultan",
     "envato_url": "https://elements.envato.com/consulo-business-consulting-tailwindcss-html-tem-BMWHKL8",
-    "allowed_packages": ["paket-exist", "paket-rise", "custom"],
+    "allowed_packages": [
+      "paket-exist",
+      "paket-rise",
+      "custom"
+    ],
     "description": "Website korporat bisnis konsultan berstandar Tailwind CSS, bersih, terstruktur, dan berwibawa.",
-    "badge": "Tailwind CSS"
+    "badge": "Tailwind CSS",
+    "image": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "consulo-nextjs",
@@ -149,9 +208,13 @@
     "type": "Corporate Modern",
     "industry": "Digital Agency & Konsultan",
     "envato_url": "https://elements.envato.com/consulo-business-consulting-nextjs-template-AX267DE",
-    "allowed_packages": ["paket-run", "custom"],
+    "allowed_packages": [
+      "paket-run",
+      "custom"
+    ],
     "description": "Versi Next.js dari Consulo untuk perusahaan konsultan manajemen, keuangan, dan investasi.",
-    "badge": "Eksekutif"
+    "badge": "Eksekutif",
+    "image": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "orido-nextjs",
@@ -160,9 +223,13 @@
     "type": "Interactive Portfolio",
     "industry": "Personal & Portfolio",
     "envato_url": "https://elements.envato.com/orido-tailwind-css-personal-portfolio-react-next-BERV6BG",
-    "allowed_packages": ["paket-run", "custom"],
+    "allowed_packages": [
+      "paket-run",
+      "custom"
+    ],
     "description": "Portofolio visual dengan transisi smooth scrolling berbasis React dan Next.js modern.",
-    "badge": "Kreatif"
+    "badge": "Kreatif",
+    "image": "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "fxotary-html",
@@ -171,9 +238,14 @@
     "type": "Multi-page Agency",
     "industry": "Digital Agency & Konsultan",
     "envato_url": "https://elements.envato.com/fxotary-digital-agency-html-template-NX6GKRW",
-    "allowed_packages": ["paket-exist", "paket-rise", "custom"],
+    "allowed_packages": [
+      "paket-exist",
+      "paket-rise",
+      "custom"
+    ],
     "description": "Profil agensi digital, software house, dan studio kreatif dengan animasi SVG halus.",
-    "badge": "Agensi Ringan"
+    "badge": "Agensi Ringan",
+    "image": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "fxotary-nextjs",
@@ -182,9 +254,13 @@
     "type": "Tech Startup Profile",
     "industry": "Digital Agency & Konsultan",
     "envato_url": "https://elements.envato.com/fxotary-digital-agency-react-nextjs-template-5Q2PC9X",
-    "allowed_packages": ["paket-run", "custom"],
+    "allowed_packages": [
+      "paket-run",
+      "custom"
+    ],
     "description": "Tech startup & agency web Next.js dengan arsitektur komponen scalable dan integrasi API.",
-    "badge": "Tech Startup"
+    "badge": "Tech Startup",
+    "image": "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "canggang-mechanic",
@@ -193,9 +269,14 @@
     "type": "Bengkel & Otomotif",
     "industry": "Otomotif & Bengkel",
     "envato_url": "https://elements.envato.com/canggang-auto-mechanic-car-repair-template-HVS9B6G",
-    "allowed_packages": ["paket-exist", "paket-rise", "custom"],
+    "allowed_packages": [
+      "paket-exist",
+      "paket-rise",
+      "custom"
+    ],
     "description": "Website resmi bengkel mobil & motor, poles cat, servis AC, dan panggilan derek darurat.",
-    "badge": "Otomotif Spesialis"
+    "badge": "Otomotif Spesialis",
+    "image": "https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "carfixing-repair",
@@ -204,9 +285,14 @@
     "type": "Bengkel & Otomotif",
     "industry": "Otomotif & Bengkel",
     "envato_url": "https://elements.envato.com/carfixing-car-repair-html-template-CR5CQGC",
-    "allowed_packages": ["paket-exist", "paket-rise", "custom"],
+    "allowed_packages": [
+      "paket-exist",
+      "paket-rise",
+      "custom"
+    ],
     "description": "Daftar estimasi biaya servis, galeri garasi, dan tombol booking servis montir ke rumah.",
-    "badge": "Siap Pakai"
+    "badge": "Siap Pakai",
+    "image": "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "logistik-transport",
@@ -215,9 +301,14 @@
     "type": "Ekspedisi & Logistik",
     "industry": "Logistik & Ekspedisi",
     "envato_url": "https://elements.envato.com/logistik-transport-logistics-html-template-PB6KEHY",
-    "allowed_packages": ["paket-exist", "paket-rise", "custom"],
+    "allowed_packages": [
+      "paket-exist",
+      "paket-rise",
+      "custom"
+    ],
     "description": "Cocok untuk jasa ekspedisi cargo, sewa truk, pindahan, dan pengiriman barang antar kota.",
-    "badge": "Cargo & Logistik"
+    "badge": "Cargo & Logistik",
+    "image": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "medisch-health",
@@ -226,9 +317,14 @@
     "type": "Klinik & Kesehatan",
     "industry": "Kesehatan & Medis",
     "envato_url": "https://elements.envato.com/medisch-health-medical-html5-template-KEEC9F6",
-    "allowed_packages": ["paket-exist", "paket-rise", "custom"],
+    "allowed_packages": [
+      "paket-exist",
+      "paket-rise",
+      "custom"
+    ],
     "description": "Website resmi klinik dokter, laboratorium, dokter gigi, apotek, dan konsultasi kesehatan.",
-    "badge": "Klinik Medis"
+    "badge": "Klinik Medis",
+    "image": "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "avukat-react",
@@ -237,9 +333,13 @@
     "type": "Kantor Hukum",
     "industry": "Hukum & Advokat",
     "envato_url": "https://elements.envato.com/avukat-lawyer-and-attorney-react-template-YLS2AGR",
-    "allowed_packages": ["paket-run", "custom"],
+    "allowed_packages": [
+      "paket-run",
+      "custom"
+    ],
     "description": "Platform kantor advokat, konsultan hukum, dan notaris dengan form konsultasi hukum terenkripsi.",
-    "badge": "Firma Hukum"
+    "badge": "Firma Hukum",
+    "image": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&auto=format&fit=crop&q=80"
   },
   {
     "id": "avukat-nextjs",
@@ -248,8 +348,12 @@
     "type": "Kantor Hukum Premium",
     "industry": "Hukum & Advokat",
     "envato_url": "https://elements.envato.com/avukat-lawyer-and-attorney-next-js-template-JPMF3QA",
-    "allowed_packages": ["paket-run", "custom"],
+    "allowed_packages": [
+      "paket-run",
+      "custom"
+    ],
     "description": "Website hukum tingkat tinggi berbasis Next.js untuk law firm terkemuka dan konsultan paten.",
-    "badge": "Prestisius"
+    "badge": "Prestisius",
+    "image": "https://images.unsplash.com/photo-1479142506502-19b3a3b7ff33?w=800&auto=format&fit=crop&q=80"
   }
 ]

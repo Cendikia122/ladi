@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getBlogs, getEvents, getProjects, getTeamMembers, getServicePackages, getOrders } from "@/app/lib/storage";
+import { getBlogs, getEvents, getProjects, getTeamMembers, getServicePackages, getOrders, getTemplates } from "@/app/lib/storage";
 import { checkDbConnection } from "@/app/lib/mysql";
 import { verifyToken } from "@/app/lib/auth";
 import LadiLogo from "../components/LadiLogo";
@@ -31,7 +31,7 @@ export default async function AdminDashboardPage() {
   const isEditor = user.role === "editor";
   const isSuperAdmin = user.role === "superadmin";
 
-  const [allBlogs, allEvents, allProjects, allTeam, allPackages, allOrders, dbStatus] = await Promise.all([
+  const [allBlogs, allEvents, allProjects, allTeam, allPackages, allOrders, dbStatus, allTemplates] = await Promise.all([
     getBlogs(10, true),
     getEvents(5, true),
     getProjects(5, true),
@@ -39,6 +39,7 @@ export default async function AdminDashboardPage() {
     getServicePackages(true),
     getOrders(),
     checkDbConnection(),
+    getTemplates(),
   ]);
 
   const publishedCount = allBlogs.filter((b) => b.status === "published").length;
@@ -202,18 +203,32 @@ export default async function AdminDashboardPage() {
             {!isEditor && (
               <>
                 {isSuperAdmin && (
-                  <Link
-                    href="/admin/users"
-                    className="px-4 py-3 rounded-full bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-1.5"
-                  >
-                    <span>🛡️</span> Kelola Admin
-                  </Link>
+                  <>
+                    <Link
+                      href="/admin/kanban"
+                      className="px-5 py-3 rounded-full bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-1.5"
+                    >
+                      <span>🎨</span> Kanban & Jam Kerja
+                    </Link>
+                    <Link
+                      href="/admin/users"
+                      className="px-4 py-3 rounded-full bg-purple-900 hover:bg-purple-950 text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-1.5"
+                    >
+                      <span>🛡️</span> Kelola Admin
+                    </Link>
+                  </>
                 )}
                 <Link
                   href="/admin/services"
                   className="px-5 py-3 rounded-full bg-[#1853a7] hover:bg-[#0f3d7d] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-1.5"
                 >
                   <span>📦</span> Kelola Paket ({allPackages.length})
+                </Link>
+                <Link
+                  href="/admin/templates"
+                  className="px-5 py-3 rounded-full bg-indigo-700 hover:bg-indigo-800 text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-1.5"
+                >
+                  <span>🎨</span> Kelola Template ({allTemplates.length})
                 </Link>
                 <Link
                   href="/admin/team"
@@ -442,12 +457,20 @@ export default async function AdminDashboardPage() {
                   )}
                 </Link>
                 {isSuperAdmin && (
-                  <Link
-                    href="/admin/users"
-                    className="px-3.5 py-1.5 rounded-xl bg-purple-100 hover:bg-purple-200 text-purple-800 font-bold"
-                  >
-                    🛡️ Kelola Admin & Password
-                  </Link>
+                  <>
+                    <Link
+                      href="/admin/kanban"
+                      className="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold flex items-center gap-1 shadow-sm"
+                    >
+                      🎨 Kanban Desain & Jam Kerja
+                    </Link>
+                    <Link
+                      href="/admin/users"
+                      className="px-3.5 py-1.5 rounded-xl bg-purple-100 hover:bg-purple-200 text-purple-800 font-bold"
+                    >
+                      🛡️ Kelola Admin & Password
+                    </Link>
+                  </>
                 )}
                 <Link
                   href="/admin/services"
@@ -490,26 +513,50 @@ export default async function AdminDashboardPage() {
 
             {/* Banner Khusus Super Admin: Kontrol Akun Admin Bawahan */}
             {isSuperAdmin && (
-              <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-purple-950 to-slate-900 text-white border border-purple-800/40 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <span className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[11px] font-mono font-bold uppercase tracking-wider">
-                      👑 FITUR SUPER ADMINISTRATOR
-                    </span>
+              <div className="space-y-4">
+                <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white border border-indigo-800/40 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[11px] font-mono font-bold uppercase tracking-wider">
+                        🎨 WORKSPACE NOTION-STYLE
+                      </span>
+                    </div>
+                    <h3 className="text-xl sm:text-2xl font-extrabold text-white">
+                      Papan Kanban Desain, Canva Live & Pelacak Jam Kerja
+                    </h3>
+                    <p className="text-xs sm:text-sm text-indigo-200/80 max-w-2xl leading-relaxed">
+                      Satukan semua link Canva tanpa perlu repot upload gambar! Kelola draft ide, ACC usulan ide desainer sebelum dikerjakan, review hasil konten visual, dan pantau jam kerja tim desainer dari jam berapa sampai jam berapa secara real-time.
+                    </p>
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-extrabold text-white">
-                    Kontrol Akun Admin & Gonta-Ganti Password Bawahan
-                  </h3>
-                  <p className="text-xs sm:text-sm text-purple-200/80 max-w-2xl leading-relaxed">
-                    Kelola seluruh kredensial admin di bawah Anda: ganti username (&quot;usn&quot;), buat akun admin baru, langsung ganti password bawahan tanpa perlu tahu password lama, serta buka blokir keamanan.
-                  </p>
+                  <Link
+                    href="/admin/kanban"
+                    className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-xs uppercase tracking-wider shrink-0 shadow-lg hover:shadow-xl transition-all flex items-center gap-2 text-center justify-center"
+                  >
+                    <span>🎨 Buka Papan Kanban →</span>
+                  </Link>
                 </div>
-                <Link
-                  href="/admin/users"
-                  className="px-6 py-3.5 rounded-2xl bg-white hover:bg-purple-50 text-purple-950 font-bold text-xs uppercase tracking-wider shrink-0 shadow-lg hover:shadow-xl transition-all flex items-center gap-2 text-center justify-center"
-                >
-                  <span>🛡️ Buka Kontrol Admin →</span>
-                </Link>
+
+                <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-purple-950 to-slate-900 text-white border border-purple-800/40 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[11px] font-mono font-bold uppercase tracking-wider">
+                        👑 FITUR SUPER ADMINISTRATOR
+                      </span>
+                    </div>
+                    <h3 className="text-xl sm:text-2xl font-extrabold text-white">
+                      Kontrol Akun Admin & Gonta-Ganti Password Bawahan
+                    </h3>
+                    <p className="text-xs sm:text-sm text-purple-200/80 max-w-2xl leading-relaxed">
+                      Kelola seluruh kredensial admin di bawah Anda: ganti username (&quot;usn&quot;), buat akun admin baru, langsung ganti password bawahan tanpa perlu tahu password lama, serta buka blokir keamanan.
+                    </p>
+                  </div>
+                  <Link
+                    href="/admin/users"
+                    className="px-6 py-3.5 rounded-2xl bg-white hover:bg-purple-50 text-purple-950 font-bold text-xs uppercase tracking-wider shrink-0 shadow-lg hover:shadow-xl transition-all flex items-center gap-2 text-center justify-center"
+                  >
+                    <span>🛡️ Buka Kontrol Admin →</span>
+                  </Link>
+                </div>
               </div>
             )}
 

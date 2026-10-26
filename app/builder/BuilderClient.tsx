@@ -556,26 +556,33 @@ Mohon dibantu konfirmasi estimasi waktu pengerjaan dan langkah berikutnya. Terim
                 </div>
 
                 {/* Grid Template Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[520px] overflow-y-auto pr-1">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[560px] overflow-y-auto pr-1">
                   {filteredTemplates.map((item) => {
                     const isPicked = selectedTemplateId === item.id;
                     return (
                       <div
                         key={item.id}
                         onClick={() => setSelectedTemplateId(item.id)}
-                        className={`p-4 rounded-2xl border-2 transition-all flex flex-col justify-between cursor-pointer ${
+                        className={`group p-4 rounded-2xl border-2 transition-all flex flex-col justify-between cursor-pointer ${
                           isPicked
                             ? "border-[#fa824b] bg-orange-50/30 shadow-md ring-2 ring-[#fa824b]/20"
                             : "border-slate-200 hover:border-slate-300 bg-white"
                         }`}
                       >
-                        <div className="space-y-2">
-                          <div className="flex items-start justify-between gap-2">
-                            <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full">
+                        <div className="space-y-3">
+                          {/* Gambar Preview Template */}
+                          <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-slate-100 border border-slate-100">
+                            <img
+                              src={item.image || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80"}
+                              alt={item.name}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              loading="lazy"
+                            />
+                            <span className="absolute top-2 left-2 px-2.5 py-0.5 rounded-lg bg-slate-900/85 backdrop-blur-xs text-white text-[10px] font-bold shadow-sm">
                               {item.industry}
                             </span>
-                            <span className="text-[10px] font-mono text-emerald-700 font-bold">
-                              Termasuk (Rp 0)
+                            <span className="absolute top-2 right-2 px-2 py-0.5 rounded-lg bg-emerald-600/90 text-white text-[10px] font-bold">
+                              Gratis (Rp 0)
                             </span>
                           </div>
 
@@ -583,7 +590,7 @@ Mohon dibantu konfirmasi estimasi waktu pengerjaan dan langkah berikutnya. Terim
                             <h4 className="text-xs sm:text-sm font-extrabold text-slate-900 leading-snug">
                               {item.name}
                             </h4>
-                            <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                            <p className="text-[11px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">
                               {item.description}
                             </p>
                           </div>
@@ -1005,15 +1012,24 @@ Mohon dibantu konfirmasi estimasi waktu pengerjaan dan langkah berikutnya. Terim
 
               {/* Referensi Desain */}
               <div className="flex items-start justify-between gap-2">
-                <div>
-                  <div className="font-bold text-slate-800">
-                    Desain: {templateMode === "research" ? "Riset Tim Ladi" : activeTemplate?.name || "Katalog Ladi"}
-                  </div>
-                  <div className="text-[11px] text-slate-400">
-                    {templateMode === "research" ? "Kurasi khusus niche bisnis" : "Katalog referensi Ladi"}
+                <div className="flex items-start gap-2.5">
+                  {templateMode === "pick" && activeTemplate?.image && (
+                    <img
+                      src={activeTemplate.image}
+                      alt={activeTemplate.name}
+                      className="w-10 h-10 rounded-lg object-cover border border-slate-200 shrink-0"
+                    />
+                  )}
+                  <div>
+                    <div className="font-bold text-slate-800">
+                      Desain: {templateMode === "research" ? "Riset Tim Ladi" : activeTemplate?.name || "Katalog Ladi"}
+                    </div>
+                    <div className="text-[11px] text-slate-400">
+                      {templateMode === "research" ? "Kurasi khusus niche bisnis" : activeTemplate?.industry || "Katalog referensi Ladi"}
+                    </div>
                   </div>
                 </div>
-                <div className="font-black text-slate-800">
+                <div className="font-black text-slate-800 shrink-0">
                   {templateMode === "research" ? "+Rp 100.000" : "+Rp 0"}
                 </div>
               </div>

@@ -3,7 +3,7 @@ import path from "path";
 import crypto from "crypto";
 import { getPool, isDbCircuitOpen, markDbOffline } from "./mysql";
 
-export type AdminRole = "superadmin" | "admin" | "editor";
+export type AdminRole = "superadmin" | "admin" | "editor" | "designer";
 
 export interface AdminUser {
   id: number;

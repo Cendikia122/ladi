@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import crypto from "crypto";
 import { getAdminUserByUsername, verifyPassword, AdminUser } from "./users";
 
-export type UserRole = "superadmin" | "admin" | "editor";
+export type UserRole = "superadmin" | "admin" | "editor" | "designer";
 
 export interface SessionUser {
   username: string;
@@ -99,7 +99,13 @@ export function verifyToken(token: string): SessionUser | null {
       if (Date.now() - timestamp > 30 * 24 * 60 * 60 * 1000) return null;
 
       const validRole: UserRole =
-        role === "editor" ? "editor" : role === "superadmin" ? "superadmin" : "admin";
+        role === "editor"
+          ? "editor"
+          : role === "designer"
+          ? "designer"
+          : role === "superadmin"
+          ? "superadmin"
+          : "admin";
       return {
         username,
         role: validRole,
@@ -108,6 +114,8 @@ export function verifyToken(token: string): SessionUser | null {
             ? "Super Administrator"
             : validRole === "admin"
             ? "Administrator"
+            : validRole === "designer"
+            ? "Desainer & Content Creator"
             : "Penulis Konten",
       };
     }

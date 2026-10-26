@@ -225,6 +225,50 @@ export async function ensureTables(db: mysql.Pool, force = false) {
     try { await db.query(`ALTER TABLE orders ADD COLUMN hosting_duration VARCHAR(100) DEFAULT ''`); } catch {}
     try { await db.query(`ALTER TABLE orders ADD COLUMN addons LONGTEXT`); } catch {}
 
+    // 10. Pastikan tabel kanban_cards ada untuk manajemen konten & desain
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS kanban_cards (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        description LONGTEXT,
+        canva_url TEXT,
+        status VARCHAR(50) DEFAULT 'draft',
+        origin VARCHAR(50) DEFAULT 'admin',
+        is_approved_by_admin TINYINT(1) DEFAULT 0,
+        priority VARCHAR(20) DEFAULT 'medium',
+        platform VARCHAR(50) DEFAULT 'Instagram Feeds',
+        assignee_name VARCHAR(100) DEFAULT '',
+        deadline VARCHAR(50) DEFAULT '',
+        admin_notes TEXT,
+        order_num INT DEFAULT 0,
+        created_by VARCHAR(100) DEFAULT 'admin',
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        INDEX idx_status (status),
+        INDEX idx_assignee (assignee_name)
+      )
+    `);
+
+    // 11. Pastikan tabel work_timer_logs ada untuk tracker jam kerja desainer
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS work_timer_logs (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_name VARCHAR(100) NOT NULL,
+        user_role VARCHAR(50) DEFAULT 'designer',
+        task_id INT NULL,
+        task_title VARCHAR(255) DEFAULT '',
+        started_at DATETIME NOT NULL,
+        ended_at DATETIME NULL,
+        duration_seconds INT DEFAULT 0,
+        status VARCHAR(20) DEFAULT 'active',
+        notes TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        INDEX idx_user_status (user_name, status),
+        INDEX idx_started_at (started_at)
+      )
+    `);
+
     // Selalu sinkronkan service_packages dari services.json ke MySQL Hostinger
     try {
       const fs = await import("fs");

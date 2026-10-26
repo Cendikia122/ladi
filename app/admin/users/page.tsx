@@ -13,7 +13,7 @@ interface AdminUserItem {
   id: number;
   username: string;
   name: string;
-  role: "superadmin" | "admin" | "editor";
+  role: "superadmin" | "admin" | "editor" | "designer";
   status: "active" | "inactive";
   created_at: string;
   updated_at?: string;
@@ -40,7 +40,7 @@ export default function AdminUsersManagementPage() {
     name: "",
     username: "",
     password: "",
-    role: "admin" as "superadmin" | "admin" | "editor",
+    role: "admin" as "superadmin" | "admin" | "editor" | "designer",
     status: "active" as "active" | "inactive",
   });
   const [showAddPass, setShowAddPass] = useState(false);
@@ -49,7 +49,7 @@ export default function AdminUsersManagementPage() {
   const [editForm, setEditForm] = useState({
     name: "",
     username: "",
-    role: "admin" as "superadmin" | "admin" | "editor",
+    role: "admin" as "superadmin" | "admin" | "editor" | "designer",
     status: "active" as "active" | "inactive",
     password: "",
   });
@@ -473,6 +473,10 @@ export default function AdminUsersManagementPage() {
                             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200">
                               <span>💼</span> Admin CMS
                             </span>
+                          ) : u.role === "designer" ? (
+                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-pink-50 text-pink-700 border border-pink-200">
+                              <span>🎨</span> Desainer Konten
+                            </span>
                           ) : (
                             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-orange-50 text-orange-700 border border-orange-200">
                               <span>✍️</span> Penulis Konten
@@ -649,6 +653,7 @@ export default function AdminUsersManagementPage() {
                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#1853a7] outline-none text-sm transition-all"
                   >
                     <option value="admin">Admin CMS (Kelola Konten)</option>
+                    <option value="designer">🎨 Desainer & Content Creator (Canva & Kanban)</option>
                     <option value="editor">Penulis Konten (Blog)</option>
                     <option value="superadmin">Super Administrator</option>
                   </select>
@@ -756,6 +761,7 @@ export default function AdminUsersManagementPage() {
                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#1853a7] outline-none text-sm transition-all"
                   >
                     <option value="admin">Admin CMS (Kelola Konten)</option>
+                    <option value="designer">🎨 Desainer & Content Creator (Canva & Kanban)</option>
                     <option value="editor">Penulis Konten (Blog)</option>
                     <option value="superadmin">Super Administrator</option>
                   </select>
