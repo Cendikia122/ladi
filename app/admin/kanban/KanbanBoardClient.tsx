@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import LadiLogo from "@/app/components/LadiLogo";
 import AdminLogoutButton from "@/app/components/AdminLogoutButton";
@@ -29,55 +29,37 @@ const COLUMNS: {
   id: KanbanStatus;
   title: string;
   subtitle: string;
-  badgeBg: string;
-  badgeBorder: string;
-  badgeText: string;
-  icon: string;
+  dotColor: string;
 }[] = [
   {
     id: "draft",
-    title: "Draft Ide Super Admin",
-    subtitle: "Ide dari Super Admin. Desainer bebas mengambil ide ini ke Proses.",
-    badgeBg: "bg-blue-500/10",
-    badgeBorder: "border-blue-500/30",
-    badgeText: "text-blue-400",
-    icon: "💡",
+    title: "Draft Ide Admin",
+    subtitle: "Ide awal dari Super Admin untuk diambil desainer",
+    dotColor: "bg-slate-400",
   },
   {
     id: "review_ide",
-    title: "Menunggu ACC Ide",
-    subtitle: "Ide dari Desainer. Wajib di-ACC Super Admin sebelum bisa dikerjakan.",
-    badgeBg: "bg-amber-500/10",
-    badgeBorder: "border-amber-500/30",
-    badgeText: "text-amber-400",
-    icon: "⏳",
+    title: "Menunggu Persetujuan",
+    subtitle: "Usulan ide desainer, memerlukan ACC Super Admin",
+    dotColor: "bg-amber-500",
   },
   {
     id: "in_progress",
     title: "Sedang Dikerjakan",
-    subtitle: "Proyek desain aktif yang sedang dibuat di Canva.",
-    badgeBg: "bg-purple-500/10",
-    badgeBorder: "border-purple-500/30",
-    badgeText: "text-purple-400",
-    icon: "⚙️",
+    subtitle: "Desain aktif dalam pengerjaan",
+    dotColor: "bg-blue-500",
   },
   {
     id: "review_design",
-    title: "Review Hasil Desain",
-    subtitle: "Desain Canva siap dicek & diberi feedback oleh Super Admin.",
-    badgeBg: "bg-pink-500/10",
-    badgeBorder: "border-pink-500/30",
-    badgeText: "text-pink-400",
-    icon: "👀",
+    title: "Review Desain",
+    subtitle: "Hasil desain Canva siap ditinjau",
+    dotColor: "bg-indigo-500",
   },
   {
     id: "done",
-    title: "Selesai & Approved",
-    subtitle: "Desain final telah disetujui dan siap diterbitkan.",
-    badgeBg: "bg-emerald-500/10",
-    badgeBorder: "border-emerald-500/30",
-    badgeText: "text-emerald-400",
-    icon: "✅",
+    title: "Selesai",
+    subtitle: "Desain final telah disetujui",
+    dotColor: "bg-emerald-500",
   },
 ];
 
@@ -90,11 +72,11 @@ const PLATFORMS: KanbanPlatform[] = [
   "Lainnya",
 ];
 
-const PRIORITIES: { id: KanbanPriority; label: string; color: string }[] = [
-  { id: "low", label: "Rendah", color: "bg-slate-500/15 text-slate-300 border-slate-600" },
-  { id: "medium", label: "Sedang", color: "bg-blue-500/15 text-blue-300 border-blue-500/40" },
-  { id: "high", label: "Tinggi", color: "bg-amber-500/15 text-amber-300 border-amber-500/40" },
-  { id: "urgent", label: "Sangat Penting / Urgent", color: "bg-rose-500/20 text-rose-300 border-rose-500/50" },
+const PRIORITIES: { id: KanbanPriority; label: string; badgeClass: string }[] = [
+  { id: "low", label: "Rendah", badgeClass: "bg-slate-100 text-slate-600 border-slate-200" },
+  { id: "medium", label: "Sedang", badgeClass: "bg-blue-50 text-blue-700 border-blue-200" },
+  { id: "high", label: "Tinggi", badgeClass: "bg-amber-50 text-amber-700 border-amber-200" },
+  { id: "urgent", label: "Mendesak", badgeClass: "bg-red-50 text-red-700 border-red-200" },
 ];
 
 function formatDuration(seconds: number): string {
@@ -139,12 +121,11 @@ export default function KanbanBoardClient({
 }: Props) {
   const isSuperAdmin = currentUser.role === "superadmin";
 
-  // State: Cards & Timers
   const [cards, setCards] = useState<KanbanCard[]>(initialCards);
   const [timerLogs, setTimerLogs] = useState<WorkTimerLog[]>(initialTimerLogs);
   const [activeTimers, setActiveTimers] = useState<WorkTimerLog[]>(initialActiveTimers);
 
-  // My Active Timer
+  // Active Timer for current user
   const myActiveTimer = useMemo(() => {
     return (
       activeTimers.find(
@@ -155,7 +136,6 @@ export default function KanbanBoardClient({
     );
   }, [activeTimers, currentUser]);
 
-  // Live ticking timer for my active timer
   const [timerElapsed, setTimerElapsed] = useState<number>(0);
   useEffect(() => {
     if (!myActiveTimer) {
@@ -172,7 +152,7 @@ export default function KanbanBoardClient({
     return () => clearInterval(interval);
   }, [myActiveTimer]);
 
-  // UI Filters
+  // Filters
   const [searchQuery, setSearchQuery] = useState("");
   const [filterPlatform, setFilterPlatform] = useState<string>("all");
   const [filterPriority, setFilterPriority] = useState<string>("all");
@@ -187,11 +167,11 @@ export default function KanbanBoardClient({
   const [stopTimerNotes, setStopTimerNotes] = useState("");
   const [uploadingImage, setUploadingImage] = useState(false);
 
-  // Toast / Notifications
+  // Toast
   const [toast, setToast] = useState<{ type: "success" | "error" | "warning"; message: string } | null>(null);
   const showToast = (type: "success" | "error" | "warning", message: string) => {
     setToast({ type, message });
-    setTimeout(() => setToast(null), 4500);
+    setTimeout(() => setToast(null), 4000);
   };
 
   const handleUploadImage = async (file: File, isEdit = false) => {
@@ -214,19 +194,19 @@ export default function KanbanBoardClient({
       } else {
         setCardForm((prev) => ({ ...prev, image_url: url }));
       }
-      showToast("success", "Gambar desain berhasil diunggah!");
+      showToast("success", "Gambar berhasil diunggah.");
     } catch (err: any) {
-      showToast("error", err.message || "Gagal mengunggah gambar.");
+      showToast("error", err.message || "Gagal upload gambar.");
     } finally {
       setUploadingImage(false);
     }
   };
 
-  // Drag and Drop State
+  // Drag and drop
   const [draggingCardId, setDraggingCardId] = useState<number | null>(null);
   const [dragOverColumn, setDragOverColumn] = useState<KanbanStatus | null>(null);
 
-  // Form State for Create Card
+  // Form State
   const [cardForm, setCardForm] = useState({
     title: "",
     description: "",
@@ -241,7 +221,6 @@ export default function KanbanBoardClient({
     admin_notes: "",
   });
 
-  // Reset form when modal opens
   const openAddModal = (defaultStatus: KanbanStatus = isSuperAdmin ? "draft" : "review_ide") => {
     setCardForm({
       title: "",
@@ -259,10 +238,7 @@ export default function KanbanBoardClient({
     setIsAddModalOpen(true);
   };
 
-  // ==========================================
-  // CARD ACTIONS
-  // ==========================================
-
+  // Create Card
   const handleCreateCard = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!cardForm.title.trim()) {
@@ -283,12 +259,13 @@ export default function KanbanBoardClient({
 
       setCards((prev) => [data.card, ...prev]);
       setIsAddModalOpen(false);
-      showToast("success", "Kartu proyek berhasil ditambahkan ke Kanban!");
+      showToast("success", "Kartu berhasil ditambahkan.");
     } catch (err: any) {
       showToast("error", err.message || "Terjadi kesalahan.");
     }
   };
 
+  // Update Card
   const handleUpdateCard = async (id: number, payload: Partial<KanbanCard>) => {
     try {
       const res = await fetch(`/api/kanban/${id}`, {
@@ -312,8 +289,9 @@ export default function KanbanBoardClient({
     }
   };
 
+  // Delete Card
   const handleDeleteCard = async (id: number) => {
-    if (!confirm("Apakah Anda yakin ingin menghapus kartu proyek ini?")) return;
+    if (!confirm("Hapus kartu ini?")) return;
     try {
       const res = await fetch(`/api/kanban/${id}`, { method: "DELETE" });
       const data = await res.json();
@@ -323,16 +301,16 @@ export default function KanbanBoardClient({
       setCards((prev) => prev.filter((c) => c.id !== id));
       if (viewingCard?.id === id) setViewingCard(null);
       if (editingCard?.id === id) setEditingCard(null);
-      showToast("success", "Kartu proyek telah dihapus.");
+      showToast("success", "Kartu berhasil dihapus.");
     } catch (err: any) {
       showToast("error", err.message || "Gagal menghapus.");
     }
   };
 
-  // Super Admin 1-Click ACC Ide
+  // Super Admin Approve Idea
   const handleApproveIdea = async (card: KanbanCard) => {
     if (!isSuperAdmin) {
-      showToast("error", "Hanya Super Admin yang berhak menyetujui (ACC) ide ini.");
+      showToast("error", "Hanya Super Admin yang berhak menyetujui ide.");
       return;
     }
     try {
@@ -347,16 +325,13 @@ export default function KanbanBoardClient({
       }
       setCards((prev) => prev.map((c) => (c.id === card.id ? data.card : c)));
       if (viewingCard?.id === card.id) setViewingCard(data.card);
-      showToast("success", `✨ Ide "${card.title}" telah di-ACC dan dipindahkan ke Sedang Dikerjakan!`);
+      showToast("success", `Ide "${card.title}" telah disetujui.`);
     } catch (err: any) {
-      showToast("error", err.message || "Gagal meng-ACC ide.");
+      showToast("error", err.message || "Gagal menyetujui ide.");
     }
   };
 
-  // ==========================================
-  // DRAG & DROP LOGIC WITH APPROVAL RULES
-  // ==========================================
-
+  // Drag and drop handlers
   const handleDragStart = (e: React.DragEvent, card: KanbanCard) => {
     setDraggingCardId(card.id);
     e.dataTransfer.setData("text/plain", String(card.id));
@@ -386,9 +361,7 @@ export default function KanbanBoardClient({
     const card = cards.find((c) => c.id === cardId);
     if (!card || card.status === targetColumn) return;
 
-    // VALIDASI ATURAN SPESIFIK USER:
-    // "Kalau pakai ide sendiri, belum bisa ditaruh di kanban sedang dikerjakan/proses.
-    // Harus menunggu acc saya baru bisa digerakkan kanbannya"
+    // Approval business rule check
     if (
       targetColumn === "in_progress" &&
       card.status === "review_ide" &&
@@ -398,16 +371,12 @@ export default function KanbanBoardClient({
       if (!isSuperAdmin) {
         showToast(
           "warning",
-          "⚠️ Ide ini belum di-ACC oleh Super Admin! Hanya Super Admin yang dapat menyetujui dan memindahkannya ke Proses."
+          "Ide usulan desainer harus disetujui (ACC) oleh Super Admin sebelum diproses."
         );
         return;
-      } else {
-        // Super admin moving it directly approves it!
-        showToast("success", "👑 Super Admin meng-ACC ide ini & memindahkannya ke Sedang Dikerjakan.");
       }
     }
 
-    // Optimistic UI update
     const previousCards = [...cards];
     setCards((prev) =>
       prev.map((c) =>
@@ -447,10 +416,7 @@ export default function KanbanBoardClient({
     }
   };
 
-  // ==========================================
-  // WORK TIMER ACTIONS
-  // ==========================================
-
+  // Timer actions
   const handleStartTimer = async (taskId?: number, taskTitle?: string) => {
     try {
       const res = await fetch("/api/work-timer", {
@@ -458,7 +424,7 @@ export default function KanbanBoardClient({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           task_id: taskId,
-          task_title: taskTitle || "Pengerjaan Desain Konten",
+          task_title: taskTitle || "Pengerjaan Desain",
           user_name: currentUser.name || currentUser.username,
         }),
       });
@@ -475,7 +441,7 @@ export default function KanbanBoardClient({
         ),
       ]);
       setTimerLogs((prev) => [data.log, ...prev]);
-      showToast("success", `⏱️ Jam kerja dimulai untuk: ${taskTitle || "Pengerjaan Desain"}`);
+      showToast("success", `Jam kerja dimulai.`);
     } catch (err: any) {
       showToast("error", err.message || "Gagal memulai jam kerja.");
     }
@@ -503,7 +469,7 @@ export default function KanbanBoardClient({
       setStopTimerNotes("");
       showToast(
         "success",
-        `🎉 Jam kerja dihentikan! Durasi tercatat: ${formatDuration(data.log?.duration_seconds || timerElapsed)}.`
+        `Jam kerja selesai. Durasi: ${formatDuration(data.log?.duration_seconds || timerElapsed)}.`
       );
     } catch (err: any) {
       showToast("error", err.message || "Gagal menghentikan jam kerja.");
@@ -521,7 +487,7 @@ export default function KanbanBoardClient({
       }
       setTimerLogs((prev) => prev.filter((t) => t.id !== id));
       setActiveTimers((prev) => prev.filter((t) => t.id !== id));
-      showToast("success", "Log jam kerja berhasil dihapus.");
+      showToast("success", "Catatan jam kerja dihapus.");
     } catch (err: any) {
       showToast("error", err.message || "Gagal menghapus.");
     }
@@ -544,41 +510,44 @@ export default function KanbanBoardClient({
   }, [cards, searchQuery, filterPlatform, filterPriority]);
 
   return (
-    <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans antialiased">
       {/* ========================================== */}
-      {/* TOP HEADER */}
+      {/* TOP HEADER (MINIMAL LIGHT) */}
       {/* ========================================== */}
-      <header className="sticky top-0 z-30 bg-[#0d1424]/95 backdrop-blur border-b border-slate-800/80 px-4 sm:px-6 py-3">
+      <header className="sticky top-0 z-30 bg-white border-b border-slate-200 px-4 sm:px-6 py-3">
         <div className="max-w-[1700px] mx-auto flex flex-wrap items-center justify-between gap-3">
-          {/* Logo & Navigation */}
+          {/* Left: Nav & Brand */}
           <div className="flex items-center gap-3">
             <Link
               href="/admin"
-              className="text-xs text-slate-400 hover:text-white flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition"
+              className="text-xs text-slate-500 hover:text-slate-900 flex items-center gap-1 px-2.5 py-1.5 rounded-md hover:bg-slate-100 transition border border-transparent hover:border-slate-200"
             >
-              ← <span className="hidden sm:inline">Kembali ke</span> Dashboard
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+              </svg>
+              <span>Dashboard</span>
             </Link>
-            <div className="h-5 w-px bg-slate-800 hidden sm:block" />
-            <LadiLogo inverted={true} />
-            <span className="hidden md:inline-flex items-center gap-1.5 text-xs font-mono px-2.5 py-0.5 rounded-full bg-purple-500/15 border border-purple-500/30 text-purple-300">
-              🎨 KANBAN DESAIN & JAM KERJA
+            <div className="h-4 w-px bg-slate-200" />
+            <LadiLogo inverted={false} />
+            <span className="hidden md:inline-block text-xs font-medium text-slate-500 border border-slate-200 px-2 py-0.5 rounded-md bg-slate-50">
+              Kanban Desain & Waktu Kerja
             </span>
           </div>
 
-          {/* Center: Live Timer Widget & Punch In/Out */}
-          <div className="flex items-center gap-2 bg-slate-900/90 border border-slate-800 px-3 py-1.5 rounded-xl shadow-inner">
+          {/* Center: Clean Work Timer */}
+          <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-3 py-1 rounded-lg">
             <div className="flex items-center gap-2">
               <span
-                className={`w-2.5 h-2.5 rounded-full ${
-                  myActiveTimer ? "bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" : "bg-slate-600"
+                className={`w-2 h-2 rounded-full ${
+                  myActiveTimer ? "bg-emerald-500 animate-pulse" : "bg-slate-300"
                 }`}
               />
-              <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider hidden sm:inline">
-                {myActiveTimer ? "Sedang Bekerja" : "Jam Kerja"}
+              <span className="text-[11px] font-mono text-slate-500 uppercase tracking-wide">
+                {myActiveTimer ? "Sedang Bekerja" : "Timer"}
               </span>
               <span
-                className={`font-mono text-sm sm:text-base font-bold ${
-                  myActiveTimer ? "text-emerald-300" : "text-slate-400"
+                className={`font-mono text-sm font-semibold ${
+                  myActiveTimer ? "text-emerald-700" : "text-slate-700"
                 }`}
               >
                 {myActiveTimer ? formatDuration(timerElapsed) : "00:00:00"}
@@ -588,65 +557,71 @@ export default function KanbanBoardClient({
             {myActiveTimer ? (
               <button
                 onClick={() => setIsStopTimerModalOpen(true)}
-                className="ml-2 text-xs font-semibold px-3 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 transition flex items-center gap-1.5"
+                className="ml-2 text-xs font-medium px-2.5 py-1 rounded-md bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition"
               >
-                ⏹️ Selesai Kerja
+                Selesai
               </button>
             ) : (
               <button
                 onClick={() => handleStartTimer()}
-                className="ml-2 text-xs font-semibold px-3 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-slate-950 shadow-md shadow-emerald-500/20 transition flex items-center gap-1.5 font-sans"
+                className="ml-2 text-xs font-medium px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 text-white transition"
               >
-                ▶️ Mulai Kerja
+                Mulai
               </button>
             )}
 
-            {/* Super Admin Monitor Button */}
             <button
               onClick={() => setIsTimerMonitorOpen(true)}
-              className="ml-1 text-xs text-slate-300 hover:text-white px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 transition flex items-center gap-1"
-              title="Pantau Jam Kerja Seluruh Tim"
+              className="ml-1 text-xs text-slate-600 hover:text-slate-900 px-2 py-1 rounded-md hover:bg-white border border-transparent hover:border-slate-200 transition"
             >
-              ⏱️ <span className="hidden sm:inline">Pantau Jam Kerja</span>
+              Log Kerja
               {activeTimers.length > 0 && (
-                <span className="text-[10px] bg-emerald-500 text-slate-950 font-bold px-1.5 py-0.2 rounded-full">
+                <span className="ml-1 text-[10px] bg-emerald-100 text-emerald-800 font-semibold px-1.5 py-0.2 rounded-full">
                   {activeTimers.length}
                 </span>
               )}
             </button>
           </div>
 
-          {/* User Profile & Actions */}
+          {/* Right: User & New Card Button */}
           <div className="flex items-center gap-2">
             <button
               onClick={() => openAddModal()}
-              className="text-xs font-medium px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-500/20 transition flex items-center gap-1.5"
+              className="text-xs font-medium px-3 py-1.5 rounded-md bg-slate-900 hover:bg-slate-800 text-white transition flex items-center gap-1.5"
             >
-              <span>+</span> <span>Tambah Ide / Kartu</span>
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+              </svg>
+              <span>Tambah Kartu</span>
             </button>
-            <div className="hidden lg:flex items-center gap-2 pl-2 border-l border-slate-800 text-xs">
-              <span className="text-slate-400">Halo,</span>
-              <span className="font-semibold text-slate-200">{currentUser.name || currentUser.username}</span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                {isSuperAdmin ? "👑 Super Admin" : "🎨 Desainer"}
+
+            <div className="hidden lg:flex items-center gap-1.5 text-xs text-slate-500 pl-2 border-l border-slate-200">
+              <span className="font-medium text-slate-800">{currentUser.name || currentUser.username}</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded border border-slate-200 bg-slate-50 text-slate-600 font-mono">
+                {isSuperAdmin ? "Super Admin" : "Desainer"}
               </span>
             </div>
+
             <AdminLogoutButton />
           </div>
         </div>
 
         {/* Filter Bar */}
-        <div className="max-w-[1700px] mx-auto mt-3 pt-2.5 border-t border-slate-800/60 flex flex-wrap items-center justify-between gap-3 text-xs">
-          <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-[280px]">
+        <div className="max-w-[1700px] mx-auto mt-3 pt-2.5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex flex-wrap items-center gap-2 flex-1 min-w-[280px]">
             {/* Search */}
             <div className="relative min-w-[200px] flex-1 max-w-xs">
-              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs">🔍</span>
+              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </span>
               <input
                 type="text"
                 placeholder="Cari kartu, deskripsi, desainer..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 text-xs"
+                className="w-full pl-8 pr-3 py-1.5 rounded-md bg-white border border-slate-200 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate-400 text-xs"
               />
             </div>
 
@@ -654,9 +629,9 @@ export default function KanbanBoardClient({
             <select
               value={filterPlatform}
               onChange={(e) => setFilterPlatform(e.target.value)}
-              className="py-1.5 px-2.5 rounded-lg bg-slate-900/90 border border-slate-800 text-slate-300 focus:outline-none focus:border-blue-500 text-xs"
+              className="py-1.5 px-2.5 rounded-md bg-white border border-slate-200 text-slate-700 focus:outline-none focus:border-slate-400 text-xs"
             >
-              <option value="all">Semua Format / Platform</option>
+              <option value="all">Semua Format</option>
               {PLATFORMS.map((p) => (
                 <option key={p} value={p}>
                   {p}
@@ -668,7 +643,7 @@ export default function KanbanBoardClient({
             <select
               value={filterPriority}
               onChange={(e) => setFilterPriority(e.target.value)}
-              className="py-1.5 px-2.5 rounded-lg bg-slate-900/90 border border-slate-800 text-slate-300 focus:outline-none focus:border-blue-500 text-xs"
+              className="py-1.5 px-2.5 rounded-md bg-white border border-slate-200 text-slate-700 focus:outline-none focus:border-slate-400 text-xs"
             >
               <option value="all">Semua Prioritas</option>
               {PRIORITIES.map((p) => (
@@ -685,24 +660,17 @@ export default function KanbanBoardClient({
                   setFilterPlatform("all");
                   setFilterPriority("all");
                 }}
-                className="text-slate-400 hover:text-slate-200 underline text-xs"
+                className="text-slate-500 hover:text-slate-800 underline text-xs ml-1"
               >
-                Reset Filter
+                Reset
               </button>
             )}
           </div>
 
-          {/* Quick Stats Summary */}
-          <div className="flex items-center gap-3 text-slate-400 font-mono text-[11px]">
-            <span>Total: <strong className="text-slate-200">{filteredCards.length}</strong> Kartu</span>
-            <span>•</span>
-            <span className="text-amber-400">
-              Menunggu ACC: <strong>{cards.filter((c) => c.status === "review_ide").length}</strong>
-            </span>
-            <span>•</span>
-            <span className="text-emerald-400">
-              Selesai: <strong>{cards.filter((c) => c.status === "done").length}</strong>
-            </span>
+          <div className="flex items-center gap-3 text-slate-500 text-xs">
+            <span>Total: <strong className="text-slate-800">{filteredCards.length}</strong></span>
+            <span>Menunggu ACC: <strong className="text-amber-600">{cards.filter((c) => c.status === "review_ide").length}</strong></span>
+            <span>Selesai: <strong className="text-emerald-600">{cards.filter((c) => c.status === "done").length}</strong></span>
           </div>
         </div>
       </header>
@@ -712,21 +680,18 @@ export default function KanbanBoardClient({
       {/* ========================================== */}
       {toast && (
         <div
-          className={`fixed bottom-5 right-5 z-50 px-4 py-3 rounded-xl shadow-2xl border text-sm max-w-md flex items-start gap-3 backdrop-blur-md transition-all ${
+          className={`fixed bottom-5 right-5 z-50 px-4 py-2.5 rounded-lg shadow-lg border text-xs max-w-sm flex items-start gap-2.5 transition-all ${
             toast.type === "success"
-              ? "bg-emerald-950/90 border-emerald-500/50 text-emerald-200"
+              ? "bg-slate-900 text-white border-slate-800"
               : toast.type === "warning"
-              ? "bg-amber-950/90 border-amber-500/50 text-amber-200"
-              : "bg-rose-950/90 border-rose-500/50 text-rose-200"
+              ? "bg-amber-50 text-amber-800 border-amber-200"
+              : "bg-red-50 text-red-800 border-red-200"
           }`}
         >
-          <span className="text-lg">
-            {toast.type === "success" ? "✅" : toast.type === "warning" ? "⚠️" : "❌"}
-          </span>
-          <div className="flex-1 text-xs leading-relaxed">{toast.message}</div>
+          <div className="flex-1 leading-relaxed">{toast.message}</div>
           <button
             onClick={() => setToast(null)}
-            className="text-slate-400 hover:text-white text-xs ml-2"
+            className="text-slate-400 hover:text-white text-xs ml-1"
           >
             ✕
           </button>
@@ -734,10 +699,10 @@ export default function KanbanBoardClient({
       )}
 
       {/* ========================================== */}
-      {/* NOTION-STYLE KANBAN BOARD CANVAS */}
+      {/* NOTION / LINEAR STYLE LIGHT KANBAN BOARD */}
       {/* ========================================== */}
       <main className="flex-1 p-4 sm:p-6 overflow-x-auto">
-        <div className="flex gap-4 items-start min-w-[1300px] max-w-[1800px] mx-auto">
+        <div className="flex gap-4 items-start min-w-[1280px] max-w-[1700px] mx-auto">
           {COLUMNS.map((col) => {
             const columnCards = filteredCards.filter((c) => c.status === col.id);
             const isDropTarget = dragOverColumn === col.id;
@@ -748,37 +713,29 @@ export default function KanbanBoardClient({
                 onDragOver={(e) => handleDragOver(e, col.id)}
                 onDragLeave={handleDragLeave}
                 onDrop={(e) => handleDrop(e, col.id)}
-                className={`flex-1 min-w-[280px] max-w-[340px] rounded-2xl flex flex-col bg-[#0f172a]/70 border transition-all duration-200 ${
+                className={`flex-1 min-w-[270px] max-w-[320px] rounded-xl flex flex-col bg-slate-100/70 border transition duration-150 ${
                   isDropTarget
-                    ? "border-blue-500 ring-2 ring-blue-500/30 bg-blue-950/20"
-                    : "border-slate-800/80"
+                    ? "border-slate-400 bg-slate-200/50"
+                    : "border-slate-200/80"
                 }`}
               >
                 {/* Column Header */}
-                <div className="p-3.5 border-b border-slate-800/70">
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-base">{col.icon}</span>
-                      <h3 className="font-semibold text-sm text-slate-200 tracking-tight">
-                        {col.title}
-                      </h3>
-                    </div>
-                    <span
-                      className={`text-xs font-mono font-bold px-2 py-0.5 rounded-full border ${col.badgeBg} ${col.badgeBorder} ${col.badgeText}`}
-                    >
-                      {columnCards.length}
-                    </span>
+                <div className="p-3 border-b border-slate-200/60 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className={`w-2 h-2 rounded-full ${col.dotColor}`} />
+                    <h3 className="font-semibold text-xs text-slate-800 uppercase tracking-wide">
+                      {col.title}
+                    </h3>
                   </div>
-                  <p className="text-[11px] text-slate-400 leading-tight">
-                    {col.subtitle}
-                  </p>
+                  <span className="text-[11px] font-mono font-medium text-slate-500 bg-white border border-slate-200 px-1.5 py-0.2 rounded">
+                    {columnCards.length}
+                  </span>
                 </div>
 
                 {/* Cards Container */}
-                <div className="p-2.5 flex-1 min-h-[480px] space-y-2.5 overflow-y-auto max-h-[calc(100vh-250px)]">
+                <div className="p-2 flex-1 min-h-[460px] space-y-2 overflow-y-auto max-h-[calc(100vh-230px)]">
                   {columnCards.map((card) => {
                     const isDragging = draggingCardId === card.id;
-                    const canvaEmbedUrl = card.canva_url ? getCanvaEmbedUrl(card.canva_url) : "";
                     const priorityConfig = PRIORITIES.find((p) => p.id === card.priority);
 
                     return (
@@ -786,122 +743,98 @@ export default function KanbanBoardClient({
                         key={card.id}
                         draggable
                         onDragStart={(e) => handleDragStart(e, card)}
-                        className={`group relative bg-[#131b2e] border rounded-xl p-3.5 transition-all shadow-sm hover:shadow-lg cursor-grab active:cursor-grabbing ${
+                        className={`group bg-white border rounded-lg p-3 transition shadow-xs hover:shadow-sm cursor-grab active:cursor-grabbing ${
                           isDragging
-                            ? "opacity-40 scale-95 border-dashed border-blue-400"
-                            : "border-slate-800 hover:border-slate-700 bg-gradient-to-b from-[#141e33] to-[#111827]"
+                            ? "opacity-30 border-dashed border-slate-400"
+                            : "border-slate-200 hover:border-slate-300"
                         }`}
                       >
                         {/* Top Badges */}
-                        <div className="flex items-center justify-between gap-1.5 mb-2 text-[10px]">
-                          <div className="flex flex-wrap items-center gap-1.5">
-                            {/* Platform */}
-                            <span className="px-2 py-0.5 rounded-md bg-slate-800/80 text-slate-300 font-medium border border-slate-700/60">
+                        <div className="flex items-center justify-between gap-1 mb-2 text-[10px]">
+                          <div className="flex flex-wrap items-center gap-1">
+                            <span className="px-1.5 py-0.5 rounded border border-slate-200 bg-slate-50 text-slate-600 font-medium">
                               {card.platform}
                             </span>
-                            {/* Priority */}
                             {priorityConfig && (
-                              <span
-                                className={`px-2 py-0.5 rounded-md font-medium border ${priorityConfig.color}`}
-                              >
+                              <span className={`px-1.5 py-0.5 rounded border font-medium ${priorityConfig.badgeClass}`}>
                                 {priorityConfig.label}
                               </span>
                             )}
                           </div>
 
-                          {/* Origin Badge */}
-                          {card.origin === "admin" ? (
-                            <span
-                              className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-blue-500/15 text-blue-300 border border-blue-500/30"
-                              title="Ide diinput oleh Super Admin"
-                            >
-                              💡 Ide Admin
-                            </span>
-                          ) : (
-                            <span
-                              className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-pink-500/15 text-pink-300 border border-pink-500/30"
-                              title="Ide diusulkan oleh Desainer"
-                            >
-                              🎨 Ide Desainer
-                            </span>
-                          )}
+                          <span
+                            className={`px-1.5 py-0.5 rounded text-[9px] font-mono border ${
+                              card.origin === "admin"
+                                ? "bg-slate-50 text-slate-600 border-slate-200"
+                                : "bg-amber-50 text-amber-700 border-amber-200"
+                            }`}
+                          >
+                            {card.origin === "admin" ? "Ide Admin" : "Ide Desainer"}
+                          </span>
                         </div>
 
                         {/* Title */}
                         <h4
                           onClick={() => setViewingCard(card)}
-                          className="font-medium text-slate-100 text-sm leading-snug hover:text-blue-400 transition cursor-pointer mb-1.5 line-clamp-2"
+                          className="font-medium text-slate-900 text-xs leading-snug hover:text-blue-600 transition cursor-pointer mb-1.5"
                         >
                           {card.title}
                         </h4>
 
-                        {/* Uploaded Image Preview (jika ada upload gambar) */}
+                        {/* Uploaded Image Thumbnail Preview */}
                         {card.image_url && (
                           <div
                             onClick={() => setViewingCard(card)}
-                            className="mb-2.5 rounded-lg overflow-hidden border border-slate-700/60 bg-slate-950 aspect-video relative cursor-pointer group/thumb shadow-inner"
+                            className="mb-2 rounded-md overflow-hidden border border-slate-200 aspect-video relative cursor-pointer group/thumb bg-slate-50"
                           >
                             <img
                               src={card.image_url}
                               alt={card.title}
-                              className="w-full h-full object-cover group-hover/thumb:scale-105 transition duration-300"
+                              className="w-full h-full object-cover group-hover/thumb:scale-102 transition duration-200"
                             />
-                            <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover/thumb:opacity-100 transition flex items-center justify-center text-[11px] font-medium text-white backdrop-blur-[2px]">
-                              🔍 Lihat Gambar Penuh
-                            </div>
                           </div>
                         )}
 
                         {/* Description snippet */}
                         {card.description && (
-                          <p className="text-xs text-slate-400 line-clamp-2 mb-2.5 leading-relaxed">
+                          <p className="text-[11px] text-slate-500 line-clamp-2 mb-2 leading-relaxed">
                             {card.description}
                           </p>
                         )}
 
-                        {/* Canva Live Preview Pill / Button */}
-                        {card.canva_url ? (
-                          <div className="mb-2.5 bg-gradient-to-r from-[#00c4cc]/10 to-[#7d2ae8]/10 border border-[#00c4cc]/30 rounded-lg p-2 flex items-center justify-between text-xs">
-                            <div className="flex items-center gap-1.5 overflow-hidden">
-                              <span className="text-sm">🎨</span>
-                              <span className="font-semibold text-slate-200 truncate text-[11px]">
-                                Desain Canva Terhubung
-                              </span>
-                            </div>
+                        {/* Canva Live Preview Button */}
+                        {card.canva_url && (
+                          <div className="mb-2">
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setCanvaPreviewUrl(card.canva_url);
                               }}
-                              className="text-[10px] font-semibold px-2 py-0.5 rounded bg-[#00c4cc] hover:bg-[#00b0b8] text-slate-950 transition flex items-center gap-1 shadow-sm shrink-0"
+                              className="w-full py-1 px-2 rounded border border-slate-200 hover:border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-medium transition flex items-center justify-between"
                             >
-                              👁️ Pratinjau Cepat
+                              <span className="truncate">Pratinjau Canva</span>
+                              <svg className="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                              </svg>
                             </button>
-                          </div>
-                        ) : (
-                          <div className="mb-2.5 text-[11px] text-slate-500 italic flex items-center gap-1">
-                            <span>📎</span> <span>Belum ada link Canva</span>
                           </div>
                         )}
 
-                        {/* Special Notification for 'review_ide' column */}
+                        {/* Approval Action for 'review_ide' column */}
                         {card.status === "review_ide" && (
-                          <div className="mb-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-200 flex flex-col gap-1.5">
-                            <div className="flex items-center gap-1.5 font-semibold">
-                              <span>⏳</span> <span>Menunggu ACC Super Admin</span>
+                          <div className="mb-2 p-2 rounded border border-amber-200 bg-amber-50/50 text-[11px] text-amber-800 space-y-1.5">
+                            <div className="flex items-center justify-between font-medium">
+                              <span>Menunggu ACC Super Admin</span>
                             </div>
-                            <p className="text-[10px] text-amber-300/80 leading-tight">
-                              Desainer belum bisa menggeser kartu ini ke &quot;Sedang Dikerjakan&quot; sebelum disetujui.
-                            </p>
                             {isSuperAdmin && (
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleApproveIdea(card);
                                 }}
-                                className="w-full mt-1 py-1 px-2 rounded-md bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs transition shadow flex items-center justify-center gap-1"
+                                className="w-full py-1 px-2 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-[11px] transition"
                               >
-                                ✓ ACC Ide Ini Sekarang
+                                Setujui Ide (ACC)
                               </button>
                             )}
                           </div>
@@ -909,52 +842,54 @@ export default function KanbanBoardClient({
 
                         {/* Admin Notes Preview */}
                         {card.admin_notes && (
-                          <div className="mb-2 text-[10px] bg-slate-900/80 border border-slate-800 rounded p-1.5 text-slate-300">
-                            <strong className="text-blue-400">Catatan Admin:</strong> {card.admin_notes}
+                          <div className="mb-2 text-[10px] bg-slate-50 border border-slate-200 rounded p-1.5 text-slate-600">
+                            <strong className="text-slate-800">Catatan:</strong> {card.admin_notes}
                           </div>
                         )}
 
-                        {/* Bottom Meta & Quick Actions */}
-                        <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
-                          <div className="flex items-center gap-1 truncate max-w-[140px]">
-                            <span>👤</span>
-                            <span className="truncate">{card.assignee_name || "Belum ditugaskan"}</span>
-                          </div>
+                        {/* Card Footer: Assignee & Actions */}
+                        <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+                          <span className="truncate max-w-[130px]">
+                            {card.assignee_name || "-"}
+                          </span>
 
                           <div className="flex items-center gap-1">
-                            {/* Start Timer with this task */}
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleStartTimer(card.id, card.title);
                               }}
-                              className="p-1 hover:bg-slate-800 rounded text-slate-400 hover:text-emerald-400 transition"
-                              title="Mulai hitung jam kerja untuk tugas ini"
+                              className="p-1 hover:bg-slate-100 rounded text-slate-500 hover:text-slate-900 transition"
+                              title="Mulai jam kerja untuk tugas ini"
                             >
-                              ⏱️
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
                             </button>
-                            {/* Edit */}
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setEditingCard(card);
                               }}
-                              className="p-1 hover:bg-slate-800 rounded text-slate-400 hover:text-blue-400 transition"
+                              className="p-1 hover:bg-slate-100 rounded text-slate-500 hover:text-slate-900 transition"
                               title="Edit kartu"
                             >
-                              ✏️
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                              </svg>
                             </button>
-                            {/* Delete (Super Admin only or card creator) */}
                             {isSuperAdmin && (
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleDeleteCard(card.id);
                                 }}
-                                className="p-1 hover:bg-slate-800 rounded text-slate-400 hover:text-rose-400 transition"
+                                className="p-1 hover:bg-slate-100 rounded text-slate-400 hover:text-red-600 transition"
                                 title="Hapus kartu"
                               >
-                                🗑️
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
                               </button>
                             )}
                           </div>
@@ -963,26 +898,24 @@ export default function KanbanBoardClient({
                     );
                   })}
 
-                  {/* Empty state per column */}
                   {columnCards.length === 0 && (
-                    <div className="h-32 border border-dashed border-slate-800/80 rounded-xl flex flex-col items-center justify-center text-slate-500 text-xs p-4 text-center">
-                      <span className="text-lg opacity-40 mb-1">{col.icon}</span>
-                      <span>Belum ada kartu di kolom ini</span>
+                    <div className="h-28 border border-dashed border-slate-200 rounded-lg flex flex-col items-center justify-center text-slate-400 text-xs p-3 text-center">
+                      <span>Tidak ada kartu</span>
                       <button
                         onClick={() => openAddModal(col.id)}
-                        className="mt-2 text-[11px] text-blue-400 hover:underline"
+                        className="mt-1 text-[11px] text-slate-600 hover:underline font-medium"
                       >
-                        + Tambah ke sini
+                        + Tambah
                       </button>
                     </div>
                   )}
                 </div>
 
-                {/* Column Footer: Quick Add Card */}
-                <div className="p-2.5 border-t border-slate-800/60 bg-[#0d1424]/40 rounded-b-2xl">
+                {/* Column Footer */}
+                <div className="p-2 border-t border-slate-200/60">
                   <button
                     onClick={() => openAddModal(col.id)}
-                    className="w-full py-1.5 px-3 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800/80 border border-transparent hover:border-slate-700 transition flex items-center justify-center gap-1.5"
+                    className="w-full py-1 rounded text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white transition flex items-center justify-center gap-1"
                   >
                     <span>+</span> <span>Tambah Kartu</span>
                   </button>
@@ -994,47 +927,40 @@ export default function KanbanBoardClient({
       </main>
 
       {/* ========================================== */}
-      {/* MODAL: CANVA QUICK VIEW (EMBED MODAL) */}
+      {/* MODAL: CANVA PREVIEW (MINIMAL LIGHT) */}
       {/* ========================================== */}
       {canvaPreviewUrl && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-fadeIn">
-          <div className="bg-[#0f172a] border border-slate-700 rounded-2xl w-full max-w-5xl h-[85vh] flex flex-col shadow-2xl overflow-hidden">
-            {/* Modal Top Bar */}
-            <div className="p-3.5 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-xl">🎨</span>
-                <div>
-                  <h3 className="font-bold text-sm text-slate-100 flex items-center gap-2">
-                    Pratinjau Desain Canva (Live Quick View)
-                  </h3>
-                  <p className="text-[11px] text-slate-400 font-mono truncate max-w-md">
-                    {canvaPreviewUrl}
-                  </p>
-                </div>
-              </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+          <div className="bg-white border border-slate-200 rounded-xl w-full max-w-5xl h-[85vh] flex flex-col shadow-xl overflow-hidden">
+            <div className="p-3 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+              <span className="font-semibold text-xs text-slate-800">
+                Pratinjau Desain Canva
+              </span>
               <div className="flex items-center gap-2">
                 <a
                   href={canvaPreviewUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-1 transition"
+                  className="px-2.5 py-1 rounded border border-slate-300 hover:bg-white text-slate-700 text-xs font-medium transition flex items-center gap-1"
                 >
-                  Buka di Canva Tab Baru ↗
+                  <span>Buka di Canva</span>
+                  <svg className="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
                 </a>
                 <button
                   onClick={() => setCanvaPreviewUrl(null)}
-                  className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition"
+                  className="p-1 rounded text-slate-400 hover:text-slate-700 transition"
                 >
                   ✕
                 </button>
               </div>
             </div>
 
-            {/* Embedded Iframe */}
-            <div className="flex-1 bg-slate-950 relative">
+            <div className="flex-1 bg-slate-100 relative">
               <iframe
                 src={getCanvaEmbedUrl(canvaPreviewUrl)}
-                title="Canva Quick Preview"
+                title="Canva Preview"
                 className="w-full h-full border-0"
                 allowFullScreen
                 loading="lazy"
@@ -1045,79 +971,69 @@ export default function KanbanBoardClient({
       )}
 
       {/* ========================================== */}
-      {/* MODAL: CREATE CARD */}
+      {/* MODAL: CREATE CARD (MINIMAL LIGHT) */}
       {/* ========================================== */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="bg-[#0f172a] border border-slate-800 rounded-2xl w-full max-w-xl p-6 shadow-2xl my-8">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-              <div className="flex items-center gap-2">
-                <span className="text-xl">✨</span>
-                <h3 className="font-bold text-base text-slate-100">
-                  Tambah Kartu Proyek Desain
-                </h3>
-              </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-xl w-full max-w-lg p-5 shadow-xl my-8">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 className="font-semibold text-sm text-slate-900">
+                Tambah Kartu Proyek
+              </h3>
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="text-slate-400 hover:text-white text-sm"
+                className="text-slate-400 hover:text-slate-700 text-xs"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleCreateCard} className="space-y-4 mt-4 text-xs">
-              {/* Judul */}
+            <form onSubmit={handleCreateCard} className="space-y-3.5 mt-3 text-xs">
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
-                  Judul Proyek / Ide Konten <span className="text-rose-400">*</span>
+                <label className="block text-slate-700 font-medium mb-1">
+                  Judul Proyek / Brief <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="Contoh: Carousel Edukasi 5 Manfaat Website untuk UMKM"
+                  placeholder="Nama konten atau desain"
                   value={cardForm.title}
                   onChange={(e) => setCardForm({ ...cardForm, title: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                  className="w-full px-3 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs"
                 />
               </div>
 
-              {/* Deskripsi */}
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
-                  Deskripsi / Brief Konten
+                <label className="block text-slate-700 font-medium mb-1">
+                  Deskripsi / Catatan Brief
                 </label>
                 <textarea
                   rows={3}
-                  placeholder="Jelaskan copywriting, tone warna, jumlah slide, poin penting konten..."
+                  placeholder="Detail pengerjaan atau arahan konten..."
                   value={cardForm.description}
                   onChange={(e) => setCardForm({ ...cardForm, description: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                  className="w-full px-3 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs"
                 />
               </div>
 
-              {/* Canva Link */}
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
-                  Link Desain Canva (View Link / Edit Link)
+                <label className="block text-slate-700 font-medium mb-1">
+                  Link Canva (Pratinjau Otomatis)
                 </label>
                 <input
                   type="url"
                   placeholder="https://www.canva.com/design/.../view"
                   value={cardForm.canva_url}
                   onChange={(e) => setCardForm({ ...cardForm, canva_url: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                  className="w-full px-3 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs"
                 />
-                <p className="text-[10px] text-slate-400 mt-1">
-                  💡 Cukup tempel link Canva apa saja, sistem otomatis mengubahnya menjadi pratinjau langsung tanpa perlu upload gambar manual.
-                </p>
               </div>
 
-              {/* Upload File Gambar / Mockup Desain Langsung */}
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
-                  Atau Upload File Gambar / Mockup Langsung (PNG, JPG, WEBP)
+                <label className="block text-slate-700 font-medium mb-1">
+                  Upload File Gambar (Opsional)
                 </label>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                   <input
                     type="file"
                     accept="image/*"
@@ -1129,43 +1045,40 @@ export default function KanbanBoardClient({
                   />
                   <label
                     htmlFor="create-card-image-file"
-                    className={`px-3 py-1.5 rounded-lg border border-slate-700 text-xs font-medium cursor-pointer transition flex items-center gap-1.5 ${
+                    className={`px-3 py-1.5 rounded-md border border-slate-300 text-xs font-medium cursor-pointer transition ${
                       uploadingImage
-                        ? "bg-slate-800 text-slate-400 cursor-not-allowed"
-                        : "bg-slate-800 hover:bg-slate-700 text-slate-200"
+                        ? "bg-slate-100 text-slate-400"
+                        : "bg-slate-50 hover:bg-slate-100 text-slate-700"
                     }`}
                   >
-                    <span>📤</span> <span>{uploadingImage ? "Mengunggah..." : "Pilih File Gambar"}</span>
+                    {uploadingImage ? "Mengunggah..." : "Pilih File Gambar"}
                   </label>
                   {cardForm.image_url && (
                     <button
                       type="button"
                       onClick={() => setCardForm({ ...cardForm, image_url: "" })}
-                      className="text-[11px] text-rose-400 hover:underline"
+                      className="text-red-600 hover:underline text-xs"
                     >
-                      Hapus Foto
+                      Hapus
                     </button>
                   )}
                 </div>
                 {cardForm.image_url && (
-                  <div className="mt-2 w-36 h-24 rounded-lg overflow-hidden border border-slate-700 bg-slate-950 relative">
-                    <img src={cardForm.image_url} alt="Uploaded preview" className="w-full h-full object-cover" />
+                  <div className="mt-2 w-32 h-20 rounded border border-slate-200 overflow-hidden bg-slate-50">
+                    <img src={cardForm.image_url} alt="Preview" className="w-full h-full object-cover" />
                   </div>
                 )}
               </div>
 
-              {/* Format & Prioritas */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
-                    Format / Platform
-                  </label>
+                  <label className="block text-slate-700 font-medium mb-1">Format Platform</label>
                   <select
                     value={cardForm.platform}
                     onChange={(e) =>
                       setCardForm({ ...cardForm, platform: e.target.value as KanbanPlatform })
                     }
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs bg-white"
                   >
                     {PLATFORMS.map((p) => (
                       <option key={p} value={p}>
@@ -1176,13 +1089,13 @@ export default function KanbanBoardClient({
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">Prioritas</label>
+                  <label className="block text-slate-700 font-medium mb-1">Prioritas</label>
                   <select
                     value={cardForm.priority}
                     onChange={(e) =>
                       setCardForm({ ...cardForm, priority: e.target.value as KanbanPriority })
                     }
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs bg-white"
                   >
                     {PRIORITIES.map((p) => (
                       <option key={p.id} value={p.id}>
@@ -1193,103 +1106,88 @@ export default function KanbanBoardClient({
                 </div>
               </div>
 
-              {/* Kolom Status & Sumber Ide */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
-                    Kolom Kanban Awal
-                  </label>
+                  <label className="block text-slate-700 font-medium mb-1">Kolom Awal</label>
                   <select
                     value={cardForm.status}
                     onChange={(e) =>
                       setCardForm({ ...cardForm, status: e.target.value as KanbanStatus })
                     }
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs bg-white"
                   >
                     {COLUMNS.map((c) => (
                       <option key={c.id} value={c.id}>
-                        {c.icon} {c.title}
+                        {c.title}
                       </option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
-                    Sumber Ide
-                  </label>
+                  <label className="block text-slate-700 font-medium mb-1">Sumber Ide</label>
                   <select
                     value={cardForm.origin}
                     disabled={!isSuperAdmin}
                     onChange={(e) =>
                       setCardForm({ ...cardForm, origin: e.target.value as KanbanOrigin })
                     }
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs disabled:opacity-50"
+                    className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs bg-white disabled:opacity-50"
                   >
-                    <option value="admin">💡 Ide Super Admin (Bebas diambil)</option>
-                    <option value="designer">🎨 Ide Desainer (Wajib ACC)</option>
+                    <option value="admin">Ide Super Admin</option>
+                    <option value="designer">Ide Desainer (Perlu ACC)</option>
                   </select>
                 </div>
               </div>
 
-              {/* Desainer & Deadline */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
-                    Ditugaskan Kepada
-                  </label>
+                  <label className="block text-slate-700 font-medium mb-1">Ditugaskan Kepada</label>
                   <input
                     type="text"
-                    placeholder="Nama Desainer"
                     value={cardForm.assignee_name}
                     onChange={(e) => setCardForm({ ...cardForm, assignee_name: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                    className="w-full px-3 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
-                    Target Selesai (Deadline)
-                  </label>
+                  <label className="block text-slate-700 font-medium mb-1">Target Selesai</label>
                   <input
                     type="date"
                     value={cardForm.deadline}
                     onChange={(e) => setCardForm({ ...cardForm, deadline: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                    className="w-full px-3 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs"
                   />
                 </div>
               </div>
 
-              {/* Catatan Admin */}
               {isSuperAdmin && (
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
-                    Catatan Khusus Super Admin
-                  </label>
+                  <label className="block text-slate-700 font-medium mb-1">Catatan Admin</label>
                   <input
                     type="text"
-                    placeholder="Contoh: Fokus ke copywriting slide 2 & 4, tone visual elegan"
+                    placeholder="Instruksi tambahan..."
                     value={cardForm.admin_notes}
                     onChange={(e) => setCardForm({ ...cardForm, admin_notes: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                    className="w-full px-3 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs"
                   />
                 </div>
               )}
 
-              {/* Buttons */}
-              <div className="flex items-center justify-end gap-2 pt-4 border-t border-slate-800">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition"
+                  className="px-3 py-1.5 rounded-md border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-medium transition"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs transition shadow-lg shadow-blue-600/20"
+                  className="px-4 py-1.5 rounded-md bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs transition"
                 >
-                  Simpan Kartu Proyek
+                  Simpan Kartu
                 </button>
               </div>
             </form>
@@ -1298,21 +1196,18 @@ export default function KanbanBoardClient({
       )}
 
       {/* ========================================== */}
-      {/* MODAL: EDIT CARD */}
+      {/* MODAL: EDIT CARD (MINIMAL LIGHT) */}
       {/* ========================================== */}
       {editingCard && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="bg-[#0f172a] border border-slate-800 rounded-2xl w-full max-w-xl p-6 shadow-2xl my-8">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-              <div className="flex items-center gap-2">
-                <span className="text-xl">✏️</span>
-                <h3 className="font-bold text-base text-slate-100">
-                  Edit Kartu Proyek Desain
-                </h3>
-              </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-xl w-full max-w-lg p-5 shadow-xl my-8">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 className="font-semibold text-sm text-slate-900">
+                Edit Kartu Proyek
+              </h3>
               <button
                 onClick={() => setEditingCard(null)}
-                className="text-slate-400 hover:text-white text-sm"
+                className="text-slate-400 hover:text-slate-700 text-xs"
               >
                 ✕
               </button>
@@ -1324,49 +1219,46 @@ export default function KanbanBoardClient({
                 await handleUpdateCard(editingCard.id, editingCard);
                 setEditingCard(null);
               }}
-              className="space-y-4 mt-4 text-xs"
+              className="space-y-3.5 mt-3 text-xs"
             >
               <div>
-                <label className="block text-slate-300 font-medium mb-1">Judul Proyek</label>
+                <label className="block text-slate-700 font-medium mb-1">Judul Proyek</label>
                 <input
                   type="text"
                   required
                   value={editingCard.title}
                   onChange={(e) => setEditingCard({ ...editingCard, title: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                  className="w-full px-3 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-300 font-medium mb-1">Deskripsi / Brief</label>
+                <label className="block text-slate-700 font-medium mb-1">Deskripsi / Brief</label>
                 <textarea
                   rows={3}
                   value={editingCard.description}
                   onChange={(e) =>
                     setEditingCard({ ...editingCard, description: e.target.value })
                   }
-                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                  className="w-full px-3 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-300 font-medium mb-1">Link Canva</label>
+                <label className="block text-slate-700 font-medium mb-1">Link Canva</label>
                 <input
                   type="url"
                   value={editingCard.canva_url}
                   onChange={(e) =>
                     setEditingCard({ ...editingCard, canva_url: e.target.value })
                   }
-                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                  className="w-full px-3 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs"
                 />
               </div>
 
-              {/* Upload Gambar / File Desain di Edit */}
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
-                  Upload / Ganti File Gambar (PNG, JPG, WEBP)
-                </label>
-                <div className="flex items-center gap-3">
+                <label className="block text-slate-700 font-medium mb-1">File Gambar (Opsional)</label>
+                <div className="flex items-center gap-2">
                   <input
                     type="file"
                     accept="image/*"
@@ -1378,34 +1270,34 @@ export default function KanbanBoardClient({
                   />
                   <label
                     htmlFor="edit-card-image-file"
-                    className={`px-3 py-1.5 rounded-lg border border-slate-700 text-xs font-medium cursor-pointer transition flex items-center gap-1.5 ${
+                    className={`px-3 py-1.5 rounded-md border border-slate-300 text-xs font-medium cursor-pointer transition ${
                       uploadingImage
-                        ? "bg-slate-800 text-slate-400 cursor-not-allowed"
-                        : "bg-slate-800 hover:bg-slate-700 text-slate-200"
+                        ? "bg-slate-100 text-slate-400"
+                        : "bg-slate-50 hover:bg-slate-100 text-slate-700"
                     }`}
                   >
-                    <span>📤</span> <span>{uploadingImage ? "Mengunggah..." : "Pilih File Gambar Baru"}</span>
+                    {uploadingImage ? "Mengunggah..." : "Pilih File Gambar Baru"}
                   </label>
                   {editingCard.image_url && (
                     <button
                       type="button"
                       onClick={() => setEditingCard({ ...editingCard, image_url: "" })}
-                      className="text-[11px] text-rose-400 hover:underline"
+                      className="text-red-600 hover:underline text-xs"
                     >
-                      Hapus Foto
+                      Hapus
                     </button>
                   )}
                 </div>
                 {editingCard.image_url && (
-                  <div className="mt-2 w-36 h-24 rounded-lg overflow-hidden border border-slate-700 bg-slate-950 relative">
-                    <img src={editingCard.image_url} alt="Uploaded preview" className="w-full h-full object-cover" />
+                  <div className="mt-2 w-32 h-20 rounded border border-slate-200 overflow-hidden bg-slate-50">
+                    <img src={editingCard.image_url} alt="Preview" className="w-full h-full object-cover" />
                   </div>
                 )}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">Status / Kolom</label>
+                  <label className="block text-slate-700 font-medium mb-1">Kolom Status</label>
                   <select
                     value={editingCard.status}
                     onChange={(e) =>
@@ -1414,18 +1306,18 @@ export default function KanbanBoardClient({
                         status: e.target.value as KanbanStatus,
                       })
                     }
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs bg-white"
                   >
                     {COLUMNS.map((c) => (
                       <option key={c.id} value={c.id}>
-                        {c.icon} {c.title}
+                        {c.title}
                       </option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">Prioritas</label>
+                  <label className="block text-slate-700 font-medium mb-1">Prioritas</label>
                   <select
                     value={editingCard.priority}
                     onChange={(e) =>
@@ -1434,7 +1326,7 @@ export default function KanbanBoardClient({
                         priority: e.target.value as KanbanPriority,
                       })
                     }
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs bg-white"
                   >
                     {PRIORITIES.map((p) => (
                       <option key={p.id} value={p.id}>
@@ -1445,9 +1337,9 @@ export default function KanbanBoardClient({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">Format Platform</label>
+                  <label className="block text-slate-700 font-medium mb-1">Platform</label>
                   <select
                     value={editingCard.platform}
                     onChange={(e) =>
@@ -1456,7 +1348,7 @@ export default function KanbanBoardClient({
                         platform: e.target.value as KanbanPlatform,
                       })
                     }
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs bg-white"
                   >
                     {PLATFORMS.map((p) => (
                       <option key={p} value={p}>
@@ -1467,43 +1359,41 @@ export default function KanbanBoardClient({
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">Ditugaskan Kepada</label>
+                  <label className="block text-slate-700 font-medium mb-1">Ditugaskan Kepada</label>
                   <input
                     type="text"
                     value={editingCard.assignee_name}
                     onChange={(e) =>
                       setEditingCard({ ...editingCard, assignee_name: e.target.value })
                     }
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                    className="w-full px-3 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
-                  Catatan Admin / Feedback
-                </label>
+                <label className="block text-slate-700 font-medium mb-1">Catatan Admin</label>
                 <input
                   type="text"
                   value={editingCard.admin_notes || ""}
                   onChange={(e) =>
                     setEditingCard({ ...editingCard, admin_notes: e.target.value })
                   }
-                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                  className="w-full px-3 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-4 border-t border-slate-800">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setEditingCard(null)}
-                  className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition"
+                  className="px-3 py-1.5 rounded-md border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-medium transition"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs transition shadow-lg shadow-blue-600/20"
+                  className="px-4 py-1.5 rounded-md bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs transition"
                 >
                   Simpan Perubahan
                 </button>
@@ -1514,107 +1404,125 @@ export default function KanbanBoardClient({
       )}
 
       {/* ========================================== */}
-      {/* MODAL: NOTION-STYLE CARD DETAIL VIEW */}
+      {/* MODAL: DETAIL CARD (NOTION STYLE LIGHT) */}
       {/* ========================================== */}
       {viewingCard && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 overflow-y-auto">
-          <div className="bg-[#0f172a] border border-slate-700 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden my-6">
-            {/* Modal Header */}
-            <div className="p-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-xl overflow-hidden my-6">
+            <div className="p-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
               <div className="flex items-center gap-2">
-                <span className="text-xl">📄</span>
-                <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                <span className="text-xs font-mono font-medium text-slate-500">
                   ID #{viewingCard.id}
                 </span>
-                <span className="text-xs font-medium text-slate-400">
+                <span className="text-xs text-slate-600 font-medium">
                   {viewingCard.platform}
                 </span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => {
                     const card = viewingCard;
                     setViewingCard(null);
                     setEditingCard(card);
                   }}
-                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition"
+                  className="px-2.5 py-1 rounded border border-slate-300 hover:bg-white text-slate-700 text-xs font-medium transition"
                 >
-                  ✏️ Edit
+                  Edit
                 </button>
                 <button
                   onClick={() => setViewingCard(null)}
-                  className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition"
+                  className="p-1 rounded text-slate-400 hover:text-slate-700 transition"
                 >
                   ✕
                 </button>
               </div>
             </div>
 
-            {/* Modal Content */}
-            <div className="p-6 overflow-y-auto space-y-5 text-xs">
-              {/* Title & Status Bar */}
+            <div className="p-5 overflow-y-auto space-y-4 text-xs">
               <div>
-                <h2 className="text-xl font-bold text-white mb-3">
+                <h2 className="text-lg font-semibold text-slate-900 mb-2">
                   {viewingCard.title}
                 </h2>
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-200">
+                  <span className="px-2 py-0.5 rounded border border-slate-200 bg-slate-50 text-slate-700">
                     Status: <strong>{COLUMNS.find((c) => c.id === viewingCard.status)?.title}</strong>
                   </span>
-                  <span className="px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-200">
-                    Ditugaskan: <strong>{viewingCard.assignee_name || "-"}</strong>
+                  <span className="px-2 py-0.5 rounded border border-slate-200 bg-slate-50 text-slate-700">
+                    Penugasan: <strong>{viewingCard.assignee_name || "-"}</strong>
                   </span>
-                  <span className="px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-200">
+                  <span className="px-2 py-0.5 rounded border border-slate-200 bg-slate-50 text-slate-700">
                     Sumber: <strong>{viewingCard.origin === "admin" ? "Ide Super Admin" : "Ide Desainer"}</strong>
                   </span>
                   {viewingCard.deadline && (
-                    <span className="px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-amber-300">
-                      Deadline: <strong>{formatDateIndo(viewingCard.deadline)}</strong>
+                    <span className="px-2 py-0.5 rounded border border-slate-200 bg-slate-50 text-slate-700">
+                      Target: <strong>{formatDateIndo(viewingCard.deadline)}</strong>
                     </span>
                   )}
                 </div>
               </div>
 
-              {/* Special Approval Notice */}
+              {/* ACC Alert */}
               {viewingCard.status === "review_ide" && (
-                <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-2 text-amber-300">
-                    <span className="text-lg">⏳</span>
-                    <div>
-                      <p className="font-semibold text-xs">Status Menunggu ACC Super Admin</p>
-                      <p className="text-[11px] text-amber-300/70">
-                        Ide ini diajukan oleh desainer dan memerlukan izin Super Admin sebelum diproses.
-                      </p>
-                    </div>
+                <div className="p-3 rounded-lg border border-amber-200 bg-amber-50 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="font-semibold text-xs text-amber-900">Menunggu Persetujuan Super Admin</p>
+                    <p className="text-[11px] text-amber-800">
+                      Ide usulan dari desainer sebelum dipindahkan ke proses pengerjaan.
+                    </p>
                   </div>
                   {isSuperAdmin && (
                     <button
                       onClick={() => handleApproveIdea(viewingCard)}
-                      className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs transition shadow shrink-0"
+                      className="px-3 py-1.5 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs transition shrink-0"
                     >
-                      ✓ ACC Ide Ini Sekarang
+                      Setujui Ide (ACC)
                     </button>
                   )}
                 </div>
               )}
 
-              {/* Canva Live Preview Frame (if link exists) */}
-              {viewingCard.canva_url ? (
-                <div className="rounded-xl border border-slate-700 overflow-hidden bg-slate-950">
-                  <div className="px-4 py-2 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
-                    <span className="font-semibold text-slate-200 flex items-center gap-1.5">
-                      <span>🎨</span> Canva Live Preview
-                    </span>
+              {/* Uploaded Image */}
+              {viewingCard.image_url && (
+                <div className="rounded-lg border border-slate-200 overflow-hidden bg-slate-50">
+                  <div className="px-3 py-2 border-b border-slate-200 flex items-center justify-between text-[11px] font-medium text-slate-700">
+                    <span>File Gambar Desain</span>
+                    <a
+                      href={viewingCard.image_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      Buka Asli ↗
+                    </a>
+                  </div>
+                  <div className="p-2 flex items-center justify-center bg-white">
+                    <img
+                      src={viewingCard.image_url}
+                      alt={viewingCard.title}
+                      className="max-h-80 rounded object-contain"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Canva Preview */}
+              {viewingCard.canva_url && (
+                <div className="rounded-lg border border-slate-200 overflow-hidden bg-white">
+                  <div className="px-3 py-2 border-b border-slate-200 flex items-center justify-between text-[11px] font-medium text-slate-700 bg-slate-50">
+                    <span>Pratinjau Canva Interaktif</span>
                     <a
                       href={viewingCard.canva_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-400 hover:underline text-xs flex items-center gap-1"
+                      className="text-blue-600 hover:underline flex items-center gap-1"
                     >
-                      Buka di Canva ↗
+                      <span>Buka Canva</span>
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
                     </a>
                   </div>
-                  <div className="h-96 w-full">
+                  <div className="h-80 w-full bg-slate-100">
                     <iframe
                       src={getCanvaEmbedUrl(viewingCard.canva_url)}
                       title="Canva Detail View"
@@ -1624,81 +1532,38 @@ export default function KanbanBoardClient({
                     />
                   </div>
                 </div>
-              ) : (
-                <div className="p-4 rounded-xl border border-dashed border-slate-800 text-slate-400 flex items-center justify-between">
-                  <span>📎 Belum ada link desain Canva yang dilampirkan.</span>
-                  <button
-                    onClick={() => {
-                      const card = viewingCard;
-                      setViewingCard(null);
-                      setEditingCard(card);
-                    }}
-                    className="text-blue-400 hover:underline text-xs"
-                  >
-                    + Lampirkan Link Canva
-                  </button>
-                </div>
               )}
 
-              {/* Uploaded File Gambar (jika ada) */}
-              {viewingCard.image_url && (
-                <div className="rounded-xl border border-slate-700 overflow-hidden bg-slate-950">
-                  <div className="px-4 py-2 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
-                    <span className="font-semibold text-slate-200 flex items-center gap-1.5">
-                      <span>🖼️</span> File Gambar Mockup / Desain Terunggah
-                    </span>
-                    <a
-                      href={viewingCard.image_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-400 hover:underline text-xs flex items-center gap-1"
-                    >
-                      Buka Gambar Asli ↗
-                    </a>
-                  </div>
-                  <div className="p-3 bg-slate-950 flex items-center justify-center">
-                    <img
-                      src={viewingCard.image_url}
-                      alt={viewingCard.title}
-                      className="max-h-96 rounded-lg object-contain shadow-lg"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* Description & Brief */}
+              {/* Description */}
               <div>
-                <h4 className="font-semibold text-slate-300 mb-1.5 uppercase tracking-wider text-[11px]">
-                  Deskripsi & Brief Konten
+                <h4 className="font-semibold text-slate-800 mb-1 text-[11px] uppercase tracking-wide">
+                  Deskripsi & Brief
                 </h4>
-                <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 whitespace-pre-wrap leading-relaxed">
+                <div className="p-3 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 whitespace-pre-wrap leading-relaxed">
                   {viewingCard.description || "Tidak ada deskripsi rinci."}
                 </div>
               </div>
 
-              {/* Super Admin Notes */}
+              {/* Admin Notes */}
               <div>
-                <h4 className="font-semibold text-slate-300 mb-1.5 uppercase tracking-wider text-[11px]">
-                  Catatan Khusus Super Admin
+                <h4 className="font-semibold text-slate-800 mb-1 text-[11px] uppercase tracking-wide">
+                  Catatan Admin
                 </h4>
-                <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300">
+                <div className="p-3 rounded-lg border border-slate-200 bg-slate-50 text-slate-700">
                   {viewingCard.admin_notes || "Belum ada catatan khusus."}
                 </div>
               </div>
 
-              {/* Bottom Quick Timer Action */}
-              <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
-                <span className="text-slate-500 text-[11px]">
-                  Dibuat pada: {formatDateIndo(viewingCard.created_at)}
-                </span>
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-slate-500">
+                <span className="text-[11px]">Dibuat: {formatDateIndo(viewingCard.created_at)}</span>
                 <button
                   onClick={() => {
                     handleStartTimer(viewingCard.id, viewingCard.title);
                     setViewingCard(null);
                   }}
-                  className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold text-xs transition flex items-center gap-1.5 shadow-md shadow-emerald-500/20"
+                  className="px-3 py-1.5 rounded-md bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs transition"
                 >
-                  ⏱️ Mulai Jam Kerja untuk Tugas Ini
+                  Mulai Jam Kerja
                 </button>
               </div>
             </div>
@@ -1707,28 +1572,28 @@ export default function KanbanBoardClient({
       )}
 
       {/* ========================================== */}
-      {/* MODAL: STOP TIMER CONFIRMATION */}
+      {/* MODAL: STOP TIMER */}
       {/* ========================================== */}
       {isStopTimerModalOpen && myActiveTimer && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-[#0f172a] border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl">
-            <h3 className="font-bold text-base text-slate-100 flex items-center gap-2 mb-2">
-              ⏹️ Selesaikan Sesi Jam Kerja
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
+          <div className="bg-white border border-slate-200 rounded-xl w-full max-w-sm p-5 shadow-xl">
+            <h3 className="font-semibold text-sm text-slate-900 mb-1">
+              Selesai Bekerja
             </h3>
-            <p className="text-xs text-slate-400 mb-4">
-              Durasi sesi saat ini: <strong className="text-emerald-400">{formatDuration(timerElapsed)}</strong>
+            <p className="text-xs text-slate-500 mb-3">
+              Durasi sesi kerja saat ini: <strong className="text-slate-800">{formatDuration(timerElapsed)}</strong>
             </p>
 
-            <div className="mb-4">
-              <label className="block text-slate-300 font-medium text-xs mb-1">
+            <div className="mb-3">
+              <label className="block text-slate-700 font-medium text-xs mb-1">
                 Catatan Hasil Pengerjaan (Opsional)
               </label>
               <textarea
                 rows={3}
-                placeholder="Contoh: Selesai mendesain 5 slide carousel di Canva..."
+                placeholder="Ringkasan tugas yang telah diselesaikan..."
                 value={stopTimerNotes}
                 onChange={(e) => setStopTimerNotes(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
+                className="w-full px-3 py-1.5 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:border-slate-500 text-xs"
               />
             </div>
 
@@ -1736,16 +1601,16 @@ export default function KanbanBoardClient({
               <button
                 type="button"
                 onClick={() => setIsStopTimerModalOpen(false)}
-                className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition"
+                className="px-3 py-1.5 rounded-md border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-medium transition"
               >
                 Batal
               </button>
               <button
                 type="button"
                 onClick={handleStopTimer}
-                className="px-5 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-medium text-xs transition shadow-lg shadow-rose-600/20"
+                className="px-4 py-1.5 rounded-md bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs transition"
               >
-                Hentikan & Simpan Log
+                Simpan & Selesai
               </button>
             </div>
           </div>
@@ -1753,67 +1618,49 @@ export default function KanbanBoardClient({
       )}
 
       {/* ========================================== */}
-      {/* DRAWER / MODAL: PANTAU JAM KERJA (SUPER ADMIN MONITOR) */}
+      {/* MODAL: WORK TIMER MONITOR TABLE (LIGHT) */}
       {/* ========================================== */}
       {isTimerMonitorOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto">
-          <div className="bg-[#0f172a] border border-slate-700 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden my-6">
-            {/* Header */}
-            <div className="p-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-xl">⏱️</span>
-                <div>
-                  <h3 className="font-bold text-sm text-slate-100 flex items-center gap-2">
-                    Monitoring Jam Kerja Tim Desainer
-                    {activeTimers.length > 0 && (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-mono">
-                        🟢 {activeTimers.length} Sedang Bekerja
-                      </span>
-                    )}
-                  </h3>
-                  <p className="text-[11px] text-slate-400">
-                    Pantau kapan tim mulai kerja, selesai kerja, serta total durasi yang dihabiskan.
-                  </p>
-                </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-xl w-full max-w-4xl max-h-[85vh] flex flex-col shadow-xl overflow-hidden my-6">
+            <div className="p-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+              <div>
+                <h3 className="font-semibold text-sm text-slate-900">
+                  Log Jam Kerja Tim
+                </h3>
+                <p className="text-[11px] text-slate-500">
+                  Riwayat waktu kerja, jam mulai dan selesai, serta total durasi.
+                </p>
               </div>
               <button
                 onClick={() => setIsTimerMonitorOpen(false)}
-                className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition"
+                className="p-1 rounded text-slate-400 hover:text-slate-700 transition"
               >
                 ✕
               </button>
             </div>
 
-            {/* Content List */}
-            <div className="p-6 overflow-y-auto space-y-6 text-xs flex-1">
-              {/* Active Now Section */}
+            <div className="p-5 overflow-y-auto space-y-5 text-xs flex-1">
+              {/* Active workers */}
               {activeTimers.length > 0 && (
                 <div>
-                  <h4 className="font-semibold text-emerald-400 text-xs mb-2.5 flex items-center gap-2 uppercase tracking-wider font-mono">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                    Sedang Bekerja Saat Ini ({activeTimers.length})
+                  <h4 className="font-semibold text-xs text-slate-700 mb-2 uppercase tracking-wide">
+                    Sedang Aktif ({activeTimers.length})
                   </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                     {activeTimers.map((act) => (
                       <div
                         key={act.id}
-                        className="p-3.5 rounded-xl bg-emerald-950/30 border border-emerald-500/40 flex items-center justify-between"
+                        className="p-3 rounded-lg border border-emerald-200 bg-emerald-50/40 flex items-center justify-between"
                       >
                         <div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-slate-100">{act.user_name}</span>
-                            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                              {act.user_role}
-                            </span>
-                          </div>
-                          <p className="text-slate-400 text-[11px] mt-0.5 truncate max-w-xs">
-                            {act.task_title || "Pengerjaan Desain"}
-                          </p>
-                          <p className="text-[10px] text-emerald-400 font-mono mt-1">
+                          <div className="font-semibold text-slate-900">{act.user_name}</div>
+                          <div className="text-slate-600 text-[11px]">{act.task_title || "Pengerjaan Desain"}</div>
+                          <div className="text-[10px] text-slate-500 font-mono mt-0.5">
                             Mulai: {formatClockTime(act.started_at)} WIB
-                          </p>
+                          </div>
                         </div>
-                        <span className="font-mono text-sm font-bold text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/30">
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-semibold border border-emerald-200">
                           Aktif
                         </span>
                       </div>
@@ -1822,67 +1669,57 @@ export default function KanbanBoardClient({
                 </div>
               )}
 
-              {/* Log History Table */}
+              {/* History Table */}
               <div>
-                <h4 className="font-semibold text-slate-300 text-xs mb-2.5 uppercase tracking-wider font-mono">
-                  Riwayat Log Jam Kerja ({timerLogs.length} Entri)
+                <h4 className="font-semibold text-xs text-slate-700 mb-2 uppercase tracking-wide">
+                  Riwayat ({timerLogs.length} Entri)
                 </h4>
                 {timerLogs.length === 0 ? (
-                  <div className="p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-xl">
-                    Belum ada rekaman jam kerja yang tersimpan.
+                  <div className="p-8 text-center text-slate-400 border border-dashed border-slate-200 rounded-lg">
+                    Belum ada riwayat jam kerja yang tersimpan.
                   </div>
                 ) : (
-                  <div className="overflow-x-auto border border-slate-800 rounded-xl">
+                  <div className="overflow-x-auto border border-slate-200 rounded-lg">
                     <table className="w-full text-left border-collapse">
                       <thead>
-                        <tr className="bg-slate-900/90 text-slate-400 text-[11px] border-b border-slate-800 font-mono uppercase">
-                          <th className="py-2.5 px-3">Nama / Role</th>
-                          <th className="py-2.5 px-3">Tugas / Proyek</th>
-                          <th className="py-2.5 px-3">Jam Kerja</th>
-                          <th className="py-2.5 px-3">Durasi</th>
-                          <th className="py-2.5 px-3">Catatan</th>
-                          {isSuperAdmin && <th className="py-2.5 px-3 text-right">Aksi</th>}
+                        <tr className="bg-slate-50 text-slate-600 text-[11px] border-b border-slate-200 font-medium">
+                          <th className="py-2 px-3">Nama</th>
+                          <th className="py-2 px-3">Tugas</th>
+                          <th className="py-2 px-3">Waktu</th>
+                          <th className="py-2 px-3">Durasi</th>
+                          <th className="py-2 px-3">Catatan</th>
+                          {isSuperAdmin && <th className="py-2 px-3 text-right">Aksi</th>}
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-800 text-[11px]">
+                      <tbody className="divide-y divide-slate-100 text-[11px]">
                         {timerLogs.map((log) => (
-                          <tr key={log.id} className="hover:bg-slate-800/40 transition">
-                            <td className="py-2.5 px-3">
-                              <span className="font-semibold text-slate-200 block">
-                                {log.user_name}
-                              </span>
-                              <span className="text-[10px] text-slate-500 font-mono">
-                                {log.user_role}
-                              </span>
+                          <tr key={log.id} className="hover:bg-slate-50 transition">
+                            <td className="py-2 px-3 font-medium text-slate-800">
+                              {log.user_name}
                             </td>
-                            <td className="py-2.5 px-3 max-w-[200px]">
-                              <span className="text-slate-300 block truncate">
-                                {log.task_title || "Pengerjaan Desain"}
-                              </span>
-                              <span className="text-[10px] text-slate-500 font-mono">
-                                {formatDateIndo(log.started_at)}
-                              </span>
+                            <td className="py-2 px-3 max-w-[200px] truncate text-slate-700">
+                              {log.task_title || "Pengerjaan Desain"}
                             </td>
-                            <td className="py-2.5 px-3 font-mono text-slate-300 whitespace-nowrap">
+                            <td className="py-2 px-3 font-mono text-slate-600 whitespace-nowrap">
                               {formatClockTime(log.started_at)} -{" "}
                               {log.ended_at ? formatClockTime(log.ended_at) : "Sekarang"}
                             </td>
-                            <td className="py-2.5 px-3 font-mono font-bold text-emerald-400 whitespace-nowrap">
-                              {log.status === "active"
-                                ? "Sedang Berjalan"
-                                : formatDuration(log.duration_seconds)}
+                            <td className="py-2 px-3 font-mono font-medium text-slate-900 whitespace-nowrap">
+                              {log.status === "active" ? "Aktif" : formatDuration(log.duration_seconds)}
                             </td>
-                            <td className="py-2.5 px-3 text-slate-400 max-w-[180px] truncate">
+                            <td className="py-2 px-3 text-slate-600 max-w-[180px] truncate">
                               {log.notes || "-"}
                             </td>
                             {isSuperAdmin && (
-                              <td className="py-2.5 px-3 text-right">
+                              <td className="py-2 px-3 text-right">
                                 <button
                                   onClick={() => handleDeleteTimerLog(log.id)}
-                                  className="text-slate-500 hover:text-rose-400 p-1 rounded hover:bg-slate-800 transition"
+                                  className="text-slate-400 hover:text-red-600 p-1 rounded hover:bg-slate-100 transition"
                                   title="Hapus log"
                                 >
-                                  🗑️
+                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                  </svg>
                                 </button>
                               </td>
                             )}

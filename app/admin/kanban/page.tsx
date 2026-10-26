@@ -32,25 +32,20 @@ export default async function KanbanAdminPage() {
   // "Nanti hanya saya dulu aja (super admin) yang bisa melakukan semua hal termasuk melihat kanban."
   if (user.role !== "superadmin") {
     return (
-      <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col items-center justify-center p-6 text-center">
-        <div className="max-w-md w-full p-8 rounded-2xl bg-[#0f172a] border border-slate-800 shadow-2xl">
-          <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-3xl mx-auto mb-4">
-            🔒
-          </div>
-          <h1 className="text-xl font-bold text-white mb-2">
-            Akses Terbatas: Super Admin Only
+      <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center justify-center p-6 text-center">
+        <div className="max-w-md w-full p-8 rounded-xl bg-white border border-slate-200 shadow-sm">
+          <h1 className="text-base font-semibold text-slate-900 mb-2">
+            Akses Terbatas: Khusus Super Admin
           </h1>
-          <p className="text-sm text-slate-400 mb-6 leading-relaxed">
-            Papan Kanban Desain & Pelacak Jam Kerja saat ini hanya dibuka untuk <strong className="text-amber-300">Super Admin</strong>. Silakan hubungi Super Admin untuk akses atau pembagian tugas.
+          <p className="text-xs text-slate-500 mb-6 leading-relaxed">
+            Papan Kanban Desain dan Jam Kerja saat ini hanya dibuka untuk Super Admin. Silakan hubungi Super Admin untuk penugasan.
           </p>
-          <div className="flex flex-col gap-2">
-            <Link
-              href="/admin"
-              className="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs transition shadow-lg shadow-blue-500/20"
-            >
-              ← Kembali ke Dashboard Utama
-            </Link>
-          </div>
+          <Link
+            href="/admin"
+            className="inline-block py-2 px-4 rounded-md bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs transition"
+          >
+            Kembali ke Dashboard
+          </Link>
         </div>
       </div>
     );

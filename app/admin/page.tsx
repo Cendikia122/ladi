@@ -206,9 +206,9 @@ export default async function AdminDashboardPage() {
                   <>
                     <Link
                       href="/admin/kanban"
-                      className="px-5 py-3 rounded-full bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-1.5"
+                      className="px-5 py-3 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-1.5"
                     >
-                      <span>🎨</span> Kanban & Jam Kerja
+                      Kanban & Jam Kerja
                     </Link>
                     <Link
                       href="/admin/users"
@@ -460,9 +460,9 @@ export default async function AdminDashboardPage() {
                   <>
                     <Link
                       href="/admin/kanban"
-                      className="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold flex items-center gap-1 shadow-sm"
+                      className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold flex items-center gap-1 shadow-sm"
                     >
-                      🎨 Kanban Desain & Jam Kerja
+                      Kanban Desain & Jam Kerja
                     </Link>
                     <Link
                       href="/admin/users"
@@ -514,25 +514,25 @@ export default async function AdminDashboardPage() {
             {/* Banner Khusus Super Admin: Kontrol Akun Admin Bawahan */}
             {isSuperAdmin && (
               <div className="space-y-4">
-                <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white border border-indigo-800/40 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                  <div className="space-y-2">
+                <div className="p-6 sm:p-7 rounded-2xl bg-white text-slate-800 border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+                  <div className="space-y-1.5">
                     <div className="flex items-center gap-2">
-                      <span className="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[11px] font-mono font-bold uppercase tracking-wider">
-                        🎨 WORKSPACE NOTION-STYLE
+                      <span className="px-2.5 py-0.5 rounded border border-slate-200 bg-slate-50 text-slate-600 text-[11px] font-mono font-medium uppercase tracking-wider">
+                        Workspace Manajemen Desain
                       </span>
                     </div>
-                    <h3 className="text-xl sm:text-2xl font-extrabold text-white">
-                      Papan Kanban Desain, Canva Live & Pelacak Jam Kerja
+                    <h3 className="text-lg sm:text-xl font-bold text-slate-900">
+                      Papan Kanban Desain & Pelacak Jam Kerja
                     </h3>
-                    <p className="text-xs sm:text-sm text-indigo-200/80 max-w-2xl leading-relaxed">
-                      Satukan semua link Canva tanpa perlu repot upload gambar! Kelola draft ide, ACC usulan ide desainer sebelum dikerjakan, review hasil konten visual, dan pantau jam kerja tim desainer dari jam berapa sampai jam berapa secara real-time.
+                    <p className="text-xs sm:text-sm text-slate-500 max-w-2xl leading-relaxed">
+                      Kelola alur persetujuan ide desainer, tautan Canva interaktif, upload berkas mockup, dan pantau log jam kerja tim secara real-time langsung di database.
                     </p>
                   </div>
                   <Link
                     href="/admin/kanban"
-                    className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-xs uppercase tracking-wider shrink-0 shadow-lg hover:shadow-xl transition-all flex items-center gap-2 text-center justify-center"
+                    className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs uppercase tracking-wider shrink-0 transition flex items-center gap-1.5 text-center justify-center shadow-xs"
                   >
-                    <span>🎨 Buka Papan Kanban →</span>
+                    Buka Papan Kanban →
                   </Link>
                 </div>
 
