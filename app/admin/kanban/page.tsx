@@ -28,9 +28,8 @@ export default async function KanbanAdminPage() {
     redirect("/admin/login?reason=unauthorized");
   }
 
-  // Permintaan user:
-  // "Nanti hanya saya dulu aja (super admin) yang bisa melakukan semua hal termasuk melihat kanban."
-  if (user.role !== "superadmin") {
+  // Izinkan Super Admin, Desainer, dan Admin mengakses papan Kanban
+  if (user.role !== "superadmin" && user.role !== "designer" && user.role !== "admin") {
     return (
       <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center justify-center p-6 text-center">
         <div className="max-w-md w-full p-8 rounded-xl bg-white border border-slate-200 shadow-sm">

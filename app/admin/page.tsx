@@ -8,6 +8,8 @@ import { verifyToken } from "@/app/lib/auth";
 import LadiLogo from "../components/LadiLogo";
 import AdminLogoutButton from "@/app/components/AdminLogoutButton";
 import SecurityLockoutWidget from "@/app/components/SecurityLockoutWidget";
+import DesignerDashboard from "./DesignerDashboard";
+import { getKanbanCards, getWorkTimerLogs, getActiveTimers } from "@/app/lib/kanban";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +32,60 @@ export default async function AdminDashboardPage() {
 
   const isEditor = user.role === "editor";
   const isSuperAdmin = user.role === "superadmin";
+  const isDesigner = user.role === "designer";
+
+  // KHUSUS ROLE DESAINER: Panel Khusus Hanya Berisi Kanban Proyek, To Do List, dan Jam Kerja
+  if (isDesigner) {
+    const [kanbanCards, timerLogs, activeTimers] = await Promise.all([
+      getKanbanCards(),
+      getWorkTimerLogs(50),
+      getActiveTimers(),
+    ]);
+
+    return (
+      <div className="min-h-screen bg-[#f8fafc] text-[#0f172a]">
+        <header className="bg-[#0f172a] text-white border-b border-slate-800 py-4 px-4 sm:px-8">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <LadiLogo inverted={true} />
+              <span className="hidden sm:inline-block font-mono text-xs px-2.5 py-1 rounded-full border bg-emerald-500/10 text-emerald-300 border-emerald-500/30">
+                PORTAL DESAINER & KONTEN
+              </span>
+            </div>
+
+            <div className="flex items-center gap-4 text-xs">
+              <div className="hidden md:flex items-center gap-2 text-slate-300 bg-white/5 px-3 py-1.5 rounded-full border border-white/10 font-mono text-[11px]">
+                <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span>{user.name || user.username}</span>
+                <span className="text-slate-400">({user.username})</span>
+                <span className="text-emerald-400 font-semibold">• Desainer Konten</span>
+              </div>
+
+              <Link
+                href="/"
+                target="_blank"
+                className="text-slate-300 hover:text-white transition-colors"
+              >
+                Lihat Website ↗
+              </Link>
+              <AdminLogoutButton />
+            </div>
+          </div>
+        </header>
+
+        <main className="max-w-7xl mx-auto px-4 sm:px-8 py-8">
+          <DesignerDashboard
+            initialCards={kanbanCards}
+            initialTimerLogs={timerLogs}
+            initialActiveTimers={activeTimers}
+            currentUser={user}
+          />
+        </main>
+      </div>
+    );
+  }
 
   const [allBlogs, allEvents, allProjects, allTeam, allPackages, allOrders, dbStatus, allTemplates] = await Promise.all([
     getBlogs(10, true),
