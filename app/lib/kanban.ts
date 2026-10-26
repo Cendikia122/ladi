@@ -105,7 +105,7 @@ export async function getKanbanCards(): Promise<KanbanCard[]> {
     const rows = await query<any[]>(
       "SELECT * FROM kanban_cards ORDER BY order_num ASC, id DESC"
     );
-    if (rows && rows.length >= 0) {
+    if (rows && rows.length > 0) {
       return rows.map((r) => ({
         ...r,
         is_approved_by_admin: Boolean(r.is_approved_by_admin),
@@ -144,6 +144,7 @@ export async function createKanbanCard(data: {
   title: string;
   description?: string;
   canva_url?: string;
+  image_url?: string;
   status?: KanbanStatus;
   origin?: KanbanOrigin;
   is_approved_by_admin?: boolean;
@@ -165,14 +166,15 @@ export async function createKanbanCard(data: {
   try {
     const res = await query<any>(
       `INSERT INTO kanban_cards (
-        title, description, canva_url, status, origin,
+        title, description, canva_url, image_url, status, origin,
         is_approved_by_admin, priority, platform, assignee_name,
         deadline, admin_notes, order_num, created_by
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         data.title.trim(),
         data.description || "",
         data.canva_url || "",
+        data.image_url || "",
         defaultStatus,
         origin,
         isApproved ? 1 : 0,
@@ -202,6 +204,7 @@ export async function createKanbanCard(data: {
     title: data.title.trim(),
     description: data.description || "",
     canva_url: data.canva_url || "",
+    image_url: data.image_url || "",
     status: defaultStatus,
     origin,
     is_approved_by_admin: isApproved,
@@ -235,6 +238,7 @@ export async function updateKanbanCard(
     if (updates.title !== undefined) { fields.push("title = ?"); values.push(updates.title); }
     if (updates.description !== undefined) { fields.push("description = ?"); values.push(updates.description); }
     if (updates.canva_url !== undefined) { fields.push("canva_url = ?"); values.push(updates.canva_url); }
+    if (updates.image_url !== undefined) { fields.push("image_url = ?"); values.push(updates.image_url); }
     if (updates.status !== undefined) { fields.push("status = ?"); values.push(updates.status); }
     if (updates.origin !== undefined) { fields.push("origin = ?"); values.push(updates.origin); }
     if (updates.is_approved_by_admin !== undefined) {
@@ -313,7 +317,7 @@ export async function getWorkTimerLogs(limit = 100): Promise<WorkTimerLog[]> {
       "SELECT * FROM work_timer_logs ORDER BY id DESC LIMIT ?",
       [limit]
     );
-    if (rows && rows.length >= 0) {
+    if (rows && rows.length > 0) {
       return rows.map((r) => ({
         ...r,
         started_at: r.started_at ? new Date(r.started_at).toISOString() : new Date().toISOString(),

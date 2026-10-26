@@ -185,12 +185,41 @@ export default function KanbanBoardClient({
   const [isTimerMonitorOpen, setIsTimerMonitorOpen] = useState(false);
   const [isStopTimerModalOpen, setIsStopTimerModalOpen] = useState(false);
   const [stopTimerNotes, setStopTimerNotes] = useState("");
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   // Toast / Notifications
   const [toast, setToast] = useState<{ type: "success" | "error" | "warning"; message: string } | null>(null);
   const showToast = (type: "success" | "error" | "warning", message: string) => {
     setToast({ type, message });
     setTimeout(() => setToast(null), 4500);
+  };
+
+  const handleUploadImage = async (file: File, isEdit = false) => {
+    if (!file) return;
+    setUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Gagal mengunggah gambar.");
+      }
+      const url = data.url;
+      if (isEdit) {
+        setEditingCard((prev) => (prev ? { ...prev, image_url: url } : null));
+      } else {
+        setCardForm((prev) => ({ ...prev, image_url: url }));
+      }
+      showToast("success", "Gambar desain berhasil diunggah!");
+    } catch (err: any) {
+      showToast("error", err.message || "Gagal mengunggah gambar.");
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   // Drag and Drop State
@@ -202,6 +231,7 @@ export default function KanbanBoardClient({
     title: "",
     description: "",
     canva_url: "",
+    image_url: "",
     status: (isSuperAdmin ? "draft" : "review_ide") as KanbanStatus,
     origin: (isSuperAdmin ? "admin" : "designer") as KanbanOrigin,
     priority: "medium" as KanbanPriority,
@@ -217,6 +247,7 @@ export default function KanbanBoardClient({
       title: "",
       description: "",
       canva_url: "",
+      image_url: "",
       status: defaultStatus,
       origin: isSuperAdmin ? "admin" : "designer",
       priority: "medium",
@@ -804,6 +835,23 @@ export default function KanbanBoardClient({
                           {card.title}
                         </h4>
 
+                        {/* Uploaded Image Preview (jika ada upload gambar) */}
+                        {card.image_url && (
+                          <div
+                            onClick={() => setViewingCard(card)}
+                            className="mb-2.5 rounded-lg overflow-hidden border border-slate-700/60 bg-slate-950 aspect-video relative cursor-pointer group/thumb shadow-inner"
+                          >
+                            <img
+                              src={card.image_url}
+                              alt={card.title}
+                              className="w-full h-full object-cover group-hover/thumb:scale-105 transition duration-300"
+                            />
+                            <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover/thumb:opacity-100 transition flex items-center justify-center text-[11px] font-medium text-white backdrop-blur-[2px]">
+                              🔍 Lihat Gambar Penuh
+                            </div>
+                          </div>
+                        )}
+
                         {/* Description snippet */}
                         {card.description && (
                           <p className="text-xs text-slate-400 line-clamp-2 mb-2.5 leading-relaxed">
@@ -1064,6 +1112,48 @@ export default function KanbanBoardClient({
                 </p>
               </div>
 
+              {/* Upload File Gambar / Mockup Desain Langsung */}
+              <div>
+                <label className="block text-slate-300 font-medium mb-1">
+                  Atau Upload File Gambar / Mockup Langsung (PNG, JPG, WEBP)
+                </label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="create-card-image-file"
+                    className="hidden"
+                    onChange={(e) => {
+                      if (e.target.files?.[0]) handleUploadImage(e.target.files[0], false);
+                    }}
+                  />
+                  <label
+                    htmlFor="create-card-image-file"
+                    className={`px-3 py-1.5 rounded-lg border border-slate-700 text-xs font-medium cursor-pointer transition flex items-center gap-1.5 ${
+                      uploadingImage
+                        ? "bg-slate-800 text-slate-400 cursor-not-allowed"
+                        : "bg-slate-800 hover:bg-slate-700 text-slate-200"
+                    }`}
+                  >
+                    <span>📤</span> <span>{uploadingImage ? "Mengunggah..." : "Pilih File Gambar"}</span>
+                  </label>
+                  {cardForm.image_url && (
+                    <button
+                      type="button"
+                      onClick={() => setCardForm({ ...cardForm, image_url: "" })}
+                      className="text-[11px] text-rose-400 hover:underline"
+                    >
+                      Hapus Foto
+                    </button>
+                  )}
+                </div>
+                {cardForm.image_url && (
+                  <div className="mt-2 w-36 h-24 rounded-lg overflow-hidden border border-slate-700 bg-slate-950 relative">
+                    <img src={cardForm.image_url} alt="Uploaded preview" className="w-full h-full object-cover" />
+                  </div>
+                )}
+              </div>
+
               {/* Format & Prioritas */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
@@ -1269,6 +1359,48 @@ export default function KanbanBoardClient({
                   }
                   className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-blue-500 text-xs"
                 />
+              </div>
+
+              {/* Upload Gambar / File Desain di Edit */}
+              <div>
+                <label className="block text-slate-300 font-medium mb-1">
+                  Upload / Ganti File Gambar (PNG, JPG, WEBP)
+                </label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="edit-card-image-file"
+                    className="hidden"
+                    onChange={(e) => {
+                      if (e.target.files?.[0]) handleUploadImage(e.target.files[0], true);
+                    }}
+                  />
+                  <label
+                    htmlFor="edit-card-image-file"
+                    className={`px-3 py-1.5 rounded-lg border border-slate-700 text-xs font-medium cursor-pointer transition flex items-center gap-1.5 ${
+                      uploadingImage
+                        ? "bg-slate-800 text-slate-400 cursor-not-allowed"
+                        : "bg-slate-800 hover:bg-slate-700 text-slate-200"
+                    }`}
+                  >
+                    <span>📤</span> <span>{uploadingImage ? "Mengunggah..." : "Pilih File Gambar Baru"}</span>
+                  </label>
+                  {editingCard.image_url && (
+                    <button
+                      type="button"
+                      onClick={() => setEditingCard({ ...editingCard, image_url: "" })}
+                      className="text-[11px] text-rose-400 hover:underline"
+                    >
+                      Hapus Foto
+                    </button>
+                  )}
+                </div>
+                {editingCard.image_url && (
+                  <div className="mt-2 w-36 h-24 rounded-lg overflow-hidden border border-slate-700 bg-slate-950 relative">
+                    <img src={editingCard.image_url} alt="Uploaded preview" className="w-full h-full object-cover" />
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1505,6 +1637,32 @@ export default function KanbanBoardClient({
                   >
                     + Lampirkan Link Canva
                   </button>
+                </div>
+              )}
+
+              {/* Uploaded File Gambar (jika ada) */}
+              {viewingCard.image_url && (
+                <div className="rounded-xl border border-slate-700 overflow-hidden bg-slate-950">
+                  <div className="px-4 py-2 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
+                    <span className="font-semibold text-slate-200 flex items-center gap-1.5">
+                      <span>🖼️</span> File Gambar Mockup / Desain Terunggah
+                    </span>
+                    <a
+                      href={viewingCard.image_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:underline text-xs flex items-center gap-1"
+                    >
+                      Buka Gambar Asli ↗
+                    </a>
+                  </div>
+                  <div className="p-3 bg-slate-950 flex items-center justify-center">
+                    <img
+                      src={viewingCard.image_url}
+                      alt={viewingCard.title}
+                      className="max-h-96 rounded-lg object-contain shadow-lg"
+                    />
+                  </div>
                 </div>
               )}
 

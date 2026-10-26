@@ -14,6 +14,7 @@ export interface KanbanCard {
   title: string;
   description: string;
   canva_url: string;
+  image_url?: string;
   status: KanbanStatus;
   origin: KanbanOrigin;
   is_approved_by_admin: boolean;

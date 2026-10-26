@@ -227,7 +227,7 @@ export function verifyCanManageBlogs(request: NextRequest): SessionUser | null {
   const session = verifySession(request);
   if (
     session &&
-    (session.role === "admin" || session.role === "editor" || session.role === "superadmin")
+    (session.role === "admin" || session.role === "editor" || session.role === "superadmin" || session.role === "designer")
   ) {
     return session;
   }

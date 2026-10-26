@@ -240,6 +240,7 @@ export async function ensureTables(db: mysql.Pool, force = false) {
         assignee_name VARCHAR(100) DEFAULT '',
         deadline VARCHAR(50) DEFAULT '',
         admin_notes TEXT,
+        image_url TEXT,
         order_num INT DEFAULT 0,
         created_by VARCHAR(100) DEFAULT 'admin',
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -248,6 +249,7 @@ export async function ensureTables(db: mysql.Pool, force = false) {
         INDEX idx_assignee (assignee_name)
       )
     `);
+    try { await db.query(`ALTER TABLE kanban_cards ADD COLUMN image_url TEXT`); } catch {}
 
     // 11. Pastikan tabel work_timer_logs ada untuk tracker jam kerja desainer
     await db.query(`
